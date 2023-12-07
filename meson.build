@@ -1,5 +1,5 @@
 project(
-	'kfs-1', 'c',
+	'kfs', 'c',
 	version: '0.1.0',
 	default_options: [
 		'warning_level=3',
@@ -7,13 +7,15 @@ project(
 	]
 )
 
-
 cflags = [
 	'-m32',
 	'-fno-builtin',
 	'-fno-stack-protector',
 	'-nostdlib',
 	'-nodefaultlibs',
+	'-ffreestanding',
+	'-U__linux__',
+	'-D__i386__',
 ]
 
 cc = meson.get_compiler('c')
@@ -27,8 +29,8 @@ endforeach
 subdir('sources')
 
 executable(
-	meson.project_name(),
+	meson.project_name() + '.bin',
 	sources,
 	include_directories: include_directories('includes'),
-	link_args: cflags,
+	link_args: cflags + ['-T', '../config/linker.ld'],
 )

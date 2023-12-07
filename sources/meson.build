@@ -1,3 +1,5 @@
 sources = files([
-	'main.c'
+	'boot.s',
+	'kernel.c',
+	'vga_terminal.c',
 ])

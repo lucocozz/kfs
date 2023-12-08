@@ -19,10 +19,9 @@ cflags = [
 ]
 
 linker = ['-T', '../sources/arch/i386/linker.ld']
-link_args = cflags + linker
+link_args = cflags + linker + ['-static', '-Wl,--build-id=none']
 
 cc = meson.get_compiler('c')
-nasm = meson.get_compiler('nasm')
 
 foreach cflag : cflags
 	if cc.has_argument(cflag)
@@ -36,7 +35,7 @@ subdir('sources')
 
 executable(
 	meson.project_name() + '.bin',
-	sources,
+	sources_c + sources_asm,
 	include_directories: libs_includes + [include_directories('includes')],
 	link_args: link_args,
 	link_with: libs,

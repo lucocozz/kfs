@@ -1,5 +1,5 @@
 project(
-	'kfs', 'c',
+	'kfs', ['c'],
 	version: '0.1.0',
 	default_options: [
 		'warning_level=3',
@@ -18,6 +18,9 @@ cflags = [
 	'-D__i386__',
 ]
 
+linker = ['-T', '../sources/arch/i386/linker.ld']
+link_args = cflags + linker + ['-static', '-Wl,--build-id=none']
+
 cc = meson.get_compiler('c')
 
 foreach cflag : cflags
@@ -26,11 +29,14 @@ foreach cflag : cflags
 	endif
 endforeach
 
+subdir('libs')
 subdir('sources')
+
 
 executable(
 	meson.project_name() + '.bin',
-	sources,
-	include_directories: include_directories('includes'),
-	link_args: cflags + ['-T', '../config/linker.ld'],
+	sources_c + sources_asm,
+	include_directories: libs_includes + [include_directories('includes')],
+	link_args: link_args,
+	link_with: libs,
 )

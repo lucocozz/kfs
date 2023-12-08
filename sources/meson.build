@@ -1,5 +1,10 @@
-sources = files([
-	'boot.s',
+sources_asm = files([
+	'arch/i386/boot.s',
+	'arch/i386/crti.s',
+	'arch/i386/crtn.s',
+])
+
+sources_c = files([
 	'kernel.c',
-	'vga_terminal.c',
+	'tty.c',
 ])

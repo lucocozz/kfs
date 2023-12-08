@@ -1,23 +1,4 @@
-#include "kernel.h"
-
-static size_t	__strlen(const char *str)
-{
-	size_t	i = 0;
-
-	while (str[i] != '\0')
-		++i;
-	return (i);
-}
-
-inline uint8_t	vga_color(enum vga_color fg, enum vga_color bg)
-{
-	return (fg | bg << 4);
-}
-
-static inline uint16_t	__vga_entry(unsigned char uc, uint8_t color)
-{
-	return ((uint16_t)uc | (uint16_t)color << 8);
-}
+#include "tty.h"
 
 void	term_init()
 {
@@ -36,7 +17,7 @@ void	term_set_color(uint8_t color)
 void	term_put_entry_at(char c, uint8_t color, size_t x, size_t y)
 {
 	const size_t index = y * VGA_WIDTH + x;
-	g_term.buffer[index] = __vga_entry(c, color);
+	g_term.buffer[index] = vga_entry(c, color);
 }
 
 
@@ -62,5 +43,5 @@ void	term_putc(char c)
 
 void	term_puts(const char *str)
 {
-	term_write(str, __strlen(str));
+	term_write(str, strlen(str));
 }

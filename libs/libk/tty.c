@@ -2,7 +2,9 @@
 
 void	term_init()
 {
+	g_term.buffer = VGA_BUFFER_ADDRESS;
 	g_term.color = vga_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	set_vga_cursor(0, 0);
 	for (size_t y = 0; y < VGA_HEIGHT; ++y) {
 		for (size_t x = 0; x < VGA_WIDTH; ++x)
 			term_put_entry_at(' ', g_term.color, x, y);
@@ -34,6 +36,7 @@ void	term_write(const char *data, size_t size)
 				g_term.row = 0;
 		}
 	}
+	set_vga_cursor(g_term.column, g_term.row);
 }
 
 void	term_putc(char c)

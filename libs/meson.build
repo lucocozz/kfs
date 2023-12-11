@@ -6,7 +6,7 @@ libk = static_library(
 	'libk',
 	libk_sources,
 	link_args: cflags,
-	include_directories: libk_includes,
+	include_directories: [libk_includes, libc_includes],
 )
 
 libc = static_library(

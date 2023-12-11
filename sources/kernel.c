@@ -1,11 +1,6 @@
 #include "kernel.h"
 
-t_vga_terminal	g_term = {
-	.row = 0,
-	.column = 0,
-	.color = 0,
-	.buffer = (uint16_t*)0xB8000
-};
+t_vga_terminal	g_term = {0};
 
 void	kernel_main()
 {

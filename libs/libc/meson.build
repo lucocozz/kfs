@@ -1,3 +1,6 @@
+unistd = files([
+
+])
 
 stdio = files([
 
@@ -6,7 +9,6 @@ stdio = files([
 stdlib = files([
 
 ])
-
 
 string = files([
 	'string/strlen.c',
@@ -20,11 +22,22 @@ string = files([
 	'string/strncpy.c',
 ])
 
+io = files([
+	'sys/io/write_port.c',
+	'sys/io/read_port.c',
+])
+
+sys = files([
+
+])
+sys += io
 
 libc_includes = include_directories('./includes')
 
 libc_sources = (
+	unistd +
 	stdio +
 	stdlib +
-	string
+	string +
+	sys
 )

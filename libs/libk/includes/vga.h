@@ -5,8 +5,16 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "sys/io.h"
+
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
+#define VGA_BUFFER_SIZE (VGA_WIDTH * VGA_HEIGHT);
+#define VGA_CTRL_REGISTER 0x3D4
+#define VGA_DATA_REGISTER 0x3D5
+#define VGA_CURSOR_HIGH_BYTE 0x0E
+#define VGA_CURSOR_LOW_BYTE 0x0F
+#define VGA_BUFFER_ADDRESS (uint16_t *)0xB8000
 
 /* Hardware text mode color constants. */
 enum vga_color
@@ -39,5 +47,8 @@ static inline uint16_t	vga_entry(unsigned char uc, uint8_t color)
 {
 	return ((uint16_t)uc | (uint16_t)color << 8);
 }
+
+void	set_vga_cursor(int x, int y);
+void	get_vga_cursor(int *x, int *y);
 
 #endif

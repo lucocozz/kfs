@@ -1,5 +1,5 @@
-#ifndef KERNEL_TTY_H
-#define KERNEL_TTY_H
+#ifndef LIBK_TTY_H
+#define LIBK_TTY_H
 
 #include <stddef.h>
 #include <stdint.h>

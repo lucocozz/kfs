@@ -12,8 +12,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "tty.h"
-#include "vga.h"
 #include "libc.h"
+#include "libk.h"
 
 #endif

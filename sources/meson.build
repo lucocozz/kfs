@@ -6,5 +6,4 @@ sources_asm = files([
 
 sources_c = files([
 	'kernel.c',
-	'tty.c',
 ])

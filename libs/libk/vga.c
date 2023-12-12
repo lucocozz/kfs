@@ -10,7 +10,7 @@
 /// ## Examples
 ///
 /// ```
-/// set_cursor(0, 0);
+/// set_vga_cursor(0, 0);
 /// ```
 ///
 /// ## Note
@@ -20,9 +20,9 @@ void set_vga_cursor(int x, int y)
 {
 	uint16_t pos = y * VGA_WIDTH + x;
 
-	write_port(VGA_CTRL_REGISTER, VGA_CURSOR_HIGH_BYTE);
-	write_port(VGA_DATA_REGISTER, pos & 0xFF);
 	write_port(VGA_CTRL_REGISTER, VGA_CURSOR_LOW_BYTE);
+	write_port(VGA_DATA_REGISTER, pos & 0xFF);
+	write_port(VGA_CTRL_REGISTER, VGA_CURSOR_HIGH_BYTE);
 	write_port(VGA_DATA_REGISTER, (pos >> 8) & 0xFF);
 }
 
@@ -37,7 +37,7 @@ void set_vga_cursor(int x, int y)
 ///
 /// ```
 /// int x, y;
-/// get_cursor(&x, &y);
+/// get_vga_cursor(&x, &y);
 /// ```
 ///
 /// ## Return
@@ -51,9 +51,9 @@ void get_vga_cursor(int *x, int *y)
 {
 	uint16_t pos = 0;
 
-	write_port(VGA_CTRL_REGISTER, VGA_CURSOR_HIGH_BYTE);
-	pos |= read_port(VGA_DATA_REGISTER);
 	write_port(VGA_CTRL_REGISTER, VGA_CURSOR_LOW_BYTE);
+	pos |= read_port(VGA_DATA_REGISTER);
+	write_port(VGA_CTRL_REGISTER, VGA_CURSOR_HIGH_BYTE);
 	pos |= ((uint16_t)read_port(VGA_DATA_REGISTER)) << 8;
 
 	*x = pos % VGA_WIDTH;

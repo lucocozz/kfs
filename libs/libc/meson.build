@@ -20,6 +20,9 @@ string = files([
 	'string/strncmp.c',
 	'string/strcpy.c',
 	'string/strncpy.c',
+	'string/memcpy.c',
+	'string/memset.c',
+	'string/memcmp.c',
 ])
 
 io = files([

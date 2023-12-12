@@ -10,9 +10,13 @@
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
 #define VGA_BUFFER_SIZE (VGA_WIDTH * VGA_HEIGHT);
+/// VGA_CTRL_REGISTER is the address of the VGA control register.
 #define VGA_CTRL_REGISTER 0x3D4
+/// VGA_DATA_REGISTER is the address of the VGA data register.
 #define VGA_DATA_REGISTER 0x3D5
+/// VGA_CURSOR_HIGH_BYTE is the address of the VGA cursor high byte register.
 #define VGA_CURSOR_HIGH_BYTE 0x0E
+/// VGA_CURSOR_LOW_BYTE is the address of the VGA cursor low byte register.
 #define VGA_CURSOR_LOW_BYTE 0x0F
 #define VGA_BUFFER_ADDRESS (uint16_t *)0xB8000
 

@@ -1,4 +1,4 @@
-#include "vga.h"
+#include "libk.h"
 
 /// Set the cursor position in the VGA I/O port
 ///
@@ -21,9 +21,9 @@ void set_vga_cursor(int x, int y)
 	uint16_t pos = y * VGA_WIDTH + x;
 
 	write_port(VGA_CTRL_REGISTER, VGA_CURSOR_LOW_BYTE);
-	write_port(VGA_DATA_REGISTER, pos & 0xFF);
+	write_port(VGA_DATA_REGISTER, LOW_B8(pos));
 	write_port(VGA_CTRL_REGISTER, VGA_CURSOR_HIGH_BYTE);
-	write_port(VGA_DATA_REGISTER, (pos >> 8) & 0xFF);
+	write_port(VGA_DATA_REGISTER, HIGH_B8(pos));
 }
 
 /// Get the cursor position in the VGA I/O port

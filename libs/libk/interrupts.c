@@ -60,7 +60,7 @@ void isr_handler(registers_t reg)
 
 void isr_install()
 {
-	set_idt_gate(0, );
-	set_idt_gate(1, );
-	set_idt_gate(2, );
+	// set_idt_gate(0, );
+	// set_idt_gate(1, );
+	// set_idt_gate(2, );
 }

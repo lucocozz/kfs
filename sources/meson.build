@@ -6,4 +6,8 @@ sources_asm = files([
 
 sources_c = files([
 	'kernel.c',
+
+	'driver/tty.c',
+	'driver/keyboard.c',
+	'driver/vga.c',
 ])

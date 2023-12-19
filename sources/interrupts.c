@@ -1,4 +1,4 @@
-#include "libk.h"
+#include "interrupts.h"
 
 idt_gate_t	idt[IDT_ENTRIES] = {0};
 

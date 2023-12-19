@@ -1,4 +1,4 @@
-#include "tty.h"
+#include "driver/tty.h"
 
 void	term_init()
 {

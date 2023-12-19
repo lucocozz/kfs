@@ -1,4 +1,4 @@
-#include "libk.h"
+#include "kernel.h"
 
 /// Set the cursor position in the VGA I/O port
 ///

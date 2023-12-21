@@ -13,7 +13,11 @@
 #include <stdbool.h>
 
 #include "libc.h"
-#include "interrupts.h"
+
+#include "cpu/interrupts.h"
+#include "cpu/pic.h"
+
+#include "driver/ports.h"
 #include "driver/tty.h"
 #include "driver/vga.h"
 #include "driver/keyboard.h"

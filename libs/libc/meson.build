@@ -26,8 +26,6 @@ string = files([
 ])
 
 io = files([
-	'sys/io/write_port.c',
-	'sys/io/read_port.c',
 ])
 
 sys = files([

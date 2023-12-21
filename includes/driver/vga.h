@@ -1,5 +1,5 @@
-#ifndef LIBK_VGA_H
-#define LIBK_VGA_H
+#ifndef KERNEL_DRIVER_VGA_H
+#define KERNEL_DRIVER_VGA_H
 
 #include <stddef.h>
 #include <stdint.h>

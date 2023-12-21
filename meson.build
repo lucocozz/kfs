@@ -18,7 +18,7 @@ cflags = [
 	'-D__i386__',
 ]
 
-linker = ['-T', '../sources/arch/i386/linker.ld']
+linker = ['-T', '../config/linker.ld']
 link_args = cflags + linker + ['-static', '-Wl,--build-id=none']
 
 cc = meson.get_compiler('c')
@@ -30,13 +30,13 @@ foreach cflag : cflags
 endforeach
 
 subdir('libs')
-subdir('sources')
+subdir('kernel')
 
 
 executable(
 	meson.project_name() + '.bin',
-	sources_c + sources_asm,
-	include_directories: libs_includes + [include_directories('includes')],
+	kernel_sources,
+	include_directories: libs_includes + kernel_includes,
 	link_args: link_args,
 	link_with: libs,
 )

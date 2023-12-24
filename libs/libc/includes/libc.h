@@ -6,5 +6,6 @@
 #include "stdlib.h"
 #include "string.h"
 #include "sys/io.h"
+#include "ctype.h"
 
 #endif

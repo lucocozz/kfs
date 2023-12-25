@@ -26,5 +26,5 @@ void pic_remap(uint8_t offset1, uint8_t offset2)
 	write_port(PIC_1_DATA, INTERRUPT_MASK_KEYBOARD);
 	write_port(PIC_2_DATA, INTERRUPT_MASK_RESERVED);
 
-	__asm__ __volatile__("sti");
+	asm volatile("sti");
 }

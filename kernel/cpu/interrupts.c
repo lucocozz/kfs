@@ -46,13 +46,14 @@ void interrupts_init()
 /// Call handler corresponding to interrupt
 void interrupt_handler(struct cpu_state cpu, unsigned int interrupt, struct stack_state stack)
 {
-	static void (*handlers[IDT_ENTRIES])(void) = {
-		NULL,
-		// [INTERRUPT_KEYBOARD] = keyboard_handler,
+	void (*handlers[IDT_ENTRIES])(void) = {
+		[INTERRUPT_KEYBOARD] = keyboard_handler,
 	};
 
 	(void)cpu;
 	(void)stack;
-	if (interrupt < IDT_ENTRIES && handlers[interrupt])
+	if (interrupt < IDT_ENTRIES && handlers[interrupt]) {
 		handlers[interrupt]();
+		pic_acknowledge(interrupt);
+	}
 }

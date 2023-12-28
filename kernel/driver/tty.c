@@ -30,17 +30,39 @@ void	term_put_entry_at(char c, uint8_t color, size_t x, size_t y)
 	g_term.buffer[index] = vga_entry(c, color);
 }
 
+bool __special_key_handler(char c)
+{
+	switch (c)
+	{
+	case '\b':
+		if (g_term.column == 0) {
+			if (g_term.row == 0)
+				return (true);
+			g_term.column = VGA_WIDTH - 1;
+			--g_term.row;
+		} else 
+			--g_term.column;
+		term_put_entry_at(' ', g_term.color, g_term.column, g_term.row);
+		return (true);
+
+	case '\n':
+		g_term.column = 0;
+		++g_term.row;
+		if (g_term.row == VGA_HEIGHT)
+			g_term.row = 0;
+		return (true);
+
+	default:
+		return (false);
+	}
+}
+
 void	term_write(const char *data, size_t size)
 {
 	for (size_t i = 0; i < size; ++i)
 	{
-		if (data[i] == '\n') {
-			g_term.column = 0;
-			++g_term.row;
-			if (g_term.row == VGA_HEIGHT)
-				g_term.row = 0;
+		if (__special_key_handler(data[i]) == true)
 			continue;
-		}
 		term_put_entry_at(data[i], g_term.color, g_term.column, g_term.row);
 		++g_term.column;
 		if (g_term.column == VGA_WIDTH) {

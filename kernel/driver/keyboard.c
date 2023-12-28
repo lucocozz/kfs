@@ -16,7 +16,7 @@ static uint8_t __scancode_to_ascii(uint8_t code)
 	uint8_t key;
 
 	code = NORMALIZE_SCANCODE(code);
-	if (g_keyboard_handlers & HANDLER_KEY_SHIFT && g_keyboard_handlers & HANDLER_KEY_CAPSLOCK)
+	if ((g_keyboard_handlers & HANDLER_KEY_SHIFT) && (g_keyboard_handlers & HANDLER_KEY_CAPSLOCK))
 		key = SCANCODE_KEY(code);
 	else if (g_keyboard_handlers & (HANDLER_KEY_SHIFT | HANDLER_KEY_CAPSLOCK))
 		key = SCANCODE_SHIFT_KEY(code);
@@ -35,10 +35,8 @@ static void __handle_states_keys(uint8_t code)
 		g_keyboard_handlers ^= HANDLER_KEY_SHIFT;
 	else if (key == LEFT_ALT)
 		g_keyboard_handlers ^= HANDLER_KEY_ALT;
-	else if (key == CAPS_LOCK) {
-		if (SCANCODE_IS_PRESSED(code))
-			g_keyboard_handlers ^= HANDLER_KEY_CAPSLOCK;
-	}
+	else if (key == CAPS_LOCK && SCANCODE_IS_PRESSED(code))
+		g_keyboard_handlers ^= HANDLER_KEY_CAPSLOCK;
 }
 
 void	keyboard_handler(void)
@@ -47,9 +45,8 @@ void	keyboard_handler(void)
 
 	if (__is_state_key(code))
 		__handle_states_keys(code);
-	else {
+	else if (SCANCODE_IS_PRESSED(code)) {
 		uint8_t key = __scancode_to_ascii(code);
-		if (SCANCODE_IS_PRESSED(code))
-			term_putc(key);
+		term_putc(key);
 	}
 }

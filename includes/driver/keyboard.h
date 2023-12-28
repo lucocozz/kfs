@@ -42,6 +42,19 @@
 #define KEY_ARROW_LEFT	0x4B
 #define KEY_ARROW_RIGHT	0x4D
 
+#define KEY_F1	0x3B
+#define KEY_F2	0x3C
+#define KEY_F3	0x3D
+#define KEY_F4	0x3E
+#define KEY_F5	0x3F
+#define KEY_F6	0x40
+#define KEY_F7	0x41
+#define KEY_F8	0x42
+#define KEY_F9	0x43
+#define KEY_F10	0x44
+#define KEY_F11	0x57
+#define KEY_F12	0x58
+
 static const uint8_t scancode_key_us_qwerty[] = {
 	[0x01] =  27,  [0x02] = '1',  [0x03] = '2',  [0x04] = '3',  [0x05] = '4',
 	[0x06] = '5',  [0x07] = '6',  [0x08] = '7',  [0x09] = '8',  [0x0A] = '9',
@@ -72,24 +85,24 @@ static const uint8_t scancode_shift_key_us_qwerty[] = {
 	[0x38] =  0,   [0x39] = ' ',
 };
 
-typedef struct keypress {
+typedef struct key {
 	uint8_t	code;
 	uint8_t	ascii;
 	uint8_t	is_pressed;
 	uint8_t	state;
-} keypress_t;
+} key_t;
 
 typedef struct {
-	keypress_t		data[KEYBOARD_QUEUE_CAPACITY];
-	uint32_t		size;
-	uint32_t		readed;
+	key_t		data[KEYBOARD_QUEUE_CAPACITY];
+	uint32_t	size;
+	uint32_t	readed;
 } keyboard_queue_t;
 
 extern uint8_t			g_keyboard_states;
 extern keyboard_queue_t	g_keyboard_queue;
 
-void		keyboard_handler(void);
-keypress_t	keyboard_get_key(void);
-void		keyboard_add_key(keypress_t keypress);
+void	keyboard_handler(void);
+key_t	keyboard_get_keyqueue(void);
+void	keyboard_add_keyqueue(key_t key);
 
 #endif

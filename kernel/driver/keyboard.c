@@ -14,11 +14,12 @@ static bool __is_state_key(uint8_t code)
 static uint8_t __scancode_to_ascii(uint8_t code)
 {
 	uint8_t key;
+	uint8_t mask = KEY_SHIFT_MASK | KEY_CAPSLOCK_MASK;
 
 	code = NORMALIZE_SCANCODE(code);
-	if ((g_keyboard_states & KEY_SHIFT_MASK) && (g_keyboard_states & KEY_CAPSLOCK_MASK))
+	if ((g_keyboard_states & mask) == mask)
 		key = SCANCODE_KEY(code);
-	else if (g_keyboard_states & (KEY_SHIFT_MASK | KEY_CAPSLOCK_MASK))
+	else if (g_keyboard_states & mask)
 		key = SCANCODE_SHIFT_KEY(code);
 	else
 		key = SCANCODE_KEY(code);
@@ -46,19 +47,19 @@ void	keyboard_handler(void)
 	if (__is_state_key(code))
 		__handle_states_keys(code);
 	else {
-		keypress_t key = {
+		key_t key = {
 			.code = code,
 			.ascii = __scancode_to_ascii(code),
 			.state = g_keyboard_states,
 			.is_pressed = SCANCODE_IS_PRESSED(code),
 		};
-		keyboard_add_key(key);
+		keyboard_add_keyqueue(key);
 	}
 }
 
-keypress_t	keyboard_get_key(void)
+key_t	keyboard_get_keyqueue(void)
 {
-	keypress_t keypress = {0};
+	key_t keypress = {0};
 
 	if (g_keyboard_queue.size == 0)
 		return (keypress);
@@ -71,7 +72,7 @@ keypress_t	keyboard_get_key(void)
 	return (keypress);
 }
 
-void	keyboard_add_key(keypress_t key)
+void	keyboard_add_keyqueue(key_t key)
 {
 	if (g_keyboard_queue.size == KEYBOARD_QUEUE_CAPACITY && g_keyboard_queue.readed > 0) {
 		memmove(g_keyboard_queue.data, g_keyboard_queue.data + g_keyboard_queue.readed, g_keyboard_queue.size - g_keyboard_queue.readed);

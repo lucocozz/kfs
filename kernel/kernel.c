@@ -1,6 +1,5 @@
 #include "kernel.h"
 
-t_vga_terminal		g_term = {0};
 keyboard_queue_t	g_keyboard_queue = {0};
 
 static void	__init_kernel(void)
@@ -22,5 +21,5 @@ void	kernel_main()
 	term_puts(" World!\n");
 	term_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 	while (1)
-		term_putkey_from_queue();
+		term_put_from_keyqueue();
 }

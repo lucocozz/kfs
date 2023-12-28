@@ -9,7 +9,7 @@
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
-#define VGA_BUFFER_SIZE (VGA_WIDTH * VGA_HEIGHT);
+#define VGA_BUFFER_SIZE (VGA_WIDTH * VGA_HEIGHT)
 /// VGA_CTRL_REGISTER is the address of the VGA control register.
 #define VGA_CTRL_REGISTER 0x3D4
 /// VGA_DATA_REGISTER is the address of the VGA data register.
@@ -41,6 +41,14 @@ enum vga_color
 	VGA_COLOR_WHITE = 15,
 };
 
+typedef struct vga_terminal {
+	size_t		row;
+	size_t		column;
+	uint8_t		color;
+	uint16_t	buffer[VGA_BUFFER_SIZE];
+} vga_terminal_t;
+
+extern uint16_t	*g_vga_buffer;
 
 static inline uint8_t	vga_color(enum vga_color fg, enum vga_color bg)
 {

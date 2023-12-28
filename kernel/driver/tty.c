@@ -1,5 +1,9 @@
 #include "driver/tty.h"
 
+uint8_t				g_tty_index = 0;
+vga_terminal_t		g_tty[TTY_COUNT] = {0};
+uint16_t			*g_vga_buffer = VGA_BUFFER_ADDRESS;
+
 void	term_clear(void)
 {
 	uint8_t color = vga_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
@@ -11,33 +15,37 @@ void	term_clear(void)
 	term_goto(0, 0);
 }
 
-void	term_init(void)
+void	term_init()
 {
-	g_term.buffer = VGA_BUFFER_ADDRESS;
-	g_term.color = vga_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-	term_clear();
+	while (g_tty_index < TTY_COUNT)
+	{
+		g_tty[g_tty_index].color = vga_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+		term_clear();
+		++g_tty_index;
+	}
+	g_tty_index = 0;
 }
 
 void	term_set_color(enum vga_color fg, enum vga_color bg)
 {
-	g_term.color = vga_color(fg, bg);
+	g_tty[g_tty_index].color = vga_color(fg, bg);
 }
 
 void	term_put_entry_at(char c, uint8_t color, size_t x, size_t y)
 {
 	const size_t index = y * VGA_WIDTH + x;
-	g_term.buffer[index] = vga_entry(c, color);
+	g_vga_buffer[index] = vga_entry(c, color);
 }
 
 void	term_put_entry(char c, uint8_t color)
 {
-	term_put_entry_at(c, color, g_term.column, g_term.row);
+	term_put_entry_at(c, color, g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 }
 
 void	term_goto(size_t x, size_t y)
 {
-	g_term.column = x;
-	g_term.row = y;
+	g_tty[g_tty_index].column = x;
+	g_tty[g_tty_index].row = y;
 }
 
 bool __special_char_handler(char c)
@@ -45,19 +53,19 @@ bool __special_char_handler(char c)
 	switch (c)
 	{
 	case '\b':
-		if (g_term.column == 0) {
-			if (g_term.row == 0)
+		if (g_tty[g_tty_index].column == 0) {
+			if (g_tty[g_tty_index].row == 0)
 				return (true);
-			term_goto(VGA_WIDTH - 1, g_term.row - 1);
+			term_goto(VGA_WIDTH - 1, g_tty[g_tty_index].row - 1);
 		} else
-			--g_term.column;
-		term_put_entry(' ', g_term.color);
+			--g_tty[g_tty_index].column;
+		term_put_entry(' ', g_tty[g_tty_index].color);
 		return (true);
 
 	case '\n':
-		term_goto(0, g_term.row + 1);
-		if (g_term.row == VGA_HEIGHT)
-			g_term.row = 0;
+		term_goto(0, g_tty[g_tty_index].row + 1);
+		if (g_tty[g_tty_index].row == VGA_HEIGHT)
+			g_tty[g_tty_index].row = 0;
 		return (true);
 
 	default:
@@ -71,15 +79,15 @@ void	term_write(const char *data, size_t size)
 	{
 		if (__special_char_handler(data[i]) == true)
 			continue;
-		term_put_entry(data[i], g_term.color);
-		++g_term.column;
-		if (g_term.column == VGA_WIDTH) {
-			term_goto(0, g_term.row + 1);
-			if (g_term.row == VGA_HEIGHT)
-				g_term.row = 0;
+		term_put_entry(data[i], g_tty[g_tty_index].color);
+		++g_tty[g_tty_index].column;
+		if (g_tty[g_tty_index].column == VGA_WIDTH) {
+			term_goto(0, g_tty[g_tty_index].row + 1);
+			if (g_tty[g_tty_index].row == VGA_HEIGHT)
+				g_tty[g_tty_index].row = 0;
 		}
 	}
-	set_vga_cursor(g_term.column, g_term.row);
+	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 }
 
 void	term_putc(char c)
@@ -93,8 +101,17 @@ void	term_puts(const char *str)
 }
 
 
-bool	__special_key_handler(keypress_t key)
+bool	__special_key_handler(key_t key)
 {
+	if (key.code >= KEY_F1 && key.code <= KEY_F1 + TTY_COUNT - 1) {
+		memcpy(g_tty[g_tty_index].buffer, g_vga_buffer, VGA_BUFFER_SIZE);
+		g_tty_index = key.code - KEY_F1;
+		memcpy(g_vga_buffer, g_tty[g_tty_index].buffer, VGA_BUFFER_SIZE);
+		term_goto(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
+		set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
+		return (true);
+	}
+
 	switch (key.code)
 	{
 	case KEY_ARROW_UP:
@@ -114,18 +131,18 @@ bool	__special_key_handler(keypress_t key)
 	}
 }
 
-void	term_putkey(keypress_t key)
+void	term_putkey(key_t key)
 {
-	if (__special_key_handler(key) == true)
-		return;
 	if (key.is_pressed == false)
+		return;
+	if (__special_key_handler(key) == true)
 		return;
 	term_write((const char*)&key.ascii, 1);
 }
 
-void	term_putkey_from_queue(void)
+void	term_put_from_keyqueue(void)
 {
-	keypress_t key = keyboard_get_key();
+	key_t key = keyboard_get_keyqueue();
 	if (key.code != 0)
 		term_putkey(key);
 }

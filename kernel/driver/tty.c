@@ -18,9 +18,9 @@ void	term_init(void)
 	term_clear();
 }
 
-void	term_set_color(uint8_t color)
+void	term_set_color(enum vga_color fg, enum vga_color bg)
 {
-	g_term.color = color;
+	g_term.color = vga_color(fg, bg);
 }
 
 void	term_put_entry_at(char c, uint8_t color, size_t x, size_t y)
@@ -92,8 +92,32 @@ void	term_puts(const char *str)
 	term_write(str, strlen(str));
 }
 
+
+bool	__special_key_handler(keypress_t key)
+{
+	switch (key.code)
+	{
+	case KEY_ARROW_UP:
+		term_puts("UP");
+		return (true);
+	case KEY_ARROW_DOWN:
+		term_puts("DOWN");
+		return (true);
+	case KEY_ARROW_LEFT:
+		term_puts("LEFT");
+		return (true);
+	case KEY_ARROW_RIGHT:
+		term_puts("RIGHT");
+		return (true);
+	default:
+		return (false);
+	}
+}
+
 void	term_putkey(keypress_t key)
 {
+	if (__special_key_handler(key) == true)
+		return;
 	if (key.is_pressed == false)
 		return;
 	term_write((const char*)&key.ascii, 1);

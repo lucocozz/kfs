@@ -71,7 +71,7 @@ keypress_t	keyboard_get_key(void)
 	return (keypress);
 }
 
-void	keyboard_add_key(keypress_t keypress)
+void	keyboard_add_key(keypress_t key)
 {
 	if (g_keyboard_queue.size == KEYBOARD_QUEUE_CAPACITY && g_keyboard_queue.readed > 0) {
 		memmove(g_keyboard_queue.data, g_keyboard_queue.data + g_keyboard_queue.readed, g_keyboard_queue.size - g_keyboard_queue.readed);
@@ -80,5 +80,5 @@ void	keyboard_add_key(keypress_t keypress)
 	}
 	else if (g_keyboard_queue.size == KEYBOARD_QUEUE_CAPACITY)
 		return ;
-	g_keyboard_queue.data[g_keyboard_queue.size++] = keypress;
+	g_keyboard_queue.data[g_keyboard_queue.size++] = key;
 }

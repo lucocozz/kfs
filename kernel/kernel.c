@@ -16,7 +16,11 @@ void	kernel_main()
 {
 	__init_kernel();
 	term_clear();
-	term_puts("Hello, World!\n");
+	term_set_color(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
+	term_puts("Hello,");
+	term_set_color(VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
+	term_puts(" World!\n");
+	term_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 	while (1)
 		term_putkey_from_queue();
 }

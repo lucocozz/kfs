@@ -22,7 +22,7 @@ extern t_vga_terminal g_term;
 // VGA_TERMINAL
 void	term_init();
 void	term_clear(void);
-void	term_set_color(uint8_t color);
+void	term_set_color(enum vga_color fg, enum vga_color bg);
 void	term_put_entry_at(char c, uint8_t color, size_t x, size_t y);
 void	term_put_entry(char c, uint8_t color);
 void	term_goto(size_t x, size_t y);

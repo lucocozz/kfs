@@ -6,6 +6,8 @@
 #include <stdbool.h>
 
 #include "vga.h"
+#include "keyboard.h"
+
 #include "string.h"
 
 typedef struct vga_terminal {
@@ -22,8 +24,12 @@ void	term_init();
 void	term_clear(void);
 void	term_set_color(uint8_t color);
 void	term_put_entry_at(char c, uint8_t color, size_t x, size_t y);
+void	term_put_entry(char c, uint8_t color);
+void	term_goto(size_t x, size_t y);
 void	term_write(const char *data, size_t size);
 void	term_putc(char c);
+void	term_putkey(keypress_t keypress);
+void	term_putkey_from_queue(void);
 void	term_puts(const char *str);
 
 #endif

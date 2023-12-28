@@ -23,6 +23,7 @@ string = files([
 	'string/memcpy.c',
 	'string/memset.c',
 	'string/memcmp.c',
+	'string/memmove.c',
 ])
 
 ctype = files([

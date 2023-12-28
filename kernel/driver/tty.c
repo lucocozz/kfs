@@ -8,8 +8,7 @@ void	term_clear(void)
 			term_put_entry_at(' ', color, x, y);
 	}
 	set_vga_cursor(0, 0);
-	g_term.column = 0;
-	g_term.row = 0;
+	term_goto(0, 0);
 }
 
 void	term_init(void)
@@ -30,7 +29,18 @@ void	term_put_entry_at(char c, uint8_t color, size_t x, size_t y)
 	g_term.buffer[index] = vga_entry(c, color);
 }
 
-bool __special_key_handler(char c)
+void	term_put_entry(char c, uint8_t color)
+{
+	term_put_entry_at(c, color, g_term.column, g_term.row);
+}
+
+void	term_goto(size_t x, size_t y)
+{
+	g_term.column = x;
+	g_term.row = y;
+}
+
+bool __special_char_handler(char c)
 {
 	switch (c)
 	{
@@ -38,16 +48,14 @@ bool __special_key_handler(char c)
 		if (g_term.column == 0) {
 			if (g_term.row == 0)
 				return (true);
-			g_term.column = VGA_WIDTH - 1;
-			--g_term.row;
-		} else 
+			term_goto(VGA_WIDTH - 1, g_term.row - 1);
+		} else
 			--g_term.column;
-		term_put_entry_at(' ', g_term.color, g_term.column, g_term.row);
+		term_put_entry(' ', g_term.color);
 		return (true);
 
 	case '\n':
-		g_term.column = 0;
-		++g_term.row;
+		term_goto(0, g_term.row + 1);
 		if (g_term.row == VGA_HEIGHT)
 			g_term.row = 0;
 		return (true);
@@ -61,13 +69,12 @@ void	term_write(const char *data, size_t size)
 {
 	for (size_t i = 0; i < size; ++i)
 	{
-		if (__special_key_handler(data[i]) == true)
+		if (__special_char_handler(data[i]) == true)
 			continue;
-		term_put_entry_at(data[i], g_term.color, g_term.column, g_term.row);
+		term_put_entry(data[i], g_term.color);
 		++g_term.column;
 		if (g_term.column == VGA_WIDTH) {
-			g_term.column = 0;
-			++g_term.row;
+			term_goto(0, g_term.row + 1);
 			if (g_term.row == VGA_HEIGHT)
 				g_term.row = 0;
 		}
@@ -83,4 +90,18 @@ void	term_putc(char c)
 void	term_puts(const char *str)
 {
 	term_write(str, strlen(str));
+}
+
+void	term_putkey(keypress_t key)
+{
+	if (key.is_pressed == false)
+		return;
+	term_write((const char*)&key.ascii, 1);
+}
+
+void	term_putkey_from_queue(void)
+{
+	keypress_t key = keyboard_get_key();
+	if (key.code != 0)
+		term_putkey(key);
 }

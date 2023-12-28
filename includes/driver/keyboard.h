@@ -3,33 +3,33 @@
 
 #include <stdint.h>
 
-#define KEYBOARD_BUFFER_CAPACITY 2097152 // 2 MiB
+#define KEYBOARD_QUEUE_CAPACITY 1024
 
 #define LEFT_CTRL			0x1D
-#define LEFT_CTRL_PRESS		0x1D
-#define LEFT_CTRL_RELEASE	0x9D
+#define LEFT_CTRL_PRESSED	0x1D
+#define LEFT_CTRL_RELEASED	0x9D
 
 #define LEFT_SHIFT			0x2A
-#define LEFT_SHIFT_PRESS	0x2A
-#define LEFT_SHIFT_RELEASE	0xAA
+#define LEFT_SHIFT_PRESSED	0x2A
+#define LEFT_SHIFT_RELEASED	0xAA
 
-#define RIGHT_SHIFT			0x36
-#define RIGHT_SHIFT_PRESS	0x36
-#define RIGHT_SHIFT_RELEASE	0xB6
+#define RIGHT_SHIFT				0x36
+#define RIGHT_SHIFT_PRESSED		0x36
+#define RIGHT_SHIFT_RELEASED	0xB6
 
 #define CAPS_LOCK			0x3A
-#define CAPS_LOCK_PRESS		0x3A
-#define CAPS_LOCK_RELEASE	0xBA
+#define CAPS_LOCK_PRESSED	0x3A
+#define CAPS_LOCK_RELEASED	0xBA
 
 #define LEFT_ALT			0x38
-#define LEFT_ALT_PRESS		0x38
-#define LEFT_ALT_RELEASE	0xB8
+#define LEFT_ALT_PRESSED	0x38
+#define LEFT_ALT_RELEASED	0xB8
 
 
-#define HANDLER_KEY_CTRL		0x1
-#define HANDLER_KEY_SHIFT		0x2
-#define HANDLER_KEY_ALT			0x4
-#define HANDLER_KEY_CAPSLOCK	0x8
+#define KEY_CTRL_MASK		0x1
+#define KEY_SHIFT_MASK		0x2
+#define KEY_ALT_MASK		0x4
+#define KEY_CAPSLOCK_MASK	0x8
 
 #define SCANCODE_KEY(code) (scancode_key_us_qwerty[code])
 #define SCANCODE_SHIFT_KEY(code) (scancode_shift_key_us_qwerty[code])
@@ -72,23 +72,24 @@ static const uint8_t scancode_shift_key_us_qwerty[] = {
 	[0x38] =  0,   [0x39] = ' ',
 };
 
+typedef struct keypress {
+	uint8_t	code;
+	uint8_t	ascii;
+	uint8_t	is_pressed;
+	uint8_t	state;
+} keypress_t;
+
 typedef struct {
-	char		data[KEYBOARD_BUFFER_CAPACITY];
-	uint32_t	size;
-	uint32_t	offset;
-} keyboard_buffer_t;
+	keypress_t		data[KEYBOARD_QUEUE_CAPACITY];
+	uint32_t		size;
+	uint32_t		readed;
+} keyboard_queue_t;
 
-// typedef struct {
-// 	uint8_t	code;
-// 	uint8_t	ascii;
-// 	uint8_t	is_pressed;
-// 	uint8_t	states;			// control, shift, alt
-// 	uint8_t	toggle_states;	// capslock, numlock, scrolllock
-// } keypress_t;
+extern uint8_t			g_keyboard_states;
+extern keyboard_queue_t	g_keyboard_queue;
 
-extern uint16_t				g_keyboard_handlers;
-extern keyboard_buffer_t	g_keyboard_buffer;
-
-void	keyboard_handler(void);
+void		keyboard_handler(void);
+keypress_t	keyboard_get_key(void);
+void		keyboard_add_key(keypress_t keypress);
 
 #endif

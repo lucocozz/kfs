@@ -1,6 +1,6 @@
 #include "libc.h"
 
-/// Move memory area (overlapping)
+/// Copy N bytes of SRC to DEST, guaranteeing correct behavior for overlapping strings.
 ///
 /// ## Parameters
 ///
@@ -24,7 +24,7 @@
 ///
 /// ## Note
 ///
-/// - The memory areas may overlap.
+/// - The memory areas can overlap.
 /// - The memory areas must be already allocated.
 /// - The size of `dest` and `src` must be at least `n` bytes.
 void	*memmove(void *dest, const void *src, size_t n)

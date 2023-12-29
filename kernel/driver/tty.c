@@ -1,8 +1,8 @@
 #include "driver/tty.h"
 
-uint8_t				g_tty_index = 0;
-vga_terminal_t		g_tty[TTY_COUNT] = {0};
-uint16_t			*g_vga_buffer = VGA_BUFFER_ADDRESS;
+uint8_t			g_tty_index = 0;
+vga_terminal_t	g_tty[TTY_COUNT] = {0};
+uint16_t		*g_vga_buffer = VGA_BUFFER_ADDRESS;
 
 void	term_clear(void)
 {
@@ -48,6 +48,13 @@ void	term_goto(size_t x, size_t y)
 	g_tty[g_tty_index].row = y;
 }
 
+void	term_scroll_up(void)
+{
+	memmove(g_vga_buffer, g_vga_buffer + VGA_WIDTH, (VGA_BUFFER_SIZE - VGA_WIDTH) * sizeof(uint16_t));
+	for (size_t x = 0; x < VGA_WIDTH; ++x)
+		term_put_entry_at(' ', g_tty[g_tty_index].color, x, VGA_HEIGHT - 1);
+}
+
 bool __special_char_handler(char c)
 {
 	switch (c)
@@ -64,8 +71,10 @@ bool __special_char_handler(char c)
 
 	case '\n':
 		term_goto(0, g_tty[g_tty_index].row + 1);
-		if (g_tty[g_tty_index].row == VGA_HEIGHT)
-			g_tty[g_tty_index].row = 0;
+		if (g_tty[g_tty_index].row == VGA_HEIGHT) {
+			term_scroll_up();
+			term_goto(0, VGA_HEIGHT - 1);
+		}
 		return (true);
 
 	default:
@@ -83,8 +92,10 @@ void	term_write(const char *data, size_t size)
 		++g_tty[g_tty_index].column;
 		if (g_tty[g_tty_index].column == VGA_WIDTH) {
 			term_goto(0, g_tty[g_tty_index].row + 1);
-			if (g_tty[g_tty_index].row == VGA_HEIGHT)
-				g_tty[g_tty_index].row = 0;
+			if (g_tty[g_tty_index].row == VGA_HEIGHT) {
+				term_scroll_up();
+				term_goto(0, VGA_HEIGHT - 1);
+			}
 		}
 	}
 	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
@@ -100,13 +111,12 @@ void	term_puts(const char *str)
 	term_write(str, strlen(str));
 }
 
-
 bool	__special_key_handler(key_t key)
 {
 	if (key.code >= KEY_F1 && key.code <= KEY_F1 + TTY_COUNT - 1) {
-		memcpy(g_tty[g_tty_index].buffer, g_vga_buffer, VGA_BUFFER_SIZE);
+		memcpy(g_tty[g_tty_index].buffer, g_vga_buffer, VGA_BUFFER_SIZE * sizeof(uint16_t));
 		g_tty_index = key.code - KEY_F1;
-		memcpy(g_vga_buffer, g_tty[g_tty_index].buffer, VGA_BUFFER_SIZE);
+		memcpy(g_vga_buffer, g_tty[g_tty_index].buffer, VGA_BUFFER_SIZE * sizeof(uint16_t));
 		term_goto(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 		set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 		return (true);

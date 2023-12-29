@@ -1,6 +1,6 @@
 #include "libc.h"
 
-/// Copy memory area
+/// Copy N bytes of SRC to DEST.
 ///
 /// ## Parameters
 ///

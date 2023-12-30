@@ -1,19 +1,13 @@
 kernel_includes = include_directories('../includes')
 
-kernel_sources = files([
-	'kernel.c',
+subdir('driver')
+subdir('cpu')
+subdir('boot')
 
-	'boot/boot.s',
-	'boot/crti.s',
-	'boot/crtn.s',
+kernel_sources = files(['kernel.c'])
 
-	'cpu/idt.s',
-	'cpu/interrupt_handlers.s',
-	'cpu/interrupts.c',
-	'cpu/pic.c',
-
-	'driver/tty.c',
-	'driver/keyboard.c',
-	'driver/vga.c',
-	'driver/ports.c',
-])
+kernel_sources += (
+	driver +
+	cpu +
+	boot
+)

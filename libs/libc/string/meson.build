@@ -1,0 +1,15 @@
+string = files([
+	'strlen.c',
+	'strcat.c',
+	'strncat.c',
+	'strchr.c',
+	'strrchr.c',
+	'strcmp.c',
+	'strncmp.c',
+	'strcpy.c',
+	'strncpy.c',
+	'memcpy.c',
+	'memset.c',
+	'memcmp.c',
+	'memmove.c',
+])

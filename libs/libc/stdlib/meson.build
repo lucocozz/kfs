@@ -1,0 +1,3 @@
+stdlib = files([
+	'atoi.c',
+])

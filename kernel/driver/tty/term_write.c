@@ -32,7 +32,7 @@ static bool __special_char_handler(char c)
 		__handle_newline();
 		return (true);
 	case '\t':
-		term_goto(g_tty[g_tty_index].column + 4, g_tty[g_tty_index].row);
+		term_puts("    ");
 		return (true);
 	default:
 		return (false);

@@ -16,13 +16,10 @@ static void	__handle_key_arrow_left(void)
 	if (g_tty[g_tty_index].column == 0) {
 		if (g_tty[g_tty_index].row == 0)
 			return ;
-		term_goto(VGA_WIDTH - 1, g_tty[g_tty_index].row - 1);
-		while (term_get_c_entry_at(g_tty[g_tty_index].column - 1, g_tty[g_tty_index].row) == '\0') {
-			term_goto(g_tty[g_tty_index].column - 1, g_tty[g_tty_index].row);
-			if (g_tty[g_tty_index].column == 0)
-				break;
-		}
-	} else
+		if (term_get_c_entry_at(VGA_WIDTH - 1, g_tty[g_tty_index].row - 1) != '\0')
+			term_goto(VGA_WIDTH - 1, g_tty[g_tty_index].row - 1);
+	} 
+	else
 		--g_tty[g_tty_index].column;
 	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 }

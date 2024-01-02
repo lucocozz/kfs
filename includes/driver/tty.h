@@ -17,7 +17,7 @@ extern vga_terminal_t	g_tty[TTY_COUNT];
 extern uint16_t			*g_vga_buffer;
 
 // VGA_TERMINAL
-void	term_init();
+void	term_init(void);
 void	term_clear(void);
 void	term_set_color(enum vga_color fg, enum vga_color bg);
 void	term_put_entry_at(char c, uint8_t color, size_t x, size_t y);

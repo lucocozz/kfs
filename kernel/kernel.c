@@ -23,6 +23,7 @@ void	kernel_main()
 	term_set_color(VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
 	term_puts(" World!\n");
 	term_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	printk("printk test: %d, %i, %s, %c, %x, %X, %p, %u\n", 42, 42, "Hello World!", 'c', 42, 42, 0x42, 42);
 	while (1)
 		term_put_from_keyqueue();
 }

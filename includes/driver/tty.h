@@ -9,6 +9,7 @@
 #include "keyboard.h"
 
 #include "string.h"
+#include "stdlib.h"
 
 #define TTY_COUNT 4
 
@@ -32,5 +33,6 @@ void	term_putkey(key_t keypress);
 void	term_put_from_keyqueue(void);
 void	term_puts(const char *str);
 void	term_scroll_up(void);
+void	term_putnbr(int nb, int base);
 
 #endif

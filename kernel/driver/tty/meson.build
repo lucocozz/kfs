@@ -14,4 +14,5 @@ tty = files([
 	'term_puts.c',
 	'term_putkey.c',
 	'term_put_from_keyqueue.c',
+	'term_putnbr.c',
 ])

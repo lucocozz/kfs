@@ -1,29 +1,17 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   printk.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: lucocozz <lucocozz@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/31 16:53:30 by lucocozz          #+#    #+#             */
-/*   Updated: 2023/12/31 20:00:14 by lucocozz         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "printk.h"
 
-printk_buffer_t	g_printk_buffer = PRINTK_BUFFER_INIT;
+printk_buffer_t		g_printk_buffer = PRINTK_BUFFER_INIT;
 
 static void	__call_formater(printk_flags_t flags, va_list ap)
 {
-	void (*formats[])(va_list ap, printk_flags_t flags) = {
-		['%'] = &format_per, ['c'] = &format_c, ['s'] = &format_s,
-		['p'] = &format_p,   ['d'] = &format_d, ['i'] = &format_i,
-		['u'] = &format_u,   ['x'] = &format_x, ['X'] = &format_xu
+	void (*formaters[])(va_list ap, printk_flags_t flags) = {
+		['%'] = &printk_format_per, ['c'] = &printk_format_c, ['s'] = &printk_format_s,
+		['p'] = &printk_format_p,   ['d'] = &printk_format_d, ['i'] = &printk_format_i,
+		['u'] = &printk_format_u,   ['x'] = &printk_format_x, ['X'] = &printk_format_xu
 	};
 
-	if (formats[(int)flags.type] != NULL)
-		formats[(int)flags.type](ap, flags);
+	if (flags.type != '\0' && formaters[(int)flags.type] != NULL)
+		formaters[(int)flags.type](ap, flags);
 }
 
 static printk_flags_t	__parse_flags(const char *format, int *i, va_list ap)
@@ -31,31 +19,32 @@ static printk_flags_t	__parse_flags(const char *format, int *i, va_list ap)
 	printk_flags_t	flags = PRINTK_FLAGS_INIT;
 
 	*i += 1;
-	while (!strchr(PRINTK_FORMATS_TYPE, format[*i]) && format[*i])
+	while (format[*i] != '\0' && strchr(PRINTK_FORMATS_TYPE, format[*i]) == NULL)
 	{
-		*i += parse_padding(format[*i], &flags);
-		*i += parse_fill(format[*i], &flags);
-		*i += parse_width(&format[*i], &flags, ap);
-		*i += parse_precision(&format[*i], &flags, ap);
+		*i += printk_parse_padding(format[*i], &flags);
+		*i += printk_parse_fill(format[*i], &flags);
+		*i += printk_parse_width(&format[*i], &flags, ap);
+		*i += printk_parse_precision(&format[*i], &flags, ap);
 	}
 	flags.type = format[*i];
-	*i += 1;
+	if (format[*i] != '\0')
+		*i += 1;
 	return (flags);
 }
 
 int	printk(const char *format, ...)
 {
-	int			i = 0;
 	va_list		ap;
+	int			i = 0;
 
 	va_start(ap, format);
-	while (format[i])
+	while (format[i] != '\0')
 	{
 		if (format[i] == '%')
 			__call_formater(__parse_flags(format, &i, ap), ap);
 		else
-			insert_in_buffer(format[i++]);
+			printk_write(format[i++]);
 	}
-	print_buffer();
-	return (printk_buffer.len);
+	printk_print_buffer();
+	return (g_printk_buffer.len);
 }

@@ -32,12 +32,12 @@ static void	__left_padding(printk_flags_t flags, char *nb_str, int nb)
 		printk_puts(&flags, nb_str);
 }
 
-void	printk_format_x(va_list ap, printk_flags_t flags)
+void	printk_format_x(va_list *ap, printk_flags_t flags)
 {
 	unsigned int	nb;
 	char			nb_str[32];
 
-	nb = va_arg(ap, unsigned int);
+	nb = va_arg(*ap, unsigned int);
 	utoa(nb, nb_str, 16);
 	if (flags.padding)
 		__rigth_padding(flags, nb_str, nb);
@@ -45,12 +45,12 @@ void	printk_format_x(va_list ap, printk_flags_t flags)
 		__left_padding(flags, nb_str, nb);
 }
 
-void	printk_format_xu(va_list ap, printk_flags_t flags)
+void	printk_format_xu(va_list *ap, printk_flags_t flags)
 {
 	unsigned int	nb;
 	char			nb_str[32];
 
-	nb = va_arg(ap, unsigned int);
+	nb = va_arg(*ap, unsigned int);
 	utoa(nb, nb_str, 16);
 	strtoupper(nb_str);
 	if (flags.padding)

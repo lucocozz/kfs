@@ -28,9 +28,9 @@ static void	__left_padding(printk_flags_t flags, char *nb_str, int nb)
 		printk_puts(&flags, nb_str);
 }
 
-void	printk_format_p(va_list ap, printk_flags_t flags)
+void	printk_format_p(va_list *ap, printk_flags_t flags)
 {
-	uintptr_t	nb = (uintptr_t)va_arg(ap, void *);
+	uintptr_t	nb = (uintptr_t)va_arg(*ap, void *);
 	char		nb_str[34] = "0x";
 
 	utoa(nb, nb_str + 2, 16);

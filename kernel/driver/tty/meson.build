@@ -4,6 +4,7 @@ tty = files([
 	'term_put_c_entry_at.c',
 	'term_put_c_entry.c',
 	'term_get_c_entry_at.c',
+	'term_get_c_entry_at_pos.c',
 	'term_init.c',
 	'term_clear.c',
 	'term_goto.c',

@@ -2,7 +2,7 @@
 
 void	term_cursor_forward(void)
 {
-	if (term_get_c_entry_at(g_tty[g_tty_index].column, g_tty[g_tty_index].row) != '\0')
+	if (term_get_c_entry_at() != '\0')
 		term_goto(g_tty[g_tty_index].column + 1, g_tty[g_tty_index].row);
 	if (g_tty[g_tty_index].column == VGA_WIDTH) {
 		term_goto(0, g_tty[g_tty_index].row + 1);

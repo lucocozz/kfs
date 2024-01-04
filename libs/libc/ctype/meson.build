@@ -1,0 +1,17 @@
+ctype = files([
+	'isalnum.c',
+	'isalpha.c',
+	'iscntrl.c',
+	'isdigit.c',
+	'isgraph.c',
+	'islower.c',
+	'isprint.c',
+	'ispunct.c',
+	'isspace.c',
+	'isupper.c',
+	'isxdigit.c',
+	'isascii.c',
+	'isblank.c',
+	'tolower.c',
+	'toupper.c',
+])

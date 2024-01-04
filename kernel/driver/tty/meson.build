@@ -1,0 +1,18 @@
+tty = files([
+	'term_put_entry_at.c',
+	'term_put_entry.c',
+	'term_put_c_entry_at.c',
+	'term_put_c_entry.c',
+	'term_get_c_entry_at.c',
+	'term_init.c',
+	'term_clear.c',
+	'term_goto.c',
+	'term_set_color.c',
+	'term_scroll_up.c',
+	'term_write.c',
+	'term_putc.c',
+	'term_puts.c',
+	'term_putkey.c',
+	'term_put_from_keyqueue.c',
+	'term_putnbr.c',
+])

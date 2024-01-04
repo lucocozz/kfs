@@ -1,22 +1,11 @@
-
-stdio = files([
-
-])
-
-stdlib = files([
-
-])
-
-
-string = files([
-	'string/strlen.c',
-])
-
+subdir('string')
+subdir('ctype')
+subdir('stdlib')
 
 libc_includes = include_directories('./includes')
 
 libc_sources = (
-	stdio +
-	stdlib +
-	string
+	string +
+	ctype +
+	stdlib
 )

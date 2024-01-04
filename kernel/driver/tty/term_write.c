@@ -2,14 +2,16 @@
 
 static void	__handle_backspace(void)
 {
-	if (g_tty[g_tty_index].column == 0) {
-		if (g_tty[g_tty_index].row == 0)
-			return ;
-		term_goto(VGA_WIDTH - 1, g_tty[g_tty_index].row - 1);
-	} else
-		--g_tty[g_tty_index].column;
-	term_put_c_entry('\0');
-	//TODO: handle backspace inner line
+	size_t index;
+	size_t len = 0;
+	
+	if (term_cursor_backward() == false)
+		return;
+	index = g_tty[g_tty_index].row * VGA_WIDTH + g_tty[g_tty_index].column;
+	while (g_vga_buffer[index + len] != '\0')
+		++len;
+	memmove(g_vga_buffer + index, g_vga_buffer + index + 1, len);
+	g_vga_buffer[index + len] = '\0';
 }
 
 static void	__handle_newline(void)

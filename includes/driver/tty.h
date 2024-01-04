@@ -35,5 +35,7 @@ void	term_scroll_up(void);
 void	term_putnbr(int nb, int base);
 size_t	term_get_index(void);
 void	term_set_index(size_t index);
+bool	term_cursor_backward(void);
+void	term_cursor_forward(void);
 
 #endif

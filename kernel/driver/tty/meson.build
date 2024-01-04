@@ -17,4 +17,6 @@ tty = files([
 	'term_putnbr.c',
 	'term_get_index.c',
 	'term_set_index.c',
+	'term_cursor_backward.c',
+	'term_cursor_forward.c',
 ])

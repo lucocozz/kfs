@@ -15,7 +15,6 @@
 
 extern uint8_t			g_tty_index;
 extern vga_terminal_t	g_tty[TTY_COUNT];
-extern uint16_t			*g_vga_buffer;
 
 // VGA_TERMINAL
 void	term_init(void);
@@ -34,5 +33,9 @@ void	term_put_from_keyqueue(void);
 void	term_puts(const char *str);
 void	term_scroll_up(void);
 void	term_putnbr(int nb, int base);
+size_t	term_get_index(void);
+void	term_set_index(size_t index);
+bool	term_cursor_backward(void);
+void	term_cursor_forward(void);
 
 #endif

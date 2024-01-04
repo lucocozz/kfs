@@ -41,6 +41,9 @@
 #define KEY_ARROW_DOWN	0x50
 #define KEY_ARROW_LEFT	0x4B
 #define KEY_ARROW_RIGHT	0x4D
+#define KEY_BACKSPACE	0x0E
+#define KEY_ENTER		0x1C
+#define KEY_TAB			0x0F
 
 #define KEY_F1	0x3B
 #define KEY_F2	0x3C

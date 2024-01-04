@@ -20,13 +20,13 @@ int	printk_parse_fill(char c, printk_flags_t *flags)
 	return (c == '0');
 }
 
-int	printk_parse_width(const char *str, printk_flags_t *flags, va_list ap)
+int	printk_parse_width(const char *str, printk_flags_t *flags, va_list *ap)
 {
 	int	i = 0;
 
 	if (str[i] == '*')
 	{
-		flags->width = va_arg(ap, int);
+		flags->width = va_arg(*ap, int);
 		if (flags->width < 0) {
 			flags->width *= -1;
 			printk_parse_padding('-', flags);
@@ -43,7 +43,7 @@ int	printk_parse_width(const char *str, printk_flags_t *flags, va_list ap)
 	return (i);
 }
 
-int	printk_parse_precision(const char *s, printk_flags_t *flags, va_list ap)
+int	printk_parse_precision(const char *s, printk_flags_t *flags, va_list *ap)
 {
 	int	i;
 
@@ -53,7 +53,7 @@ int	printk_parse_precision(const char *s, printk_flags_t *flags, va_list ap)
 		i++;
 		if (s[i] == '*')
 		{
-			flags->precision = va_arg(ap, int);
+			flags->precision = va_arg(*ap, int);
 			if (flags->precision < 0)
 				flags->precision = -1;
 			i++;

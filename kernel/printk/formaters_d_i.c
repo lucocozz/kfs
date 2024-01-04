@@ -44,9 +44,9 @@ static void	__left_padding(printk_flags_t flags, char *nb_str, int nb)
 	}
 }
 
-void	printk_format_d(va_list ap, printk_flags_t flags)
+void	printk_format_d(va_list *ap, printk_flags_t flags)
 {
-	int		nb = va_arg(ap, int);
+	int		nb = va_arg(*ap, int);
 	char	nb_str[12] = {0};
 
 	itoa((nb < 0) ? nb * -1 : nb, nb_str, 10);
@@ -56,7 +56,7 @@ void	printk_format_d(va_list ap, printk_flags_t flags)
 		__left_padding(flags, nb_str, nb);
 }
 
-void	printk_format_i(va_list ap, printk_flags_t flags)
+void	printk_format_i(va_list *ap, printk_flags_t flags)
 {
 	printk_format_d(ap, flags);
 }

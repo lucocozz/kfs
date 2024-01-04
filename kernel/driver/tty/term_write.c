@@ -7,7 +7,7 @@ static void	__handle_backspace(void)
 	
 	if (term_cursor_backward() == false)
 		return;
-	index = g_tty[g_tty_index].row * VGA_WIDTH + g_tty[g_tty_index].column;
+	index = term_get_index();
 	while (g_vga_buffer[index + len] != '\0')
 		++len;
 	memmove(g_vga_buffer + index, g_vga_buffer + index + 1, len);
@@ -34,7 +34,8 @@ static bool __special_char_handler(char c)
 		__handle_newline();
 		return (true);
 	case '\t':
-		term_puts("    ");
+		if (term_get_c_entry_at(g_tty[g_tty_index].column, g_tty[g_tty_index].row) == '\0')
+			term_puts("    ");
 		return (true);
 	default:
 		return (false);

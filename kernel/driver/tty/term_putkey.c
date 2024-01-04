@@ -1,4 +1,5 @@
 #include "driver/tty.h"
+#include "printk.h"
 
 static void	__handle_function_key(key_t key)
 {
@@ -11,20 +12,17 @@ static void	__handle_function_key(key_t key)
 	}
 }
 
-static void	__handle_key_arrow_left(void)
+static bool	__term_cursor_back(void)
 {
-	if (g_tty[g_tty_index].column == 0) {
-		if (g_tty[g_tty_index].row == 0)
-			return ;
-		if (term_get_c_entry_at(VGA_WIDTH - 1, g_tty[g_tty_index].row - 1) != '\0')
-			term_goto(VGA_WIDTH - 1, g_tty[g_tty_index].row - 1);
-	} 
-	else
-		--g_tty[g_tty_index].column;
-	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
+	size_t index = term_get_index();
+
+	if (index == 0 || (char)g_vga_buffer[index - 1] == '\0')
+		return (false);
+	term_set_index(index - 1);
+	return (true);
 }
 
-static void	__handle_key_arrow_right(void)
+static void	__term_cursor_front(void)
 {
 	if (term_get_c_entry_at(g_tty[g_tty_index].column, g_tty[g_tty_index].row) != '\0')
 		term_goto(g_tty[g_tty_index].column + 1, g_tty[g_tty_index].row);
@@ -38,6 +36,20 @@ static void	__handle_key_arrow_right(void)
 	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 }
 
+static void	__handle_key_backspace(void)
+{
+	size_t index;
+	size_t len = 0;
+	
+	if (__term_cursor_back() == false)
+		return;
+	index = g_tty[g_tty_index].row * VGA_WIDTH + g_tty[g_tty_index].column;
+	while (g_vga_buffer[index + len] != '\0')
+		++len;
+	memmove(g_vga_buffer + index, g_vga_buffer + index + 1, len);
+	g_vga_buffer[index + len] = '\0';
+}
+
 static bool	__handle_arrow_key(key_t key)
 {
 	switch (key.code)
@@ -47,10 +59,10 @@ static bool	__handle_arrow_key(key_t key)
 	case KEY_ARROW_DOWN:
 		return (true);
 	case KEY_ARROW_LEFT:
-		__handle_key_arrow_left();
+		__term_cursor_back();
 		return (true);
 	case KEY_ARROW_RIGHT:
-		__handle_key_arrow_right();
+		__term_cursor_front();
 		return (true);
 	default:
 		return (false);
@@ -61,6 +73,10 @@ static bool	__special_key_handler(key_t key)
 {
 	if (key.code >= KEY_F1 && key.code <= KEY_F10) {
 		__handle_function_key(key);
+		return (true);
+	}
+	if (key.code == KEY_BACKSPACE) {
+		__handle_key_backspace();
 		return (true);
 	}
 	return (__handle_arrow_key(key));

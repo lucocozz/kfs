@@ -1,6 +1,6 @@
 project(
 	'kfs', ['c'],
-	version: '0.1.0',
+	version: '0.2.0',
 	default_options: [
 		'warning_level=3',
 		'werror=true',

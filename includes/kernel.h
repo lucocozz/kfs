@@ -14,8 +14,9 @@
 
 #include "libc.h"
 
-#include "cpu/interrupts.h"
 #include "cpu/pic.h"
+#include "cpu/interrupts.h"
+#include "cpu/memory_segments.h"
 
 #include "driver/ports.h"
 #include "driver/tty.h"

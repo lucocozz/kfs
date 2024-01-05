@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-#define GDT_ADDRESS (gdt_ptr_t*)0x00000800
+#define GDT_ADDRESS 0x00000800
 
-#define SEGMENT_DESCRIPTOR_COUNT 6
+#define SEGMENT_DESCRIPTOR_COUNT 7
 
 #define SEGMENT_BASE 0
 #define SEGMENT_LIMIT 0xFFFFFFFF

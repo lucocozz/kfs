@@ -12,6 +12,9 @@ static void	__init_kernel(void)
 	term_puts("Initializing interrupts...\n");
 	interrupts_init();
 	term_puts("Interrupts initialized\n");
+	term_puts("Initializing GDT...\n");
+	gdt_init();
+	term_puts("GDT initialized\n");
 }
 
 void	kernel_main()

@@ -1,4 +1,5 @@
 #include "cpu/memory_segments.h"
+#include "string.h"
 
 gdt_entry_t gdt_entries[SEGMENT_DESCRIPTOR_COUNT] = {0};
 
@@ -13,12 +14,12 @@ void	gdt_set_gate(int32_t num, uint32_t base, uint32_t limit, uint8_t access, ui
 	gdt_entries[num].access = access;
 }
 
-void	init_gdt()
+void	gdt_init(void)
 {
-	gdt_ptr_t *gdt_ptr = GDT_ADDRESS;
+	gdt_ptr_t gdt_ptr;
 
-	gdt_ptr->limit = (sizeof(gdt_entry_t) * SEGMENT_DESCRIPTOR_COUNT);
-	gdt_ptr->base = (uint32_t)&gdt_entries;
+	gdt_ptr.limit = (sizeof(gdt_entry_t) * SEGMENT_DESCRIPTOR_COUNT);
+	gdt_ptr.base = (uint32_t)GDT_ADDRESS;
 
 	gdt_set_gate(0, 0, 0, 0, 0);													// Null segment
 	gdt_set_gate(1, 0, SEGMENT_LIMIT, SEGMENT_KERNEL_CODE, SEGMENT_GRANULARITY);	// Kernel mode Code segment
@@ -27,6 +28,8 @@ void	init_gdt()
 	gdt_set_gate(4, 0, SEGMENT_LIMIT, SEGMENT_USER_CODE, SEGMENT_GRANULARITY);		// User mode code segment
 	gdt_set_gate(5, 0, SEGMENT_LIMIT, SEGMENT_USER_DATA, SEGMENT_GRANULARITY);		// User mode data segment
 	gdt_set_gate(6, 0, SEGMENT_LIMIT, SEGMENT_USER_STACK, SEGMENT_GRANULARITY);		// User mode stack segment
+
+	memcpy((void *)gdt_ptr.base, (void *)gdt_entries, gdt_ptr.limit);
 
 	gdt_flush((uint32_t)&gdt_ptr);
 }

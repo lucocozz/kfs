@@ -28,7 +28,7 @@ static void	__left_padding(printk_flags_t flags, char *nb_str, int nb)
 	}
 	if (nb == 0 && flags.precision == 0 && flags.width != 0)
 		printk_putc(&flags, ' ');
-	else if (nb == 0 || flags.precision != 0)
+	else if (nb != 0 || flags.precision != 0)
 		printk_puts(&flags, nb_str);
 }
 
@@ -38,7 +38,7 @@ void	printk_format_u(va_list *ap, printk_flags_t flags)
 	char			nb_str[32];
 
 	utoa(nb, nb_str, 10);
-	if (flags.padding)
+	if (flags.padding != 0)
 		__rigth_padding(flags, nb_str, nb);
 	else
 		__left_padding(flags, nb_str, nb);

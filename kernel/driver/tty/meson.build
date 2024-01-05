@@ -4,6 +4,7 @@ tty = files([
 	'term_put_c_entry_at.c',
 	'term_put_c_entry.c',
 	'term_get_c_entry_at.c',
+	'term_get_c_entry_at_pos.c',
 	'term_init.c',
 	'term_clear.c',
 	'term_goto.c',
@@ -15,4 +16,8 @@ tty = files([
 	'term_putkey.c',
 	'term_put_from_keyqueue.c',
 	'term_putnbr.c',
+	'term_get_index.c',
+	'term_set_index.c',
+	'term_cursor_backward.c',
+	'term_cursor_forward.c',
 ])

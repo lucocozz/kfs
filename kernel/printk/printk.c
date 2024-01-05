@@ -2,9 +2,9 @@
 
 printk_buffer_t		g_printk_buffer = PRINTK_BUFFER_INIT;
 
-static void	__call_formater(printk_flags_t flags, va_list ap)
+static void	__call_formater(printk_flags_t flags, va_list *ap)
 {
-	void (*formaters[])(va_list ap, printk_flags_t flags) = {
+	void (*formaters[])(va_list *ap, printk_flags_t flags) = {
 		['%'] = &printk_format_per, ['c'] = &printk_format_c, ['s'] = &printk_format_s,
 		['p'] = &printk_format_p,   ['d'] = &printk_format_d, ['i'] = &printk_format_i,
 		['u'] = &printk_format_u,   ['x'] = &printk_format_x, ['X'] = &printk_format_xu
@@ -14,7 +14,7 @@ static void	__call_formater(printk_flags_t flags, va_list ap)
 		formaters[(int)flags.type](ap, flags);
 }
 
-static printk_flags_t	__parse_flags(const char *format, int *i, va_list ap)
+static printk_flags_t	__parse_flags(const char *format, int *i, va_list *ap)
 {
 	printk_flags_t	flags = PRINTK_FLAGS_INIT;
 
@@ -41,7 +41,7 @@ int	printk(const char *format, ...)
 	while (format[i] != '\0')
 	{
 		if (format[i] == '%')
-			__call_formater(__parse_flags(format, &i, ap), ap);
+			__call_formater(__parse_flags(format, &i, &ap), &ap);
 		else
 			printk_write(format[i++]);
 	}

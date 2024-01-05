@@ -21,16 +21,16 @@ static void	__left_padding(printk_flags_t flags, char *str)
 	int	i = 0;
 	int	len = strlen(str);
 
-	len = (len < flags.precision) ? len : flags.precision;
+	len = (len < flags.precision) ? flags.precision : len;
 	while (flags.width > len)
 		printk_putc(&flags, flags.fill);
 	while (len-- > 0)
 		printk_write(str[i++]);
 }
 
-void	printk_format_s(va_list ap, printk_flags_t flags)
+void	printk_format_s(va_list *ap, printk_flags_t flags)
 {
-	char	*str = va_arg(ap, char*);
+	char	*str = va_arg(*ap, char*);
 
 	if (str == NULL)
 		str = "(null)";
@@ -40,9 +40,9 @@ void	printk_format_s(va_list ap, printk_flags_t flags)
 		__left_padding(flags, str);
 }
 
-void	printk_format_c(va_list ap, printk_flags_t flags)
+void	printk_format_c(va_list *ap, printk_flags_t flags)
 {
-	char c = (char)va_arg(ap, int);
+	char c = (char)va_arg(*ap, int);
 
 	if (flags.padding != 0) {
 		printk_putc(&flags, c);

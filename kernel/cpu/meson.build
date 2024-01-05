@@ -1,6 +1,9 @@
 cpu = files([
-	'idt.s',
-	'interrupt_handlers.s',
-	'interrupts.c',
-	'pic.c',
+	'interrupt/idt.s',
+	'interrupt/interrupt_handlers.s',
+	'interrupt/interrupts.c',
+	'interrupt/pic.c',
+
+	'segmentation/gdt.s',
+	'segmentation/memory_segments.c',
 ])

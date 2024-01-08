@@ -36,6 +36,8 @@ char *utoa(unsigned int n, char *buffer, int radix)
 
 	if (radix < 2 || radix > 36)
 		return (NULL);
+	if (n == 0)
+		return (strcpy(buffer, "0"));
 	do {
 		buffer[i++] = "0123456789abcdefghijklmnopqrstuvwxyz"[n % radix];
 	} while ((n /= radix) > 0);

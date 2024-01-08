@@ -16,6 +16,7 @@ cflags = [
 	'-ffreestanding',
 	'-U__linux__',
 	'-D__i386__',
+	'-D__KERNEL__',
 ]
 
 linker = ['-T', '../config/linker.ld']

@@ -2,6 +2,7 @@
 #define KERNEL_DRIVER_KEYBOARD_H
 
 #include <stdint.h>
+#include "symbol_table.h"
 
 #define KEYBOARD_QUEUE_CAPACITY 1024
 

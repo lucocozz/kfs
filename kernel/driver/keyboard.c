@@ -42,7 +42,7 @@ static void __handle_states_keys(uint8_t code)
 
 void	keyboard_handler(void)
 {
-	uint8_t code = read_port(KEYBOARD_PORT_DATA);
+	uint8_t code = inb(KEYBOARD_PORT_DATA);
 
 	if (__is_state_key(code))
 		__handle_states_keys(code);

@@ -48,5 +48,5 @@ void	printk_format_per(va_list *ap, printk_flags_t flags)
 {
 	(void)ap;
 	(void)flags;
-	printk_write('%');
+	printk_write("%", 1);
 }

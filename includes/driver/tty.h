@@ -7,6 +7,8 @@
 
 #include "vga.h"
 #include "keyboard.h"
+#include "symbol_table.h"
+
 
 #include "string.h"
 #include "stdlib.h"

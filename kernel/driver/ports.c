@@ -9,13 +9,13 @@
 /// ## Examples
 ///
 /// ```
-/// uint8_t data = read_port(0x3f8);
+/// uint8_t data = inb(0x3f8);
 /// ```
 ///
 /// ## Return
 ///
 /// Data read from the port.
-uint8_t read_port(uint16_t port)
+uint8_t inb(uint16_t port)
 {
 	uint8_t result;
 
@@ -33,9 +33,9 @@ uint8_t read_port(uint16_t port)
 /// ## Examples
 ///
 /// ```
-///  write_port(0x3f8, 'A');
+///  outb(0x3f8, 'A');
 /// ```
-void write_port(uint16_t port, uint8_t data)
+void outb(uint16_t port, uint8_t data)
 {
 	__asm__ volatile("outb %0, %1" : : "a" (data), "dN" (port));
 }

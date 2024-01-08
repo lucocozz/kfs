@@ -5,7 +5,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "sys/io.h"
+#include "driver/ports.h"
+#include "symbol_table.h"
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25

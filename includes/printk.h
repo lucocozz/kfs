@@ -7,6 +7,7 @@
 #include "driver/tty.h"
 #include "string.h"
 #include "stdlib.h"
+#include "symbol_table.h"
 
 #define KERN_EMERG		"<0>" /* system is unusable */
 #define KERN_ALERT		"<1>" /* action must be taken immediately */
@@ -20,7 +21,7 @@
 #define KERN_CONT		"<c>" /* continuation of last printk() */
 
 #define PRINTK_BUFFER_CAPACITY 4096
-#define PRINTK_FLAGS_INIT {0, 0, 0, ' ', '\0'}
+#define PRINTK_FLAGS_INIT {0, 0, -1, ' ', '\0'}
 #define PRINTK_BUFFER_INIT {0, 0, {0}}
 #define PRINTK_FORMATS_TYPE "cspdiuxX%"
 
@@ -40,7 +41,7 @@ typedef struct g_printk_buffer {
 
 int				printk(const char *format, ...);
 void			printk_print_buffer(void);
-void			printk_write(char c);
+void			printk_write(const char *str, size_t len);
 void			printk_puts(printk_flags_t *flags, char *str);
 void			printk_putc(printk_flags_t *flags, char c);
 void			printk_format_c(va_list *ap, printk_flags_t flags);

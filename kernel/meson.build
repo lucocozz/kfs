@@ -5,7 +5,7 @@ subdir('cpu')
 subdir('boot')
 subdir('printk')
 
-kernel_sources = files(['kernel.c'])
+kernel_sources = files(['kernel.c', 'dump_stack.c', 'symbol_table.c'])
 
 kernel_sources += (
 	driver +

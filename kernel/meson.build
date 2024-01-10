@@ -4,12 +4,14 @@ subdir('driver')
 subdir('cpu')
 subdir('boot')
 subdir('printk')
+subdir('builtin')
 
-kernel_sources = files(['kernel.c', 'dump_stack.c', 'symbol_table.c'])
+kernel_sources = files(['kernel.c', 'symbol_table.c'])
 
 kernel_sources += (
 	driver +
 	cpu +
 	boot +
-	printk
+	printk +
+	builtin
 )

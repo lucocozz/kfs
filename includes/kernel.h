@@ -31,6 +31,6 @@
 #define LOW_B8(address) (uint8_t)((address) & 0xFF)
 #define HIGH_B8(address) (uint8_t)(((address) >> 8) & 0xFF)
 
-void		dump_stack(void);
+void	dump_stack(void);
 
 #endif

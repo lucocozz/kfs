@@ -16,7 +16,7 @@ static void	__init_kernel(void)
 	gdt_init();
 	term_puts("GDT initialized\n");
 }
-EXPORT_SYMBOL(__init_kernel);
+EXPORT_SYMBOL(__init_kernel)
 
 void	kernel_main()
 {
@@ -33,4 +33,4 @@ void	kernel_main()
 	while (1)
 		term_put_from_keyqueue();
 }
-EXPORT_SYMBOL(kernel_main);
+EXPORT_SYMBOL(kernel_main)

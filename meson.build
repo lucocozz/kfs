@@ -17,6 +17,8 @@ cflags = [
 	'-U__linux__',
 	'-D__i386__',
 	'-D__KERNEL__',
+	'-Wl,--print-map',
+	'-Wl,--undefined=.symbol_table'
 ]
 
 linker = ['-T', '../config/linker.ld']

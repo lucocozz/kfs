@@ -6,7 +6,7 @@ static void	__print_register(uint32_t *reg, char *name)
 
 	printk("  %s = %08p", name, reg);
 	if (symbol != NULL)
-		printk(" %s", symbol);
+		printk(" <%s>", symbol);
 	printk("\n");
 }
 
@@ -33,4 +33,4 @@ void	dump_stack(void)
 		esp = ebp + 2;
 	}
 }
-EXPORT_SYMBOL(dump_stack);
+EXPORT_SYMBOL(dump_stack)

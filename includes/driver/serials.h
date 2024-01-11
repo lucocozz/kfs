@@ -1,5 +1,5 @@
-#ifndef KERNEL_DRIVER_PORTS_H
-#define KERNEL_DRIVER_PORTS_H
+#ifndef KERNEL_DRIVER_SERIALS_H
+#define KERNEL_DRIVER_SERIALS_H
 
 #include <stdint.h>
 #include "symbol_table.h"

@@ -9,6 +9,8 @@ tty = files([
 	'term_clear.c',
 	'term_goto.c',
 	'term_set_color.c',
+	'term_set_text_color.c',
+	'term_reset_color.c',
 	'term_scroll_up.c',
 	'term_write.c',
 	'term_putc.c',
@@ -20,4 +22,7 @@ tty = files([
 	'term_set_index.c',
 	'term_cursor_backward.c',
 	'term_cursor_forward.c',
+	'term_getline.c',
+	'term_go_home_line.c',
+	'term_go_end_line.c',
 ])

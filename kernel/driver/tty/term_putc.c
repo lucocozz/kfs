@@ -3,6 +3,7 @@
 
 void	term_putc(char c)
 {
+	// This code is for inserting a character in the middle of a string
 	if (isprint(c) == true && term_get_c_entry_at() != '\0') {
 		size_t len = 0;
 		size_t index = term_get_index();
@@ -12,5 +13,6 @@ void	term_putc(char c)
 			++len;
 		memmove(dest, src, len);
 	}
+
 	term_write(&c, 1);
 }

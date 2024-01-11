@@ -22,15 +22,6 @@ void	kernel_main()
 {
 	__init_kernel();
 	term_clear();
-	term_set_color(VGA_COLOR_LIGHT_BLUE, VGA_COLOR_BLACK);
-	term_puts("Hello,");
-	term_set_color(VGA_COLOR_LIGHT_GREEN, VGA_COLOR_BLACK);
-	term_puts(" World!\n");
-	term_set_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-	printk(KERN_INFO "printk test: %d, %i, %s, %c, %x, %X, %p, %u\n", 65, 31, "This is a kernel", 'c', 42, 42, 0x42, 42);
-	dump_stack();
-	symbol_table_print();
-	while (1)
-		term_put_from_keyqueue();
+	shell();
 }
 EXPORT_SYMBOL(kernel_main)

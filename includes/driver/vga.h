@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "driver/ports.h"
+#include "driver/serials.h"
 #include "symbol_table.h"
 
 #define VGA_WIDTH 80
@@ -45,7 +45,16 @@ enum vga_color
 typedef struct vga_terminal {
 	size_t		row;
 	size_t		column;
-	uint8_t		color;
+	union
+	{
+		uint8_t		color;
+		struct
+		{
+			uint8_t	fg:4;
+			uint8_t	bg:4;
+		};
+	};
+	
 	uint16_t	buffer[VGA_BUFFER_SIZE];
 } vga_terminal_t;
 

@@ -16,3 +16,4 @@ void	term_putc(char c)
 
 	term_write(&c, 1);
 }
+EXPORT_SYMBOL(term_putc);

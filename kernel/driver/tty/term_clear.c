@@ -10,3 +10,4 @@ void	term_clear(void)
 	set_vga_cursor(0, 0);
 	term_goto(0, 0);
 }
+EXPORT_SYMBOL(term_clear);

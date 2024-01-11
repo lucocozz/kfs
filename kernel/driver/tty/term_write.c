@@ -13,6 +13,7 @@ static void	__handle_backspace(void)
 	memmove(g_vga_buffer + index, g_vga_buffer + index + 1, len);
 	g_vga_buffer[index + len] = '\0';
 }
+EXPORT_SYMBOL(__handle_backspace);
 
 static void	__handle_newline(void)
 {
@@ -22,6 +23,7 @@ static void	__handle_newline(void)
 		term_goto(0, VGA_HEIGHT - 1);
 	}
 }
+EXPORT_SYMBOL(__handle_newline);
 
 static bool __special_char_handler(char c)
 {
@@ -41,6 +43,7 @@ static bool __special_char_handler(char c)
 		return (false);
 	}
 }
+EXPORT_SYMBOL(__special_char_handler);
 
 void	term_write(const char *data, size_t size)
 {
@@ -60,3 +63,4 @@ void	term_write(const char *data, size_t size)
 	}
 	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 }
+EXPORT_SYMBOL(term_write);

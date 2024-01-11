@@ -48,4 +48,4 @@ int	printk(const char *format, ...)
 	printk_print_buffer();
 	return (g_printk_buffer.len);
 }
-EXPORT_SYMBOL(printk)
+EXPORT_SYMBOL(printk);

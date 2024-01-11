@@ -25,6 +25,7 @@ void set_vga_cursor(int x, int y)
 	outb(VGA_CTRL_REGISTER, VGA_CURSOR_HIGH_BYTE);
 	outb(VGA_DATA_REGISTER, HIGH_B8(pos));
 }
+EXPORT_SYMBOL(set_vga_cursor);
 
 /// Get the cursor position in the VGA I/O port
 ///
@@ -59,3 +60,4 @@ void get_vga_cursor(int *x, int *y)
 	*x = pos % VGA_WIDTH;
 	*y = pos / VGA_WIDTH;
 }
+EXPORT_SYMBOL(get_vga_cursor);

@@ -14,6 +14,7 @@
 
 #include "libc.h"
 
+#include "symbol_table.h"
 #include "cpu/pic.h"
 #include "cpu/interrupts.h"
 #include "cpu/memory_segments.h"
@@ -26,7 +27,6 @@
 #include "printk.h"
 #include "builtin.h"
 #include "shell.h"
-#include "symbol_table.h"
 
 #define LOW_B16(address) (uint16_t)((address) & 0xFFFF)
 #define HIGH_B16(address) (uint16_t)(((address) >> 16) & 0xFFFF)

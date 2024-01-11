@@ -2,6 +2,7 @@
 #define KERNEL_CPU_PIC_H
 
 #include <stdint.h>
+#include "symbol_table.h"
 
 #define PIC_1 0x20
 #define PIC_2 0xA0

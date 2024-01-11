@@ -2,6 +2,7 @@
 #define KERNEL_CPU_MEMORY_SEGMENTS_H
 
 #include <stdint.h>
+#include "symbol_table.h"
 
 #define GDT_ADDRESS 0x00000800
 

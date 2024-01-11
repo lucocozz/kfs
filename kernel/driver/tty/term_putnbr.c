@@ -7,3 +7,4 @@ void	term_putnbr(int nb, int base)
 	itoa(nb, nb_str, base);
 	term_puts(nb_str);
 }
+EXPORT_SYMBOL(term_putnbr);

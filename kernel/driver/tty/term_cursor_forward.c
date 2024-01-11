@@ -13,3 +13,4 @@ void	term_cursor_forward(void)
 	}
 	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 }
+EXPORT_SYMBOL(term_cursor_forward);

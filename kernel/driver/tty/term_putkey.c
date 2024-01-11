@@ -11,6 +11,7 @@ static void	__handle_function_key(key_t key)
 		set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 	}
 }
+EXPORT_SYMBOL(__handle_function_key);
 
 static bool	__handle_arrow_key(key_t key)
 {
@@ -30,6 +31,7 @@ static bool	__handle_arrow_key(key_t key)
 		return (false);
 	}
 }
+EXPORT_SYMBOL(__handle_arrow_key);
 
 static bool	__special_key_handler(key_t key)
 {
@@ -39,6 +41,7 @@ static bool	__special_key_handler(key_t key)
 	}
 	return (__handle_arrow_key(key));
 }
+EXPORT_SYMBOL(__special_key_handler);
 
 void	term_putkey(key_t key)
 {
@@ -48,3 +51,4 @@ void	term_putkey(key_t key)
 		return;
 	term_putc(key.ascii);
 }
+EXPORT_SYMBOL(term_putkey);

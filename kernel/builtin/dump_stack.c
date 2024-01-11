@@ -1,4 +1,5 @@
 #include "printk.h"
+#include "symbol_table.h"
 
 static void	__print_register(uint32_t *reg, char *name)
 {
@@ -9,6 +10,7 @@ static void	__print_register(uint32_t *reg, char *name)
 		printk(" <%s>", symbol);
 	printk("\n");
 }
+EXPORT_SYMBOL(__print_register);
 
 void	dump_stack(void)
 {
@@ -33,4 +35,4 @@ void	dump_stack(void)
 		esp = ebp + 2;
 	}
 }
-EXPORT_SYMBOL(dump_stack)
+EXPORT_SYMBOL(dump_stack);

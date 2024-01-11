@@ -6,10 +6,12 @@ static void	__helper(void)
 		" - reboot\n"
 		" - halt\n"
 		" - dump_stack\n"
+		" - symtab\n"
 		" - help\n"
 		" - clear\n"
 	);
 }
+EXPORT_SYMBOL(__helper);
 
 static void	__prompt(void)
 {
@@ -19,6 +21,7 @@ static void	__prompt(void)
 	g_tty[g_tty_index].column += 1;
 	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 }
+EXPORT_SYMBOL(__prompt);
 
 static void	__commands(char *input)
 {
@@ -28,8 +31,12 @@ static void	__commands(char *input)
 		reboot();
 	else if (strcmp(input, "halt") == 0)
 		halt();
+	else if (strcmp(input, "shutdown") == 0)
+		shutdown();
 	else if (strcmp(input, "dump_stack") == 0)
 		dump_stack();
+	else if (strcmp(input, "symtab") == 0)
+		symbol_table_print();
 	else if (strcmp(input, "help") == 0)
 		__helper();
 	else if (strcmp(input, "clear") == 0)
@@ -39,6 +46,7 @@ static void	__commands(char *input)
 	else
 		printk("%s: command not found\n", input);
 }
+EXPORT_SYMBOL(__commands);
 
 void	shell(void)
 {
@@ -50,3 +58,4 @@ void	shell(void)
 		__commands(input);
 	}
 }
+EXPORT_SYMBOL(shell);

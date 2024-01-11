@@ -10,6 +10,7 @@ static bool __is_state_key(uint8_t code)
 		return (true);
 	return (false);
 }
+EXPORT_SYMBOL(__is_state_key);
 
 static uint8_t __scancode_to_ascii(uint8_t code)
 {
@@ -25,6 +26,7 @@ static uint8_t __scancode_to_ascii(uint8_t code)
 		key = SCANCODE_KEY(code);
 	return (key);
 }
+EXPORT_SYMBOL(__scancode_to_ascii);
 
 static void __handle_states_keys(uint8_t code)
 {
@@ -39,6 +41,7 @@ static void __handle_states_keys(uint8_t code)
 	else if (key == CAPS_LOCK && SCANCODE_IS_PRESSED(code))
 		g_keyboard_states ^= KEY_CAPSLOCK_MASK;
 }
+EXPORT_SYMBOL(__handle_states_keys);
 
 void	keyboard_handler(void)
 {
@@ -56,6 +59,7 @@ void	keyboard_handler(void)
 		keyboard_add_keyqueue(key);
 	}
 }
+EXPORT_SYMBOL(keyboard_handler);
 
 key_t	keyboard_get_keyqueue(void)
 {
@@ -71,6 +75,7 @@ key_t	keyboard_get_keyqueue(void)
 	}
 	return (keypress);
 }
+EXPORT_SYMBOL(keyboard_get_keyqueue);
 
 void	keyboard_add_keyqueue(key_t key)
 {
@@ -83,3 +88,4 @@ void	keyboard_add_keyqueue(key_t key)
 		return ;
 	g_keyboard_queue.data[g_keyboard_queue.size++] = key;
 }
+EXPORT_SYMBOL(keyboard_add_keyqueue);

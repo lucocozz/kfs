@@ -10,3 +10,4 @@ void	term_init()
 	}
 	g_tty_index = 0;
 }
+EXPORT_SYMBOL(term_init);

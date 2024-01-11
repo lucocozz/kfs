@@ -2,6 +2,7 @@
 #define KERNEL_CPU_INTERRUPTS_H
 
 #include <stdint.h>
+#include "symbol_table.h"
 
 #define IDT_ENTRIES 256
 

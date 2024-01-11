@@ -1,24 +1,5 @@
 #include "driver/tty.h"
 
-// void	term_getline(char *buffer, size_t size)
-// {
-// 	size_t i = 0;
-
-// 	while (i < size)
-// 	{
-// 		key_t key = keyboard_get_keyqueue();
-// 		if (key.code == 0 || key.is_pressed == false)
-// 			continue;
-// 		term_putkey(key);
-// 		if (key.ascii == '\n')
-// 			break;
-// 		buffer[i] = key.ascii;
-// 		++i;
-// 	}
-// 	buffer[i] = '\0';
-// }
-
-
 static void	__read_input(void)
 {
 	while (true)
@@ -33,6 +14,7 @@ static void	__read_input(void)
 		term_putkey(key);
 	}
 }
+EXPORT_SYMBOL(__read_input);
 
 static void	__write_in_buffer(char *buffer, size_t size)
 {
@@ -46,6 +28,7 @@ static void	__write_in_buffer(char *buffer, size_t size)
 	}
 	buffer[index] = '\0';
 }
+EXPORT_SYMBOL(__write_in_buffer);
 
 void	term_getline(char *buffer, size_t size)
 {
@@ -55,3 +38,4 @@ void	term_getline(char *buffer, size_t size)
 	term_go_end_line();
 	term_putc('\n');
 }
+EXPORT_SYMBOL(term_getline);

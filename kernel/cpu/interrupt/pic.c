@@ -10,6 +10,7 @@ void pic_acknowledge(unsigned int interrupt)
 			outb(PIC_2_COMMAND, PIC_ACKNOWLEDGE);
 	}
 }
+EXPORT_SYMBOL(pic_acknowledge);
 
 void pic_remap(uint8_t offset1, uint8_t offset2)
 {
@@ -28,3 +29,4 @@ void pic_remap(uint8_t offset1, uint8_t offset2)
 
 	asm volatile("sti");
 }
+EXPORT_SYMBOL(pic_remap);

@@ -10,23 +10,24 @@
 #define __init __attribute__((__constructor__))
 #define __exit __attribute__((__destructor__))
 
+#define SYMBOL_SECTION_NAME "symbol_table"
+
 typedef struct SymbolTableEntry {
 	uint32_t	address;
 	char		*name;
 } SymbolTableEntry_t;
 
 #define EXPORT_SYMBOL(func) \
-	SymbolTableEntry_t func##_symbol __section(".symbol_table"); \
-	char *func##_name = #func; \
-	__init void __init_##func(void) { \
-		symbol_add_entry(func##_name, (uint32_t)func); \
+	SymbolTableEntry_t __symbol_##func __section(SYMBOL_SECTION_NAME) = { \
+		.address = (uint32_t)&func, \
+		.name = #func \
 	}
 
-extern SymbolTableEntry_t g_symbol_table[];
+extern SymbolTableEntry_t	__start_symbol_table;
+extern SymbolTableEntry_t	__stop_symbol_table;
 
 char		*symbol_lookup_addr(uint32_t address);
 uint32_t	symbol_lookup_name(char *name);
 void		symbol_table_print(void);
-void		symbol_add_entry(char *name, uint32_t address);
 
 #endif

@@ -10,7 +10,6 @@ static bool __is_state_key(uint8_t code)
 		return (true);
 	return (false);
 }
-EXPORT_SYMBOL(__is_state_key);
 
 static uint8_t __scancode_to_ascii(uint8_t code)
 {
@@ -26,7 +25,6 @@ static uint8_t __scancode_to_ascii(uint8_t code)
 		key = SCANCODE_KEY(code);
 	return (key);
 }
-EXPORT_SYMBOL(__scancode_to_ascii);
 
 static void __handle_states_keys(uint8_t code)
 {
@@ -41,7 +39,6 @@ static void __handle_states_keys(uint8_t code)
 	else if (key == CAPS_LOCK && SCANCODE_IS_PRESSED(code))
 		g_keyboard_states ^= KEY_CAPSLOCK_MASK;
 }
-EXPORT_SYMBOL(__handle_states_keys);
 
 void	keyboard_handler(void)
 {

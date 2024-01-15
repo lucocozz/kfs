@@ -14,7 +14,6 @@ static void	__read_input(void)
 		term_putkey(key);
 	}
 }
-EXPORT_SYMBOL(__read_input);
 
 static void	__write_in_buffer(char *buffer, size_t size)
 {
@@ -28,7 +27,6 @@ static void	__write_in_buffer(char *buffer, size_t size)
 	}
 	buffer[index] = '\0';
 }
-EXPORT_SYMBOL(__write_in_buffer);
 
 void	term_getline(char *buffer, size_t size)
 {

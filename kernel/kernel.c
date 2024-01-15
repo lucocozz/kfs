@@ -16,12 +16,11 @@ static void	__init_kernel(void)
 	gdt_init();
 	term_puts("GDT initialized\n");
 }
-EXPORT_SYMBOL(__init_kernel);
 
 void	kernel_main()
 {
 	__init_kernel();
-	term_clear();
+	// term_clear();
 	shell();
 }
 EXPORT_SYMBOL(kernel_main);

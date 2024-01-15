@@ -10,7 +10,7 @@ tty = files([
 	'term_goto.c',
 	'term_set_color.c',
 	'term_set_text_color.c',
-	'term_reset_color.c',
+	'term_default_color.c',
 	'term_scroll_up.c',
 	'term_write.c',
 	'term_putc.c',

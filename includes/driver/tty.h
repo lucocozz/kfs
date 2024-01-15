@@ -23,7 +23,7 @@ void	term_init(void);
 void	term_clear(void);
 void	term_set_color(enum vga_color fg, enum vga_color bg);
 void	term_set_text_color(enum vga_color color);
-void	term_reset_color(void);
+void	term_default_color(void);
 void	term_put_entry_at(char c, uint8_t color, size_t x, size_t y);
 void	term_put_entry(char c, uint8_t color);
 void	term_put_c_entry(char c);

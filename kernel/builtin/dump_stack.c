@@ -10,7 +10,6 @@ static void	__print_register(uint32_t *reg, char *name)
 		printk(" <%s>", symbol);
 	printk("\n");
 }
-EXPORT_SYMBOL(__print_register);
 
 void	dump_stack(void)
 {

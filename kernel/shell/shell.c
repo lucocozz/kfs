@@ -11,17 +11,15 @@ static void	__helper(void)
 		" - clear\n"
 	);
 }
-EXPORT_SYMBOL(__helper);
 
 static void	__prompt(void)
 {
 	term_set_text_color(VGA_COLOR_GREEN);
 	term_puts("$>");
-	term_reset_color();
+	term_default_color();
 	g_tty[g_tty_index].column += 1;
 	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 }
-EXPORT_SYMBOL(__prompt);
 
 static void	__commands(char *input)
 {
@@ -46,7 +44,6 @@ static void	__commands(char *input)
 	else
 		printk("%s: command not found\n", input);
 }
-EXPORT_SYMBOL(__commands);
 
 void	shell(void)
 {

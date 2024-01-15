@@ -20,7 +20,7 @@ static void	__init_kernel(void)
 void	kernel_main()
 {
 	__init_kernel();
-	// term_clear();
+	term_clear();
 	shell();
 }
 EXPORT_SYMBOL(kernel_main);

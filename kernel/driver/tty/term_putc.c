@@ -3,7 +3,8 @@
 
 void	term_putc(char c)
 {
-	if (isprint(c) == true && term_get_c_entry_at(g_tty[g_tty_index].column, g_tty[g_tty_index].row) != '\0') {
+	// This code is for inserting a character in the middle of a string
+	if (isprint(c) == true && term_get_c_entry_at() != '\0') {
 		size_t len = 0;
 		size_t index = term_get_index();
 		void *src = g_vga_buffer + term_get_index();
@@ -12,5 +13,7 @@ void	term_putc(char c)
 			++len;
 		memmove(dest, src, len);
 	}
+
 	term_write(&c, 1);
 }
+EXPORT_SYMBOL(term_putc);

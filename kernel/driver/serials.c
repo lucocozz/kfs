@@ -1,4 +1,4 @@
-#include "driver/ports.h"
+#include "driver/serials.h"
 
 /// Read from a port
 ///
@@ -9,19 +9,20 @@
 /// ## Examples
 ///
 /// ```
-/// uint8_t data = read_port(0x3f8);
+/// uint8_t data = inb(0x3f8);
 /// ```
 ///
 /// ## Return
 ///
 /// Data read from the port.
-uint8_t read_port(uint16_t port)
+uint8_t inb(uint16_t port)
 {
 	uint8_t result;
 
 	__asm__ volatile("inb %1, %0" : "=a" (result) : "dN" (port));
 	return (result);
 }
+EXPORT_SYMBOL(inb);
 
 /// Write to a port
 ///
@@ -33,9 +34,10 @@ uint8_t read_port(uint16_t port)
 /// ## Examples
 ///
 /// ```
-///  write_port(0x3f8, 'A');
+///  outb(0x3f8, 'A');
 /// ```
-void write_port(uint16_t port, uint8_t data)
+void outb(uint16_t port, uint8_t data)
 {
 	__asm__ volatile("outb %0, %1" : : "a" (data), "dN" (port));
 }
+EXPORT_SYMBOL(outb);

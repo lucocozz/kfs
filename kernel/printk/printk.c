@@ -43,8 +43,9 @@ int	printk(const char *format, ...)
 		if (format[i] == '%')
 			__call_formater(__parse_flags(format, &i, &ap), &ap);
 		else
-			printk_write(format[i++]);
+			printk_write(&format[i++], 1);
 	}
 	printk_print_buffer();
 	return (g_printk_buffer.len);
 }
+EXPORT_SYMBOL(printk);

@@ -9,3 +9,4 @@ bool	term_cursor_backward(void)
 	term_set_index(index - 1);
 	return (true);
 }
+EXPORT_SYMBOL(term_cursor_backward);

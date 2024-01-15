@@ -28,6 +28,7 @@ void set_idt_descriptor(int n , uint32_t handler)
 	idt_descriptors[n].type_and_attr = 0x8E;
 	idt_descriptors[n].offset_high = HIGH_B16(handler);
 }
+EXPORT_SYMBOL(set_idt_descriptor);
 
 /// Initialize Interrupt Descriptor Table (IDT)
 void interrupts_init()
@@ -42,6 +43,7 @@ void interrupts_init()
 
 	pic_remap(PIC_1_OFFSET, PIC_2_OFFSET);
 }
+EXPORT_SYMBOL(interrupts_init);
 
 /// Call handler corresponding to interrupt
 void interrupt_handler(struct cpu_state cpu, unsigned int interrupt, struct stack_state stack)
@@ -57,3 +59,4 @@ void interrupt_handler(struct cpu_state cpu, unsigned int interrupt, struct stac
 		pic_acknowledge(interrupt);
 	}
 }
+EXPORT_SYMBOL(interrupt_handler);

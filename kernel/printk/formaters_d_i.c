@@ -23,14 +23,14 @@ static void	__left_padding(printk_flags_t flags, char *nb_str, int nb)
 	int	len = strlen(nb_str);
 
 	if (nb < 0 && flags.fill == '0')
-		printk_write('-');
+		printk_write("-", 1);
 	while (flags.width > len && flags.width > flags.precision) {
 		if (nb < 0 && (flags.width == len + 1 || flags.width == flags.precision + 1))
 			break ;
 		printk_putc(&flags, flags.fill);
 	}
 	if (nb < 0 && flags.fill == ' ')
-		printk_write('-');
+		printk_write("-", 1);
 	else if (nb < 0 && flags.precision > len)
 		printk_putc(&flags, '0');
 	while (flags.precision > len) {
@@ -39,7 +39,7 @@ static void	__left_padding(printk_flags_t flags, char *nb_str, int nb)
 	}
 	if (nb == 0 && flags.precision == 0 && flags.width != 0)
 		printk_putc(&flags, ' ');
-	else if (nb != 0 || flags.precision != 0) {
+	else if (flags.precision != 0) {
 		printk_puts(&flags, nb_str);
 	}
 }

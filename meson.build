@@ -1,6 +1,6 @@
 project(
 	'kfs', ['c'],
-	version: '0.1.0',
+	version: '0.2.0',
 	default_options: [
 		'warning_level=3',
 		'werror=true',
@@ -16,6 +16,9 @@ cflags = [
 	'-ffreestanding',
 	'-U__linux__',
 	'-D__i386__',
+	'-D__KERNEL__',
+	# '-Wl,--print-map',
+	# '-Wl,--undefined=symbol_table'
 ]
 
 linker = ['-T', '../config/linker.ld']

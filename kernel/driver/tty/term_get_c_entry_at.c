@@ -1,7 +1,8 @@
 #include "driver/tty.h"
 
-char	term_get_c_entry_at(size_t x, size_t y)
+char	term_get_c_entry_at(void)
 {
-	const size_t index = y * VGA_WIDTH + x;
+	const size_t index = term_get_index();
 	return ((char)g_vga_buffer[index]);
 }
+EXPORT_SYMBOL(term_get_c_entry_at);

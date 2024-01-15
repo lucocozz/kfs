@@ -42,7 +42,7 @@ static void __handle_states_keys(uint8_t code)
 
 void	keyboard_handler(void)
 {
-	uint8_t code = read_port(KEYBOARD_PORT_DATA);
+	uint8_t code = inb(KEYBOARD_PORT_DATA);
 
 	if (__is_state_key(code))
 		__handle_states_keys(code);
@@ -56,6 +56,7 @@ void	keyboard_handler(void)
 		keyboard_add_keyqueue(key);
 	}
 }
+EXPORT_SYMBOL(keyboard_handler);
 
 key_t	keyboard_get_keyqueue(void)
 {
@@ -71,6 +72,7 @@ key_t	keyboard_get_keyqueue(void)
 	}
 	return (keypress);
 }
+EXPORT_SYMBOL(keyboard_get_keyqueue);
 
 void	keyboard_add_keyqueue(key_t key)
 {
@@ -83,3 +85,4 @@ void	keyboard_add_keyqueue(key_t key)
 		return ;
 	g_keyboard_queue.data[g_keyboard_queue.size++] = key;
 }
+EXPORT_SYMBOL(keyboard_add_keyqueue);

@@ -6,3 +6,4 @@ void	term_scroll_up(void)
 	for (size_t x = 0; x < VGA_WIDTH; ++x)
 		term_put_c_entry_at('\0', x, VGA_HEIGHT - 1);
 }
+EXPORT_SYMBOL(term_scroll_up);

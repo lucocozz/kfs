@@ -3,7 +3,7 @@ subdir('tty')
 driver = files([
 	'keyboard.c',
 	'vga.c',
-	'ports.c',
+	'serials.c',
 ])
 
 driver += tty

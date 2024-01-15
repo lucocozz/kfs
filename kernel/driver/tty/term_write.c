@@ -34,7 +34,7 @@ static bool __special_char_handler(char c)
 		__handle_newline();
 		return (true);
 	case '\t':
-		if (term_get_c_entry_at(g_tty[g_tty_index].column, g_tty[g_tty_index].row) == '\0')
+		if (term_get_c_entry_at() == '\0')
 			term_puts("    ");
 		return (true);
 	default:
@@ -60,3 +60,4 @@ void	term_write(const char *data, size_t size)
 	}
 	set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 }
+EXPORT_SYMBOL(term_write);

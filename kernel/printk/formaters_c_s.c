@@ -25,7 +25,7 @@ static void	__left_padding(printk_flags_t flags, char *str)
 	while (flags.width > len)
 		printk_putc(&flags, flags.fill);
 	while (len-- > 0)
-		printk_write(str[i++]);
+		printk_write(&str[i++], 1);
 }
 
 void	printk_format_s(va_list *ap, printk_flags_t flags)

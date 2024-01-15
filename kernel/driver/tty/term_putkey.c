@@ -3,11 +3,13 @@
 
 static void	__handle_function_key(key_t key)
 {
-	if (key.code < KEY_F1 + TTY_COUNT) {
-		memcpy(g_tty[g_tty_index].buffer, g_vga_buffer, sizeof(uint16_t) * VGA_BUFFER_SIZE);
+	if (key.code < KEY_F1 + TTY_COUNT)
+	{
+		for (size_t i = 0; i < VGA_BUFFER_SIZE; ++i)
+			g_tty[g_tty_index].buffer[i] = g_vga_buffer[i];
 		g_tty_index = key.code - KEY_F1;
-		memcpy(g_vga_buffer, g_tty[g_tty_index].buffer, sizeof(uint16_t) * VGA_BUFFER_SIZE);
-		term_goto(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
+		for (size_t i = 0; i < VGA_BUFFER_SIZE; ++i)
+			g_vga_buffer[i] = g_tty[g_tty_index].buffer[i];
 		set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 	}
 }
@@ -48,3 +50,4 @@ void	term_putkey(key_t key)
 		return;
 	term_putc(key.ascii);
 }
+EXPORT_SYMBOL(term_putkey);

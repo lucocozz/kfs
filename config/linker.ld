@@ -1,49 +1,44 @@
-OUTPUT_FORMAT(elf32-i386)
-OUTPUT_ARCH(i386)
-ENTRY(_start)
+/* Link.ld -- Linker script for the kernel - ensure everything goes in the */
+/*            Correct place.  */
+/*            Original file taken from Bran's Kernel Development */
+/*            tutorials: http://www.osdever.net/bkerndev/index.php. */
 
+ENTRY(_start)
 SECTIONS
 {
-	. = 0x00100000;
+    . = 0x00100000;
 
-	.multiboot_data : {
-		*(.multiboot_data)
-	}
+    .multiboot ALIGN(4K): {
+        *(.multiboot)
+    }
 
-	.multiboot_text : {
-		*(.multiboot_text)
-	}
+    .note.gnu.build-id ALIGN(4K): {
+        *(.note.gnu.build-id)
+    }
 
-	. += 0xC0000000;
-	_kernel_start = .;
+    .boot ALIGN(4K) : {
+        *(.boot)
+    }
 
-	.text ALIGN(4K) : AT (ADDR (.text) - 0xC0000000)
-	{
-		*(.text)
-	}
+    . += 0xC0000000;
 
-	.rodata ALIGN(4K) : AT (ADDR (.rodata) - 0xC0000000)
-	{
-		*(.rodata)
-	}
+    .text ALIGN(4K): AT(ADDR(.text) - 0xC0000000){
+        *(.text)
+    }
 
-	.data ALIGN(4K) : AT (ADDR (.data) - 0xC0000000)
-	{
-		*(.data)
-	}
+    .rodata ALIGN(4K): AT(ADDR(.rodata) - 0xC0000000){
+        *(.rodata)
+    }
 
-	.bss ALIGN(4K) : AT (ADDR (.bss) - 0xC0000000)
-	{
-		*(.COMMON)
-		*(.bss)
-	}
-	.stab ALIGN(4K) : AT (ADDR (.stab) - 0xC0000000)
-	{
-		*(.stab)
-	}
-	.stabstr ALIGN(4K) : AT (ADDR (.stabstr) - 0xC0000000)
-	{
-		*(.stabstr)
-	}
-	_kernel_end = .;
+    .data ALIGN(4K): AT(ADDR(.data) - 0xC0000000){
+        *(.data)
+    }
+
+    .bss ALIGN(4K): AT(ADDR(.bss) - 0xC0000000){
+        *(COMMON)
+        *(.bss)
+    }
+
+    _kernel_end = .;
+
 }

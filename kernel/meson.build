@@ -4,16 +4,22 @@ subdir('driver')
 subdir('cpu')
 subdir('boot')
 subdir('printk')
-subdir('builtin')
 subdir('shell')
+subdir('memory')
 
-kernel_sources = files(['kernel.c', 'symbol_table.c'])
+kernel_c_sources = files(['kernel.c', 'symbol_table.c'])
+kernel_asm_sources = files([])
 
-kernel_sources += (
+kernel_c_sources += (
 	driver +
-	cpu +
-	boot +
+	cpu_c +
 	printk +
-	builtin +
-	shell
+	shell +
+	memory
 )
+
+kernel_asm_sources += (
+	boot_asm +
+	cpu_asm
+)
+

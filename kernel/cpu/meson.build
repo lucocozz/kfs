@@ -1,9 +1,13 @@
-cpu = files([
-	'interrupt/idt.s',
-	'interrupt/interrupt_handlers.s',
+cpu_c = files([
 	'interrupt/interrupts.c',
 	'interrupt/pic.c',
 
-	'segmentation/gdt.s',
 	'segmentation/memory_segments.c',
+])
+
+cpu_asm = files([
+	'interrupt/idt.asm',
+	'interrupt/interrupt_handlers.asm',
+
+	'segmentation/gdt.asm',
 ])

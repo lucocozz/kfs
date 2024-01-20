@@ -25,8 +25,8 @@
 #include "driver/keyboard.h"
 
 #include "printk.h"
-#include "builtin.h"
-#include "shell.h"
+#include "shell/builtin.h"
+#include "shell/shell.h"
 
 #define LOW_B16(address) (uint16_t)((address) & 0xFFFF)
 #define HIGH_B16(address) (uint16_t)(((address) >> 16) & 0xFFFF)

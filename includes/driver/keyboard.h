@@ -1,8 +1,11 @@
+// https://github.com/Stichting-MINIX-Research-Foundation/minix/blob/master/minix/drivers/tty/tty/keymaps/french.src
+
 #ifndef KERNEL_DRIVER_KEYBOARD_H
 #define KERNEL_DRIVER_KEYBOARD_H
 
 #include <stdint.h>
 #include "symbol_table.h"
+#include "interrupt/interrupts.h"
 
 #define KEYBOARD_QUEUE_CAPACITY 1024
 
@@ -102,10 +105,13 @@ typedef struct {
 	uint32_t	readed;
 } keyboard_queue_t;
 
+typedef struct cpu_state cpu_state_t;
+typedef struct stack_state stack_state_t;
+
 extern uint8_t			g_keyboard_states;
 extern keyboard_queue_t	g_keyboard_queue;
 
-void	keyboard_handler(void);
+void	keyboard_handler(cpu_state_t cpu, stack_state_t stack);
 key_t	keyboard_get_keyqueue(void);
 void	keyboard_add_keyqueue(key_t key);
 

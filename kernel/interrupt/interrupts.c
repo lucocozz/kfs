@@ -1,4 +1,6 @@
-#include "kernel.h"
+#include "symbol_table.h"
+#include "interrupt/interrupts.h"
+#include "memory/memory.h"
 
 IDT_t			idt = {0};
 IDTDescriptor_t	idt_descriptors[IDT_ENTRIES] = {0};
@@ -36,6 +38,7 @@ void interrupts_init()
 	idt.size = sizeof(IDTDescriptor_t) * IDT_ENTRIES;
 	idt.address = (uint32_t)idt_descriptors;
 
+	set_idt_descriptor(INTERRUPT_PAGE_FAULT, (uint32_t)interrupt_handler_14);
 	// set_idt_descriptor(INTERRUPT_TIMER, (uint32_t)interrupt_handler_32);
 	set_idt_descriptor(INTERRUPT_KEYBOARD, (uint32_t)interrupt_handler_33);
 	// set_idt_descriptor(INTERRUPT_SYSCALL, (uint32_t)interrupt_handler_128);
@@ -46,16 +49,15 @@ void interrupts_init()
 EXPORT_SYMBOL(interrupts_init);
 
 /// Call handler corresponding to interrupt
-void interrupt_handler(struct cpu_state cpu, unsigned int interrupt, struct stack_state stack)
+void interrupt_handler(cpu_state_t cpu, unsigned int interrupt, stack_state_t stack)
 {
-	void (*handlers[IDT_ENTRIES])(void) = {
+	void (*handlers[IDT_ENTRIES])(cpu_state_t, stack_state_t) = {
+		[INTERRUPT_PAGE_FAULT] = page_fault_handler,
 		[INTERRUPT_KEYBOARD] = keyboard_handler,
 	};
 
-	(void)cpu;
-	(void)stack;
 	if (interrupt < IDT_ENTRIES && handlers[interrupt]) {
-		handlers[interrupt]();
+		handlers[interrupt](cpu, stack);
 		pic_acknowledge(interrupt);
 	}
 }

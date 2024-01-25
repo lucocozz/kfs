@@ -1,6 +1,7 @@
-#include "kernel.h"
+#include "driver/keyboard.h"
 
-uint8_t	g_keyboard_states = 0;
+uint8_t				g_keyboard_states = 0;
+keyboard_queue_t	g_keyboard_queue = {0};
 
 static bool __is_state_key(uint8_t code)
 {
@@ -40,8 +41,9 @@ static void __handle_states_keys(uint8_t code)
 		g_keyboard_states ^= KEY_CAPSLOCK_MASK;
 }
 
-void	keyboard_handler(void)
+void	keyboard_handler(struct cpu_state cpu, struct stack_state stack)
 {
+	UNUSED(cpu); UNUSED(stack);
 	uint8_t code = inb(KEYBOARD_PORT_DATA);
 
 	if (__is_state_key(code))

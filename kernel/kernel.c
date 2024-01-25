@@ -2,25 +2,21 @@
 
 uint8_t				g_tty_index = 0;
 vga_terminal_t		g_tty[TTY_COUNT] = {0};
-uint16_t			*g_vga_buffer = VGA_BUFFER_ADDRESS;
-keyboard_queue_t	g_keyboard_queue = {0};
+// uint32_t			_kernel_end = KERNEL_START + 0x100000;
+uint16_t			*g_vga_buffer = (uint16_t*)0xC03FF000; //VGA_BUFFER_ADDRESS;
 
-static void	__init_kernel(void)
+static void	__init_kernel()
 {
-	term_init();
-	term_puts("Terminal initialized\n");
-	term_puts("Initializing interrupts...\n");
-	interrupts_init();
-	term_puts("Interrupts initialized\n");
-	term_puts("Initializing GDT...\n");
 	gdt_init();
-	term_puts("GDT initialized\n");
+	interrupts_init();
+	// paging_init();
+	term_init();
 }
 
-void	kernel_main()
+void	kernel_main(uint32_t magic, multiboot_info_t *boot_info)
 {
+	(void)magic; (void)boot_info;
 	__init_kernel();
-	term_clear();
 	shell();
 }
 EXPORT_SYMBOL(kernel_main);

@@ -1,7 +1,7 @@
 kernel_includes = include_directories('../includes')
 
 subdir('driver')
-subdir('cpu')
+subdir('interrupt')
 subdir('boot')
 subdir('printk')
 subdir('shell')
@@ -12,14 +12,15 @@ kernel_asm_sources = files([])
 
 kernel_c_sources += (
 	driver +
-	cpu_c +
+	interrupt_c +
 	printk +
 	shell +
-	memory
+	memory_c
 )
 
 kernel_asm_sources += (
 	boot_asm +
-	cpu_asm
+	interrupt_asm +
+	memory_asm
 )
 

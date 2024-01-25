@@ -1,4 +1,4 @@
-#include "cpu/memory_segments.h"
+#include "memory/memory_segments.h"
 #include "string.h"
 
 gdt_entry_t gdt_entries[SEGMENT_DESCRIPTOR_COUNT] = {0};

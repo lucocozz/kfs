@@ -15,4 +15,5 @@ string = files([
 	'memset.c',
 	'memcmp.c',
 	'memmove.c',
+	'bzero.c',
 ])

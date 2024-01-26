@@ -1,7 +1,7 @@
 memory_c = files([
 	'kheap/kmalloc.c',
 	
-	'segmentation/memory_segments.c',
+	'segmentation/segments.c',
 
 	'paging/paging.c',
 ])

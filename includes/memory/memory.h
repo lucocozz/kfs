@@ -1,5 +1,5 @@
-#ifndef KERNEL_MEMORY_PAGING_H
-#define KERNEL_MEMORY_PAGING_H
+#ifndef KERNEL_MEMORY_H
+#define KERNEL_MEMORY_H
 
 #include <stddef.h>
 #include <stdint.h>

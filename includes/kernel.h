@@ -20,7 +20,7 @@
 #include "printk.h"
 
 #include "memory/memory.h"
-#include "memory/memory_segments.h"
+#include "memory/segments.h"
 
 #include "interrupt/pic.h"
 #include "interrupt/interrupts.h"

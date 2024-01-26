@@ -1,5 +1,5 @@
-#ifndef KERNEL_CPU_MEMORY_SEGMENTS_H
-#define KERNEL_CPU_MEMORY_SEGMENTS_H
+#ifndef KERNEL_MEMORY_SEGMENTS_H
+#define KERNEL_MEMORY_SEGMENTS_H
 
 #include <stdint.h>
 #include "symbol_table.h"

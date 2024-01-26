@@ -1,5 +1,5 @@
-#ifndef KERNEL_CPU_INTERRUPTS_H
-#define KERNEL_CPU_INTERRUPTS_H
+#ifndef KERNEL_INTERRUPTS_H
+#define KERNEL_INTERRUPTS_H
 
 #include <stdint.h>
 #include "symbol_table.h"

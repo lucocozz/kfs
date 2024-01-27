@@ -14,14 +14,20 @@
 #define PAGE_DIR_SIZE		1024
 #define PAGE_TABLE_SIZE		1024
 
+#define PAGE_INDEX(addr) ((addr) / PAGE_SIZE) % PAGE_TABLE_SIZE
+#define PAGE_TABLE_INDEX(addr) ((addr) / PAGE_SIZE) / PAGE_TABLE_SIZE
+
 #define PAGE_FLAG_PRESENT	0x1
 #define PAGE_FLAG_WRITE		0x2
 
 #define INDEX_FROM_BIT(a) (a / CPU_ARCH_BITS)
 #define OFFSET_FROM_BIT(a) (a % CPU_ARCH_BITS)
 
-#define MEM_END_PAGE	0x1000000 // 16MB
+#define FRAMES_BITMAP_SIZE	(NUM_FRAMES / CPU_ARCH_BITS)
 
+#define KHEAP_START	0xC0000000 // 3072MB
+#define KHEAP_SIZE	0x1000000 // 16MB
+#define NUM_FRAMES	(KHEAP_SIZE / PAGE_SIZE) // 4096
 
 typedef struct page {
 	uint32_t	present		: 1;
@@ -47,7 +53,7 @@ typedef struct page_directory {
 
 
 extern uint32_t	_kernel_end;
-
+extern uint32_t	_kernel_start;
 
 void	paging_init(void);
 void	page_fault_handler(struct cpu_state cpu, struct stack_state stack);

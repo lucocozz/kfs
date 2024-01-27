@@ -3,9 +3,10 @@
 #include "memory/memory.h"
 
 static uint32_t			*g_frames_bitmap;
-static uint32_t			g_num_frames;
+// static uint32_t			g_num_frames;
 static page_directory_t	*g_kernel_directory;
 static page_directory_t	*g_current_directory;
+static uint32_t			g_kernel_end = (uint32_t)&_kernel_end;
 
 void	page_fault_handler(struct cpu_state cpu, struct stack_state stack)
 {
@@ -54,7 +55,7 @@ static void	__set_frame(uint32_t frame_addr)
 
 static int32_t	__first_free_frame(void)
 {
-	uint32_t len = INDEX_FROM_BIT(g_num_frames);
+	uint32_t len = FRAMES_BITMAP_SIZE;
 
 	for (uint32_t i = 0; i < len; ++i)
 	{
@@ -63,9 +64,10 @@ static int32_t	__first_free_frame(void)
 			for (uint8_t bit = 0; bit < CPU_ARCH_BITS; ++bit)
 			{
 				uint32_t tested_bit = 0x1 << bit;
-
-				if (g_frames_bitmap[i] & tested_bit)
-					return (i * CPU_ARCH_BITS + bit); 
+				if (!(g_frames_bitmap[i] & tested_bit)) {
+					printk("First free frame: %d\n", i * CPU_ARCH_BITS + bit);
+					return (i * CPU_ARCH_BITS + bit);
+				}
 			}
 		}
 	}
@@ -93,10 +95,8 @@ void	__alloc_frame(page_t *page, bool is_kernel, bool is_writeable)
 
 page_t	*get_page(uint32_t address, page_directory_t *directory, bool make)
 {
-	address /= PAGE_SIZE; // Transform address to page index
-
-	uint32_t table_index = address / PAGE_TABLE_SIZE;
-	uint32_t page_index = address % PAGE_TABLE_SIZE;
+	uint32_t table_index = PAGE_TABLE_INDEX(address);
+	uint32_t page_index = PAGE_INDEX(address);
 
 	if (directory->tables.virtual[table_index] != NULL)
 		return (&directory->tables.virtual[table_index]->pages[page_index]);
@@ -105,6 +105,7 @@ page_t	*get_page(uint32_t address, page_directory_t *directory, bool make)
 		uint32_t physical_address;
 
 		directory->tables.virtual[table_index] = (page_table_t*)kmalloc_ap(sizeof(page_table_t), &physical_address);
+		bzero(directory->tables.virtual[table_index]->pages, sizeof(page_table_t));
 		directory->tables.physical[table_index] = physical_address | 0x7;
 		return (&directory->tables.virtual[table_index]->pages[page_index]);
 	}
@@ -123,20 +124,20 @@ static void	__switch_page_directory(page_directory_t *directory)
 
 void paging_init(void)
 {
-	uint32_t kernel_end_page = (uint32_t)&_kernel_end / PAGE_SIZE;
-
-	g_num_frames = MEM_END_PAGE / PAGE_SIZE;
-	g_frames_bitmap = (uint32_t*)kmalloc(INDEX_FROM_BIT(g_num_frames));
-	bzero(g_frames_bitmap, INDEX_FROM_BIT(g_num_frames));
+	g_frames_bitmap = (uint32_t*)kmalloc_a(FRAMES_BITMAP_SIZE * sizeof(uint32_t));
+	bzero(g_frames_bitmap, FRAMES_BITMAP_SIZE * sizeof(uint32_t));
 
 	g_kernel_directory = (page_directory_t*)kmalloc_a(sizeof(page_directory_t));
 	bzero(g_kernel_directory->tables.virtual, PAGE_DIR_SIZE * sizeof(page_table_t *));
 	bzero(g_kernel_directory->tables.physical, PAGE_DIR_SIZE * sizeof(uint32_t));
 	g_current_directory = g_kernel_directory;
 
-	for (uint32_t i = 0; i < kernel_end_page; ++i)
-		__alloc_frame(get_page(i * PAGE_SIZE, g_kernel_directory, true), true, false);
-
+	printk("Kernel end: %p\n", g_kernel_end);
+	for (uint32_t i = 0; i < g_kernel_end; i += PAGE_SIZE) {
+		// printk("Allocating frame at %p\n", i);
+		__alloc_frame(get_page(i, g_kernel_directory, true), false, false);
+	}
+	printk("Kernel directory: %p\n", g_kernel_directory);
 	__switch_page_directory(g_kernel_directory);
 }
 EXPORT_SYMBOL(paging_init);

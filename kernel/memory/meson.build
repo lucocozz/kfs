@@ -8,4 +8,6 @@ memory_c = files([
 
 memory_asm = files([
 	'segmentation/gdt.asm',
+
+	# 'paging/enable_paging.asm'
 ])

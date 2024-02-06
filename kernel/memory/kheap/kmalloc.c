@@ -1,21 +1,22 @@
 #include "memory/memory.h"
 #include "utils.h"
 
+uint32_t	g_placement_address = (uint32_t)&_kernel_end;
+
 uint32_t	kmalloc_internal(uint32_t size, bool align, uint32_t *phys)
 {
 	uint32_t			address;
-	static uint32_t		placement_address = (uint32_t)&_kernel_end;
 
-	if (align == true && (placement_address & 0xFFFFF000)) {
-		placement_address &= 0xFFFFF000;
-		placement_address += PAGE_SIZE;
+	if (align == true && (g_placement_address & 0xFFFFF000)) {
+		g_placement_address &= 0xFFFFF000;
+		g_placement_address += PAGE_SIZE;
 	}
 
 	if (phys != NULL)
-		*phys = placement_address;
+		*phys = g_placement_address;
 
-	address = placement_address;
-	placement_address += size;
+	address = g_placement_address;
+	g_placement_address += size;
 
 	return (address);
 }

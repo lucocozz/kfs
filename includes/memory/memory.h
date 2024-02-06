@@ -19,15 +19,22 @@
 
 #define PAGE_FLAG_PRESENT	0x1
 #define PAGE_FLAG_WRITE		0x2
+#define PAGE_FLAG_USER		0x4
+#define PAGE_FLAG_RESERVED	0x8
+#define PAGE_FLAG_GLOBAL	0x10
+#define PAGE_FLAG_ACCESS	0x20
+#define PAGE_FLAG_DIRTY		0x40
 
-#define INDEX_FROM_BIT(a) (a / CPU_ARCH_BITS)
-#define OFFSET_FROM_BIT(a) (a % CPU_ARCH_BITS)
+#define BITMAP_INDEX(a) (a / CPU_ARCH_BITS)
+#define BITMAP_OFFSET(a) (a % CPU_ARCH_BITS)
 
-#define FRAMES_BITMAP_SIZE	(NUM_FRAMES / CPU_ARCH_BITS)
 
 #define KHEAP_START	0xC0000000 // 3072MB
 #define KHEAP_SIZE	0x1000000 // 16MB
+#define KHEAP_END	(KHEAP_START + KHEAP_SIZE)
 #define NUM_FRAMES	(KHEAP_SIZE / PAGE_SIZE) // 4096
+#define FRAMES_SIZE	BITMAP_INDEX(NUM_FRAMES)
+#define FRAME_FULL	0xFFFFFFFF
 
 typedef struct page {
 	uint32_t	present		: 1;
@@ -54,6 +61,7 @@ typedef struct page_directory {
 
 extern uint32_t	_kernel_end;
 extern uint32_t	_kernel_start;
+extern uint32_t	g_placement_address;
 
 void	paging_init(void);
 void	page_fault_handler(struct cpu_state cpu, struct stack_state stack);

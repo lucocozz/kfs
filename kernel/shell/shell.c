@@ -4,6 +4,7 @@ static void	__helper(void)
 {
 	term_puts("Available commands:\n"
 		" - reboot\n"
+		" - shutdown\n"
 		" - halt\n"
 		" - dump_stack\n"
 		" - symtab\n"

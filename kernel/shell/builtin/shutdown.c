@@ -3,7 +3,7 @@
 
 void	shutdown(void)
 {
-	halt();
-	outb(0X64, 0xFE);
+	// halt();
+	outw(0x604, 0x2000);
 }
 EXPORT_SYMBOL(shutdown);

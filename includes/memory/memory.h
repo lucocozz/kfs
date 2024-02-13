@@ -62,9 +62,12 @@ typedef struct page_directory {
 extern uint32_t	_kernel_end;
 extern uint32_t	_kernel_start;
 extern uint32_t	g_placement_address;
+extern uint32_t	*g_frames;
 
 void	paging_init(void);
 void	page_fault_handler(struct cpu_state cpu, struct stack_state stack);
+void	alloc_frame(page_t *page, bool is_kernel, bool is_writeable);
+page_t	*get_page(uint32_t address, page_directory_t *directory, bool make);
 
 
 /* MEMORY/KHEAP/KMALLOC.C */

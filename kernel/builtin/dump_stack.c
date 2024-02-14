@@ -1,6 +1,14 @@
 #include "printk.h"
 #include "symbol_table.h"
 
+#define MAX_FRAMES 10
+
+struct stackframe {
+  struct stackframe* ebp;
+  uint32_t eip;
+};
+
+
 static void	__print_register(uint32_t *reg, char *name)
 {
 	char	*symbol = symbol_lookup_addr((uint32_t)reg);
@@ -11,27 +19,18 @@ static void	__print_register(uint32_t *reg, char *name)
 	printk("\n");
 }
 
-void	dump_stack(void)
+void dump_stack(void)
 {
-	uint32_t	*ebp, *eip, *esp;
+    struct stackframe *stack;
 
-	asm volatile (
-		"mov %%ebp, %0;"
-		"call 1f; 1: pop %1;"
-		"mov %%esp, %2;"
-		: "=r"(ebp), "=r"(eip), "=r"(esp)
-	);
-
-	printk("Stack dump:\n");
-	for (size_t frame_index = 0; ebp != 0; ++frame_index)
-	{
-		printk("Frame %2d:\n", frame_index);
-		__print_register(ebp, "ebp");
-		__print_register(eip, "eip");
-		__print_register(esp, "esp");
-		ebp = (uint32_t*)*ebp;
-		eip = (uint32_t*)*(ebp + 1);
-		esp = ebp + 2;
-	}
+    asm ("movl %%ebp,%0" : "=r"(stack) ::);
+    printk("Stack dump:\n");
+    for(unsigned int frame = 0; stack && frame < MAX_FRAMES; ++frame)
+    {
+		printk("Frame %2d:\n", frame);
+		__print_register((uint32_t *)stack->ebp, "ebp");
+        __print_register((uint32_t *)stack->eip, "eip");
+        stack = stack->ebp;
+    }
 }
 EXPORT_SYMBOL(dump_stack);

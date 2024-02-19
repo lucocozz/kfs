@@ -6,7 +6,7 @@ static void	__helper(void)
 		" - reboot\n"
 		" - shutdown\n"
 		" - halt\n"
-		" - dump_stack\n"
+		" - dump\n"
 		" - symtab\n"
 		" - help\n"
 		" - clear\n"
@@ -32,7 +32,7 @@ static void	__commands(char *input)
 		halt();
 	else if (strcmp(input, "shutdown") == 0)
 		shutdown();
-	else if (strcmp(input, "dump_stack") == 0)
+	else if (strcmp(input, "dump") == 0)
 		dump_stack();
 	else if (strcmp(input, "symtab") == 0)
 		symbol_table_print();

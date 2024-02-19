@@ -29,6 +29,7 @@ _start:
 	# Call the global constructors.
 	call _init
 
+	xor %ebp, %ebp # Set ebp to NULL
 	# Transfer control to the main kernel.
 	call kernel_main
 

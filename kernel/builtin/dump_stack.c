@@ -27,10 +27,8 @@ void dump_stack(void)
     printk("Stack dump:\n");
     for(unsigned int frame = 0; stack && frame < MAX_FRAMES; ++frame)
     {
-		printk("Frame %2d:\n", frame);
-		__print_register((uint32_t *)stack->ebp, "ebp");
-        __print_register((uint32_t *)stack->eip, "eip");
-        stack = stack->ebp;
+      __print_register((uint32_t *)stack->eip, "eip");
+      stack = stack->ebp;
     }
 }
 EXPORT_SYMBOL(dump_stack);

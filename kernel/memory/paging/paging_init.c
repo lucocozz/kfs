@@ -20,15 +20,17 @@ static void	__init_directory(void)
 	g_current_directory = g_kernel_directory;
 }
 
-// static void	__switch_page_directory(page_directory_t *directory)
-// {
-// 	g_current_directory = directory;
-// 	asm volatile("mov %0, %%cr3" : : "r" (&directory->tables.physical));
-// 	// uint32_t cr0;
-// 	// asm volatile("mov %%cr0, %0" : "=r" (cr0));
-// 	// cr0 |= 0x80000000;
-// 	// asm volatile("mov %0, %%cr0" : : "r" (cr0));
-// }
+static void	__switch_page_directory(page_directory_t *directory)
+{
+	// return ;
+	g_current_directory = directory;
+	printk("%p\n", &directory->tables.physical);
+	asm volatile("mov %0, %%cr3" :: "r" (&directory->tables.physical));
+	// uint32_t cr0;
+	// asm volatile("mov %%cr0, %0" : "=r" (cr0));
+	// cr0 |= 0x80000000;
+	// asm volatile("mov %0, %%cr0" : : "r" (cr0));
+}
 
 void paging_init(void)
 {
@@ -39,6 +41,7 @@ void paging_init(void)
 		alloc_frame(get_page(i, g_kernel_directory, true), false, false);
 
 	// PAUSE_RUNTIME;
-	// __switch_page_directory(g_kernel_directory);
+	__switch_page_directory(g_kernel_directory);
+	// enable_paging((uint32_t)g_kernel_directory->tables.physical);
 }
 EXPORT_SYMBOL(paging_init);

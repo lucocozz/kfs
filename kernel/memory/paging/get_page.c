@@ -8,7 +8,7 @@ static page_t	*__create_page(uint32_t address, page_directory_t *directory)
 	uint32_t page_index = PAGE_INDEX(address);
 
 	directory->tables.virtual[table_index] = (page_table_t*)kmalloc_ap(sizeof(page_table_t), &physical_address);
-	bzero(directory->tables.virtual[table_index]->pages, sizeof(page_table_t));
+	// bzero(directory->tables.virtual[table_index]->pages, sizeof(page_table_t));
 	directory->tables.physical[table_index] = physical_address | PAGE_FLAG_PRESENT | PAGE_FLAG_WRITE | PAGE_FLAG_USER;
 	return (&directory->tables.virtual[table_index]->pages[page_index]);
 }

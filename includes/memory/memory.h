@@ -64,6 +64,8 @@ extern uint32_t	_kernel_start;
 extern uint32_t	g_placement_address;
 extern uint32_t	*g_frames;
 
+extern void enable_paging(uint32_t page_directory);
+
 void	paging_init(void);
 void	page_fault_handler(struct cpu_state cpu, struct stack_state stack);
 void	alloc_frame(page_t *page, bool is_kernel, bool is_writeable);

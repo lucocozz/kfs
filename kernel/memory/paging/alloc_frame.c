@@ -9,24 +9,6 @@ static void	__set_frame(uint32_t frame_addr)
 	g_frames[index] |= (0x1 << offset);
 }
 
-// static void	__clear_frame(uint32_t frame_addr)
-// {
-// 	uint32_t frame = frame_addr / PAGE_SIZE;
-// 	uint32_t index = BITMAP_INDEX(frame);
-// 	uint32_t offset = BITMAP_OFFSET(frame);
-
-// 	g_frames[index] &= ~(0x1 << offset);
-// }
-
-// static uint32_t	__test_frame(uint32_t frame_addr)
-// {
-// 	uint32_t frame = frame_addr / PAGE_SIZE;
-// 	uint32_t index = BITMAP_INDEX(frame);
-// 	uint32_t offset = BITMAP_OFFSET(frame);
-
-// 	return (g_frames[index] & (0x1 << offset));
-// }
-
 static uint32_t	__get_first_free_frame(void)
 {
 	uint32_t len = FRAMES_SIZE;

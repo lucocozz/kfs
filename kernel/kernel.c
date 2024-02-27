@@ -18,7 +18,6 @@ void	kernel_main(uint32_t magic, multiboot_info_t *boot_info)
 	if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
 		return ;
 	__init_kernel();
-	printk("Multiboot magic: 0x%x\n", magic);
 	shell();
 }
 EXPORT_SYMBOL(kernel_main);

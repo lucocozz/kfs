@@ -3,7 +3,7 @@ memory_c = files([
 	
 	'segmentation/segments.c',
 
-	'paging/paging.c',
+	'paging/paging_init.c',
 	'paging/page_fault.c',
 	'paging/alloc_frame.c',
 	'paging/get_page.c'
@@ -11,4 +11,6 @@ memory_c = files([
 
 memory_asm = files([
 	'segmentation/gdt.asm',
+
+	'paging/enable_paging.asm',
 ])

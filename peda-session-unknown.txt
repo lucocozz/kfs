@@ -1,3 +1,0 @@
-break /mnt/nfs/homes/lucocozz/42Projects/kfs/kernel/interrupt/interrupts.c:38
-
-set exec-wrapper logging enabled

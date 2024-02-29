@@ -5,8 +5,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "vga.h"
-#include "keyboard.h"
+#include "driver/vga.h"
+#include "driver/keyboard.h"
 #include "symbol_table.h"
 
 
@@ -14,6 +14,8 @@
 #include "stdlib.h"
 
 #define TTY_COUNT 4
+
+typedef struct key key_t;
 
 extern uint8_t			g_tty_index;
 extern vga_terminal_t	g_tty[TTY_COUNT];

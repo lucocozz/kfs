@@ -14,23 +14,25 @@
 
 #include "libc.h"
 
+#include "utils.h"
 #include "symbol_table.h"
-#include "cpu/pic.h"
-#include "cpu/interrupts.h"
-#include "cpu/memory_segments.h"
+#include "multiboot.h"
+#include "printk.h"
+
+#include "memory/memory.h"
+#include "memory/segments.h"
+
+#include "interrupt/pic.h"
+#include "interrupt/interrupts.h"
+
+
 
 #include "driver/serials.h"
-#include "driver/tty.h"
-#include "driver/vga.h"
 #include "driver/keyboard.h"
+#include "driver/vga.h"
+#include "driver/tty.h"
 
-#include "printk.h"
-#include "builtin.h"
-#include "shell.h"
-
-#define LOW_B16(address) (uint16_t)((address) & 0xFFFF)
-#define HIGH_B16(address) (uint16_t)(((address) >> 16) & 0xFFFF)
-#define LOW_B8(address) (uint8_t)((address) & 0xFF)
-#define HIGH_B8(address) (uint8_t)(((address) >> 8) & 0xFF)
+#include "shell/builtin.h"
+#include "shell/shell.h"
 
 #endif

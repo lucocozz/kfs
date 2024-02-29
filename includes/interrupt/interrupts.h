@@ -1,11 +1,14 @@
-#ifndef KERNEL_CPU_INTERRUPTS_H
-#define KERNEL_CPU_INTERRUPTS_H
+#ifndef KERNEL_INTERRUPTS_H
+#define KERNEL_INTERRUPTS_H
 
 #include <stdint.h>
 #include "symbol_table.h"
+#include "interrupt/pic.h"
+#include "utils.h"
 
 #define IDT_ENTRIES 256
 
+#define INTERRUPT_PAGE_FAULT 14
 #define INTERRUPT_TIMER 32
 #define INTERRUPT_KEYBOARD 33
 #define INTERRUPT_SYSCALL 128
@@ -23,7 +26,7 @@
 typedef struct IDT {
 	uint16_t	size;
 	uint32_t	address;
-} __attribute__((__packed__)) IDT_t;
+} __attribute__((packed)) IDT_t;
 
 /// Interrupt Descriptor Table (IDT) entry
 typedef struct IDTDescriptor {
@@ -32,7 +35,7 @@ typedef struct IDTDescriptor {
 	uint8_t		__reserved;
 	uint8_t		type_and_attr;
 	uint16_t	offset_high;
-} __attribute__((__packed__)) IDTDescriptor_t;
+} __attribute__((packed)) IDTDescriptor_t;
 
 typedef struct cpu_state {
 	unsigned int eax;
@@ -42,18 +45,18 @@ typedef struct cpu_state {
 	unsigned int ebp;
 	unsigned int esi;
 	unsigned int edi;
-} __attribute__((__packed__)) cpu_state_t;
+} __attribute__((packed)) cpu_state_t;
 
 typedef struct stack_state {
 	unsigned int error_code;
 	unsigned int eip;
 	unsigned int cs;
 	unsigned int eflags;
-} __attribute__((__packed__)) stack_state_t;
+} __attribute__((packed)) stack_state_t;
 
 
-extern IDT_t			idt;
-extern IDTDescriptor_t	idt_descriptors[IDT_ENTRIES];
+extern IDT_t			g_idt;
+extern IDTDescriptor_t	g_idt_descriptors[IDT_ENTRIES];
 
 
 void	interrupts_init();

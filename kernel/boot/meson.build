@@ -1,5 +1,3 @@
-boot = files([
-	'boot.s',
-	'crti.s',
-	'crtn.s',
+boot_asm = files([
+	'boot.asm',
 ])

@@ -56,3 +56,5 @@ kfs.bin
 kfs.iso
 .vscode/
 output.txt
+.gdb_history
+peda-session-kfs.bin.txt

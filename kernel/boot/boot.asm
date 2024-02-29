@@ -17,7 +17,7 @@ extern kernel_main                      ; main is defined elsewhere
 %define PG_FLAG 0x80000000
 
 ; reserve initial kernel stack space, that's 16k.
-%define STACKSIZE 0x4000
+%define STACKSIZE 0x4000 * 8
  
 section .data
 align 0x1000
@@ -78,9 +78,12 @@ HigherHalfKernel:
     ; should be necessary. We now have a higher-half kernel.
 
     mov esp, stack_top                  ; Set up initial stack pointer.
-    push eax                            ; pass Multiboot magic number 
-    push ebx                            ; pass Multiboot info structure
 
+    push esp                            ; pass stack pointer
+    push ebx                            ; pass Multiboot info structure
+    push eax                            ; pass Multiboot magic number 
+
+    cli
     extern kernel_main
     call kernel_main 
     

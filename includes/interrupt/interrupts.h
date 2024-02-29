@@ -55,8 +55,8 @@ typedef struct stack_state {
 } __attribute__((packed)) stack_state_t;
 
 
-extern IDT_t			idt;
-extern IDTDescriptor_t	idt_descriptors[IDT_ENTRIES];
+extern IDT_t			g_idt;
+extern IDTDescriptor_t	g_idt_descriptors[IDT_ENTRIES];
 
 
 void	interrupts_init();

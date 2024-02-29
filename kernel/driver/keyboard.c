@@ -66,6 +66,7 @@ key_t	keyboard_get_keyqueue(void)
 
 	if (g_keyboard_queue.size == 0)
 		return (keypress);
+	printk("readed: %d, size: %d\n", g_keyboard_queue.readed, g_keyboard_queue.size);
 	keypress = g_keyboard_queue.data[g_keyboard_queue.readed];
 	++g_keyboard_queue.readed;
 	if (g_keyboard_queue.readed == g_keyboard_queue.size) {

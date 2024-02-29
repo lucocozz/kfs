@@ -33,7 +33,7 @@ void set_idt_descriptor(int n , uint32_t handler)
 EXPORT_SYMBOL(set_idt_descriptor);
 
 /// Initialize Interrupt Descriptor Table (IDT)
-void interrupts_init()
+void interrupts_init(void)
 {
 	g_idt.size = (sizeof(IDTDescriptor_t) * IDT_ENTRIES) - 1;
 	g_idt.address = (uint32_t)&g_idt_descriptors;

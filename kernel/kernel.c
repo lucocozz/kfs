@@ -1,9 +1,6 @@
 #include "kernel.h"
 
-uint8_t				g_tty_index = 0;
-vga_terminal_t		g_tty[TTY_COUNT] = {0};
-uint16_t			*g_vga_buffer = VGA_BUFFER_ADDRESS;
-multiboot_info_t *g_boot_info = NULL;
+multiboot_info_t	*g_boot_info = NULL;
 
 static void	__init_kernel()
 {
@@ -15,7 +12,7 @@ static void	__init_kernel()
 
 void init_memory()
 {
-	for (unsigned int i = 0; i < g_boot_info->mmap_length; i+= sizeof(struct multiboot_mmap_entry))
+	for (unsigned int i = 0; i < g_boot_info->mmap_length; i += sizeof(struct multiboot_mmap_entry))
 	{
 		struct multiboot_mmap_entry *mmmt = (struct multiboot_mmap_entry*)(g_boot_info->mmap_addr + i + KERNEL_START);
 		printk("Mmap entry: base_addr = 0x%08x%08x, length = 0x%08x%08x\n \tsize = 0x%x, type = 0x%x\n",

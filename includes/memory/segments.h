@@ -5,7 +5,7 @@
 #include "symbol_table.h"
 #include "utils.h"
 
-#define GDT_ADDRESS 0x00000800
+#define GDT_ADDRESS 0xC0000800
 
 #define SEGMENT_DESCRIPTOR_COUNT 7
 

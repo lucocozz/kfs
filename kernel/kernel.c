@@ -7,7 +7,7 @@ multiboot_info_t *g_boot_info = NULL;
 
 static void	__init_kernel()
 {
-	// gdt_init();
+	gdt_init();
 	// interrupts_init();
 	term_init();
 	// paging_init();

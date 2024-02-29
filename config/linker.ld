@@ -1,29 +1,28 @@
 ENTRY(_start)
+OUTPUT_FORMAT(elf32-i386)
+KERNEL_VIRTUAL_ADDRESS = 0xC0100000;
 
-SECTIONS
-{
-	. = 1M;
+SECTIONS {
+   /* The kernel will live at 3GB + 1MB in the virtual
+      address space, which will be mapped to 1MB in the
+      physical address space. */
+   . = KERNEL_VIRTUAL_ADDRESS;
+ 
+   .text : AT(ADDR(.text) - 0xC0000000) {
+       *(.text)
+       *(.rodata*)
+   }
+ 
+   .data ALIGN (0x1000) : AT(ADDR(.data) - 0xC0000000) {
+       *(.data)
+   }
+ 
+   .bss : AT(ADDR(.bss) - 0xC0000000) {
+       _sbss = .;
+       *(COMMON)
+       *(.bss)
+       _ebss = .;
+   }
 
-	.text BLOCK(4K) : ALIGN(4K)
-	{
-		*(.multiboot)
-		*(.text)
-	}
-
-	.rodata BLOCK(4K) : ALIGN(4K)
-	{
-		*(.rodata)
-	}
-
-	.data BLOCK(4K) : ALIGN(4K)
-	{
-		*(.data)
-	}
-
-	.bss BLOCK(4K) : ALIGN(4K)
-	{
-		*(COMMON)
-		*(.bss)
-	}
-    _kernel_end = .;
+   _kernel_end = .;
 }

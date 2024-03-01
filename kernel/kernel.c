@@ -28,7 +28,7 @@ void mmap_print(void)
 static void	__init_kernel(multiboot_info_t *boot_info)
 {
 	gdt_init();
-	// interrupts_init();
+	interrupts_init();
 	term_init();
 	// paging_init();
 	g_boot_info = (multiboot_info_t*)((uint32_t)boot_info + KERNEL_START);
@@ -42,7 +42,6 @@ void	kernel_main(uint32_t magic, multiboot_info_t *boot_info, uint32_t *stack_to
 	if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
 		return ;
 	__init_kernel(boot_info);
-	// shell();
-	PAUSE_RUNTIME;
+	shell();
 }
 EXPORT_SYMBOL(kernel_main);

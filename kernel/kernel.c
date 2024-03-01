@@ -2,6 +2,29 @@
 
 multiboot_info_t	*g_boot_info = NULL;
 
+#define _GREEN		"\033[32m"
+#define _END		"\033[0m"
+
+void print_device_info(void)
+{
+	uint32_t device = g_boot_info->boot_device >> 24;
+	printk("BOOT DEVICE:\t");
+	switch (device) {
+	case 0xE0:
+		printk("CD\n");
+		break;
+	case 0x00:
+		printk("Floppy Disk\n");
+		break;
+	case 0x80:
+		printk("Hard Disk\n");
+		break;
+	default:
+		printk("Unknown\n");
+		break;
+	}
+	printk("\n");
+}
 void mmap_print(void)
 {
 	static const char *memory_types[] = {
@@ -12,6 +35,9 @@ void mmap_print(void)
 		"Bad RAM"
 	};
 
+	print_device_info();
+	printk("Memory Map:\n");
+	printk("------------------------------------------------------------\n");
 	printk("Base\t\t\t\t  Lenght\t\t\t\tType\n");
 	printk("------------------------------------------------------------\n");
 	for (uint32_t i = 0; i < g_boot_info->mmap_length; i += sizeof(multiboot_mmap_entry_t))

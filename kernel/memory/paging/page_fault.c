@@ -7,7 +7,7 @@ void	page_fault_handler(struct cpu_state cpu, struct stack_state stack)
 	UNUSED(cpu);
 	asm volatile("mov %%cr2, %0" : "=r" (faulting_address));
 
-	printk("Page fault! (%d, %d, %d, %d, %d) at %p\n", 
+	printk("Page fault! (%d, %d, %d, %d, %d) at %08p\n", 
 		!(stack.error_code & 0x1),
 		stack.error_code & PAGE_FLAG_WRITE,
 		stack.error_code & PAGE_FLAG_USER,

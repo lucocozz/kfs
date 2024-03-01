@@ -2,9 +2,6 @@
 
 multiboot_info_t	*g_boot_info = NULL;
 
-#define _GREEN		"\033[32m"
-#define _END		"\033[0m"
-
 void print_device_info(void)
 {
 	uint32_t device = g_boot_info->boot_device >> 24;
@@ -46,7 +43,7 @@ void mmap_print(void)
 		printk("0x%08X%08X\t0x%08X%08X\t%s\n",
 			entry->addr_high, entry->addr_low,
 			entry->len_high, entry->len_low,
-			memory_types[(uint32_t)entry->type - 1]
+			memory_types[entry->type - 1]
 		);
 	}
 }

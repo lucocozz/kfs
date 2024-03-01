@@ -235,7 +235,7 @@ typedef struct multiboot_mmap_entry
 	#define MULTIBOOT_MEMORY_NVS				4
 	#define MULTIBOOT_MEMORY_BADRAM				5
 	uint32_t type;
-} __packed multiboot_memory_map_t;
+} __packed multiboot_mmap_entry_t;
 
 struct multiboot_mod_list
 {

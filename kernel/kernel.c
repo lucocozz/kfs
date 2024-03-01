@@ -2,24 +2,38 @@
 
 multiboot_info_t	*g_boot_info = NULL;
 
-static void	__init_kernel()
+void mmap_print(void)
+{
+	static const char *memory_types[] = {
+		"Available",
+		"Reserved",
+		"ACPI Reclaimable",
+		"ACPI NVS",
+		"Bad RAM"
+	};
+
+	printk("Base\t\t\t\t  Lenght\t\t\t\tType\n");
+	printk("------------------------------------------------------------\n");
+	for (uint32_t i = 0; i < g_boot_info->mmap_length; i += sizeof(multiboot_mmap_entry_t))
+	{
+		multiboot_mmap_entry_t *entry = (multiboot_mmap_entry_t*)(g_boot_info->mmap_addr + i);
+		printk("0x%08X%08X\t0x%08X%08X\t%s\n",
+			entry->addr_high, entry->addr_low,
+			entry->len_high, entry->len_low,
+			memory_types[(uint32_t)entry->type - 1]
+		);
+	}
+}
+
+static void	__init_kernel(multiboot_info_t *boot_info)
 {
 	// gdt_init();
 	// interrupts_init();
 	term_init();
 	// paging_init();
-}
-
-void init_memory()
-{
-	for (unsigned int i = 0; i < g_boot_info->mmap_length; i += sizeof(struct multiboot_mmap_entry))
-	{
-		struct multiboot_mmap_entry *mmmt = (struct multiboot_mmap_entry*)(g_boot_info->mmap_addr + i + KERNEL_START);
-		printk("Mmap entry: base_addr = 0x%08x%08x, length = 0x%08x%08x\n \tsize = 0x%x, type = 0x%x\n",
-			(uint32_t)mmmt->addr_high, (uint32_t)mmmt->addr_low,
-			(uint32_t)mmmt->len_high, (uint32_t)mmmt->len_low,
-			(uint32_t)mmmt->size, (uint32_t)mmmt->type);
-	}
+	g_boot_info = (multiboot_info_t*)((uint32_t)boot_info + KERNEL_START);
+	g_boot_info->mmap_addr += KERNEL_START;
+	mmap_print();
 }
 
 void	kernel_main(uint32_t magic, multiboot_info_t *boot_info, uint32_t *stack_top)
@@ -27,12 +41,7 @@ void	kernel_main(uint32_t magic, multiboot_info_t *boot_info, uint32_t *stack_to
 	UNUSED(stack_top);
 	if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
 		return ;
-	// display boot info
-	g_boot_info = (multiboot_info_t*)((uint32_t)boot_info + KERNEL_START);
-	__init_kernel();
-	init_memory();
-	// __asm__ volatile("sti");
-	printk("Kernel initialized\n");
+	__init_kernel(boot_info);
 	// shell();
 	PAUSE_RUNTIME;
 }

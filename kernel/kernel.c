@@ -27,7 +27,7 @@ void mmap_print(void)
 
 static void	__init_kernel(multiboot_info_t *boot_info)
 {
-	// gdt_init();
+	gdt_init();
 	// interrupts_init();
 	term_init();
 	// paging_init();

@@ -27,6 +27,6 @@ void pic_remap(uint8_t offset1, uint8_t offset2)
 	outb(PIC_1_DATA, INTERRUPT_MASK_KEYBOARD);
 	outb(PIC_2_DATA, INTERRUPT_MASK_RESERVED);
 
-	asm volatile("sti");
+	ASM("sti");
 }
 EXPORT_SYMBOL(pic_remap);

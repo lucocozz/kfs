@@ -2,7 +2,7 @@
 
 void	halt(void)
 {
-	asm volatile("cli");
-	asm volatile("hlt");
+	ASM("cli");
+	ASM("hlt");
 }
 EXPORT_SYMBOL(halt);

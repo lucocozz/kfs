@@ -2,6 +2,7 @@
 #define KERNEL_DRIVER_SERIALS_H
 
 #include <stdint.h>
+#include "utils.h"
 #include "symbol_table.h"
 
 #define KEYBOARD_PORT_DATA 0x60

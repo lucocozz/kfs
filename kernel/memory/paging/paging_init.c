@@ -25,11 +25,11 @@ static void	__switch_page_directory(page_directory_t *directory)
 	// return ;
 	g_current_directory = directory;
 	printk("%p\n", &directory->tables.physical);
-	asm volatile("mov %0, %%cr3" :: "r" (&directory->tables.physical));
+	ASM("mov %0, %%cr3" :: "r" (&directory->tables.physical));
 	// uint32_t cr0;
-	// asm volatile("mov %%cr0, %0" : "=r" (cr0));
+	// ASM("mov %%cr0, %0" : "=r" (cr0));
 	// cr0 |= 0x80000000;
-	// asm volatile("mov %0, %%cr0" : : "r" (cr0));
+	// ASM("mov %0, %%cr0" : : "r" (cr0));
 }
 
 void paging_init(void)

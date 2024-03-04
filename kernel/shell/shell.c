@@ -8,6 +8,7 @@ static void	__helper(void)
 		" - halt\n"
 		" - dump\n"
 		" - symtab\n"
+		" - mmap\n"
 		" - help\n"
 		" - clear\n"
 	);
@@ -36,6 +37,8 @@ static void	__commands(char *input)
 		dump_stack();
 	else if (strcmp(input, "symtab") == 0)
 		symbol_table_print();
+	else if (strcmp(input, "mmap") == 0)
+		mmap_print();
 	else if (strcmp(input, "help") == 0)
 		__helper();
 	else if (strcmp(input, "clear") == 0)

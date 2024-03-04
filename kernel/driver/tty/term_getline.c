@@ -4,7 +4,7 @@ static void	__read_input(void)
 {
 	while (true)
 	{
-		key_t key = keyboard_get_keyqueue();
+		key_t key = keyboard_get_keypoll();
 
 		if (key.code == 0 || key.is_pressed == false)
 			continue;

@@ -7,8 +7,6 @@
 #include "symbol_table.h"
 #include "interrupt/interrupts.h"
 
-#define KEYBOARD_QUEUE_CAPACITY 1024
-
 #define LEFT_CTRL			0x1D
 #define LEFT_CTRL_PRESSED	0x1D
 #define LEFT_CTRL_RELEASED	0x9D
@@ -35,11 +33,11 @@
 #define KEY_ALT_MASK		0x4
 #define KEY_CAPSLOCK_MASK	0x8
 
-#define SCANCODE_KEY(code) (scancode_key_us_qwerty[code])
-#define SCANCODE_SHIFT_KEY(code) (scancode_shift_key_us_qwerty[code])
-#define SCANCODE_IS_PRESSED(code) (code <= 0x58)
-#define SCANCODE_IS_UNPRESSED(code) (!(SCANCODE_IS_PRESSED(code)))
-#define NORMALIZE_SCANCODE(code) (SCANCODE_IS_PRESSED(code) ? code : (code - 0x80))
+#define SCANCODE_KEY(code)			(scancode_key_us_qwerty[code])
+#define SCANCODE_SHIFT_KEY(code)	(scancode_shift_key_us_qwerty[code])
+#define SCANCODE_IS_PRESSED(code)	(code <= 0x58)
+#define SCANCODE_IS_UNPRESSED(code)	(!(SCANCODE_IS_PRESSED(code)))
+#define NORMALIZE_SCANCODE(code)	(SCANCODE_IS_PRESSED(code) ? code : (code - 0x80))
 
 #define KEY_ARROW_UP	0x48
 #define KEY_ARROW_DOWN	0x50
@@ -99,20 +97,14 @@ typedef struct key {
 	uint8_t	state;
 } key_t;
 
-typedef struct {
-	key_t		data[KEYBOARD_QUEUE_CAPACITY];
-	uint32_t	size;
-	uint32_t	readed;
-} keyboard_queue_t;
+typedef struct registers	registers_t;
+typedef struct stack_state	stack_state_t;
 
-typedef struct registers registers_t;
-typedef struct stack_state stack_state_t;
-
-extern uint8_t			g_keyboard_states;
-extern keyboard_queue_t	g_keyboard_queue;
+extern uint8_t	g_keyboard_states;
+extern key_t	g_keyboard_poll;
 
 void	keyboard_handler(registers_t regs, stack_state_t stack);
-key_t	keyboard_get_keyqueue(void);
-void	keyboard_add_keyqueue(key_t key);
+key_t	keyboard_get_keypoll(void);
+void	keyboard_set_keypoll(key_t key);
 
 #endif

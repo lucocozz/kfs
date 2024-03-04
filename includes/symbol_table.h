@@ -15,7 +15,7 @@ typedef struct SymbolTableEntry {
 } SymbolTableEntry_t;
 
 #define EXPORT_SYMBOL(func) \
-	SymbolTableEntry_t __symbol_##func __section(SYMBOL_SECTION_NAME) = { \
+	SymbolTableEntry_t __symbol_##func __Section__(SYMBOL_SECTION_NAME) = { \
 		.address = (uint32_t)&func, \
 		.name = #func \
 	}

@@ -24,7 +24,7 @@
 typedef struct gdt_ptr_s {
 	uint16_t limit;
 	uint32_t base;
-} __packed gdt_ptr_t;
+} __Packed__ gdt_ptr_t;
 
 typedef struct gdt_entry_s {
 	uint16_t	limit_low;
@@ -33,7 +33,7 @@ typedef struct gdt_entry_s {
 	uint8_t		access;
 	uint8_t		granularity;
 	uint8_t		base_high;
-} __packed gdt_entry_t;
+} __Packed__ gdt_entry_t;
 
 extern gdt_entry_t	gdt_entries[SEGMENT_DESCRIPTOR_COUNT];
 

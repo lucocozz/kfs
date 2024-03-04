@@ -41,9 +41,9 @@ static void __handle_states_keys(uint8_t code)
 		g_keyboard_states ^= KEY_CAPSLOCK_MASK;
 }
 
-void	keyboard_handler(struct cpu_state cpu, struct stack_state stack)
+void	keyboard_handler(registers_t regs, struct stack_state stack)
 {
-	UNUSED(cpu); UNUSED(stack);
+	UNUSED(regs); UNUSED(stack);
 	uint8_t code = inb(KEYBOARD_PORT_DATA);
 
 	if (__is_state_key(code))

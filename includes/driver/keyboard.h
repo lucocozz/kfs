@@ -105,13 +105,13 @@ typedef struct {
 	uint32_t	readed;
 } keyboard_queue_t;
 
-typedef struct cpu_state cpu_state_t;
+typedef struct registers registers_t;
 typedef struct stack_state stack_state_t;
 
 extern uint8_t			g_keyboard_states;
 extern keyboard_queue_t	g_keyboard_queue;
 
-void	keyboard_handler(cpu_state_t cpu, stack_state_t stack);
+void	keyboard_handler(registers_t regs, stack_state_t stack);
 key_t	keyboard_get_keyqueue(void);
 void	keyboard_add_keyqueue(key_t key);
 

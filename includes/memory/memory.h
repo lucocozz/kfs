@@ -44,10 +44,10 @@ typedef struct page {
 	uint32_t	dirty		: 1;
 	uint32_t	unused		: 7;
 	uint32_t	frame		: 20;
-} __packed page_t;
+} __Packed__ page_t;
 
 typedef struct page_table {
-	page_t pages[PAGE_TABLE_SIZE] __aligned(PAGE_SIZE);
+	page_t pages[PAGE_TABLE_SIZE] __Aligned__(PAGE_SIZE);
 } page_table_t;
 
 typedef struct page_directory {
@@ -67,7 +67,7 @@ extern uint32_t	*g_frames;
 extern void enable_paging(uint32_t page_directory);
 
 void	paging_init(void);
-void	page_fault_handler(struct cpu_state cpu, struct stack_state stack);
+void	page_fault_handler(registers_t regs, struct stack_state stack);
 void	alloc_frame(page_t *page, bool is_kernel, bool is_writeable);
 page_t	*get_page(uint32_t address, page_directory_t *directory, bool make);
 

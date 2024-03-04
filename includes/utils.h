@@ -23,13 +23,13 @@
 #define LOW_B8(address)		(uint8_t)((address) & 0xFF)
 #define HIGH_B8(address)	(uint8_t)(((address) >> 8) & 0xFF)
 
-#define __packed 		__attribute__((__packed__))
-#define __aligned(x)	__attribute__((__aligned__(x)))
-#define __section(name) __attribute__((__section__(name)))
-#define __used			__attribute__((__used__))
-#define __init			__attribute__((__constructor__))
-#define __exit			__attribute__((__destructor__))
-#define __cleanup(addr)	__attribute__((__cleanup__(addr)))
+#define __Packed__			__attribute__((__packed__))
+#define __Aligned__(x)		__attribute__((__aligned__(x)))
+#define __Section__(name)	__attribute__((__section__(name)))
+#define __Used__			__attribute__((__used__))
+#define __Init__			__attribute__((__constructor__))
+#define __Exit__			__attribute__((__destructor__))
+#define __Cleanup__(addr)	__attribute__((__cleanup__(addr)))
 
 #ifdef _DEBUG_
 

@@ -50,18 +50,23 @@ int get_memory_map()
 	kernel_memory_map.total_memory_length = g_boot_info->mem_upper + g_boot_info->mem_lower;
 
 	mmap_print();
+
 	// virtual memory map
 	printk("Kernel Start: 0x%X\n", kernel_memory_map.sections.kernel.start);
 	printk("Kernel End: 0x%X\n", kernel_memory_map.sections.kernel.end);
 	printk("Kernel Length: 0x%X\n", kernel_memory_map.sections.kernel.length);
+	printk("\n");
 
 	// physical memory map
-	printk("Total Memory: %dMB\n", kernel_memory_map.total_memory_length / 1024);
-	printk("Memory Lower: %dKB\n", g_boot_info->mem_lower);
-	printk("Memory Upper: %dKB\n", g_boot_info->mem_upper);
 	printk("Kernel physical start: 0x%X\n", kernel_memory_map.sections.kernel.start - KERNEL_START);
 	printk("Kernel physical end: 0x%X\n", kernel_memory_map.sections.kernel.end - KERNEL_START);
 	printk("Kernel physical length: 0x%X\n", kernel_memory_map.sections.kernel.length);
+	printk("\n");
+
+	// Total memory
+	printk("Total Memory: %dMB\n", kernel_memory_map.total_memory_length / 1024);
+	printk("Memory Lower: %dKB\n", g_boot_info->mem_lower);
+	printk("Memory Upper: %dKB\n", g_boot_info->mem_upper);
 
 	return (0);
 }

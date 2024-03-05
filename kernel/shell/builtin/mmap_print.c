@@ -48,4 +48,5 @@ void mmap_print(void)
 			memory_types[entry->type - 1]
 		);
 	}
+	printk("------------------------------------------------------------\n");
 }

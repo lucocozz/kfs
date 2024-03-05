@@ -15,6 +15,7 @@
 #include "libc.h"
 
 #include "utils.h"
+#include "assert.h"
 #include "symbol_table.h"
 #include "multiboot.h"
 #include "printk.h"

@@ -25,9 +25,9 @@ IDT_entry_t	g_idt_entries[IDT_ENTRIES_SIZE] = {0};
 void set_idt_descriptor(int n , uint32_t handler)
 {
 	g_idt_entries[n].offset_low = LOW_B16(handler);
-	g_idt_entries[n].segment_selector = KERNEL_CODE_SEG;
-	g_idt_entries[n].__reserved = 0;
-	g_idt_entries[n].type_and_attr = 0x8E;
+	g_idt_entries[n].selector = KERNEL_CODE_SEG;
+	g_idt_entries[n].zero = 0;
+	g_idt_entries[n].flags = 0x8E;
 	g_idt_entries[n].offset_high = HIGH_B16(handler);
 }
 EXPORT_SYMBOL(set_idt_descriptor);

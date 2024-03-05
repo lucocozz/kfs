@@ -59,8 +59,6 @@ typedef struct page_directory {
 } page_directory_t;
 
 
-extern uint32_t	_kernel_end;
-extern uint32_t	_kernel_start;
 extern uint32_t	g_placement_address;
 extern uint32_t	*g_frames;
 

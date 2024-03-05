@@ -10,6 +10,4 @@ void	shutdown(void);
 void	dump_stack(void);
 void	mmap_print(void);
 
-extern multiboot_info_t	*g_boot_info;
-
 #endif

@@ -6,7 +6,8 @@ memory_c = files([
 	'paging/paging_init.c',
 	'paging/page_fault.c',
 	'paging/alloc_frame.c',
-	'paging/get_page.c'
+	'paging/get_page.c',
+	'memory_map.c'
 ])
 
 memory_asm = files([

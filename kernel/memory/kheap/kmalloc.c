@@ -1,4 +1,5 @@
 #include "memory/memory.h"
+#include "memory/memory_map.h"
 #include "utils.h"
 
 uint32_t	g_placement_address = (uint32_t)&_kernel_end;

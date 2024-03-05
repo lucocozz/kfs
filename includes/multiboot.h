@@ -24,6 +24,18 @@
 #ifndef KERNEL_MULTIBOOT_H
 #define KERNEL_MULTIBOOT_H
 
+#define CHECK_FLAG(flags, bit) ((flags) & (1 << (bit)))
+
+#define CHECK_AND_LOG_FLAG(mboot_ptr, flag, name)                          \
+    do                                                                     \
+    {                                                                      \
+        if (!CHECK_FLAG((mboot_ptr)->flags, (flag)))                       \
+        {                                                                  \
+            printk("[CHECK] %s: INVALID \n", name); \
+            return (1);                                                    \
+        }                                                                  \
+    } while (0)
+
 /* How many bytes from the start of the file we search for the header. */
 #define MULTIBOOT_SEARCH                        8192
 #define MULTIBOOT_HEADER_ALIGN                  4
@@ -53,7 +65,6 @@
 
 /* This flag indicates the use of the address fields in the header. */
 #define MULTIBOOT_AOUT_KLUDGE                   0x00010000
-
 /* Flags to be set in the ’flags’ member of the multiboot info structure. */
 
 /* is there basic lower/upper memory information? */
@@ -64,6 +75,8 @@
 #define MULTIBOOT_INFO_CMDLINE                  0x00000004
 /* are there modules to do something with? */
 #define MULTIBOOT_INFO_MODS                     0x00000008
+
+#define MULTIBOOT_INFO_DEVICE 					0x00000001
 
 /* These next two are mutually exclusive */
 

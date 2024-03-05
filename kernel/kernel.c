@@ -14,7 +14,6 @@ static void	__init_kernel(multiboot_info_t *boot_info)
 	get_memory_map();
 	// paging_init();
 }
-EXPORT_SYMBOL(__init_kernel);
 
 void	kernel_main(uint32_t magic, multiboot_info_t *boot_info, uint32_t *stack_top)
 {

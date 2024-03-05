@@ -22,6 +22,7 @@ int init_memory_map(multiboot_info_t *boot_info)
 
 	return (0);
 }
+EXPORT_SYMBOL(init_memory_map);
 
 int get_memory_map()
 {
@@ -70,3 +71,4 @@ int get_memory_map()
 
 	return (0);
 }
+EXPORT_SYMBOL(get_memory_map);

@@ -50,3 +50,4 @@ void mmap_print(void)
 	}
 	printk("------------------------------------------------------------\n");
 }
+EXPORT_SYMBOL(mmap_print);

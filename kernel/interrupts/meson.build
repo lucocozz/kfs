@@ -1,9 +1,9 @@
-interrupt_c = files([
+interrupts_c = files([
 	'interrupts.c',
 	'pic.c',
 ])
 
-interrupt_asm = files([
+interrupts_asm = files([
 	'idt.asm',
 	'interrupt_handlers.asm',
 ])

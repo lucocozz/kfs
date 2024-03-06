@@ -4,16 +4,13 @@
 #include <stdint.h>
 #include "symbol_table.h"
 
-#define PIC_1 0x20
-#define PIC_2 0xA0
-#define PIC_1_COMMAND PIC_1
-#define PIC_1_DATA (PIC_1 + 1)
-#define PIC_2_COMMAND PIC_2
-#define PIC_2_DATA (PIC_2 + 1)
-
-#define PIC_1_OFFSET 0x20
-#define PIC_2_OFFSET 0x28
-#define PIC_2_END (PIC_2_OFFSET + 7)
+#define PIC_MASTER			0x20
+#define PIC_SLAVE			0xA0
+#define PIC_MASTER_DATA		(PIC_MASTER + 1)
+#define PIC_SLAVE_DATA		(PIC_SLAVE + 1)
+#define PIC_MASTER_OFFSET	0x20
+#define PIC_SLAVE_OFFSET	0x28
+#define PIC_SLAVE_END		(PIC_SLAVE_OFFSET + 7)
 
 #define PIC_ACKNOWLEDGE 0x20
 

@@ -18,8 +18,7 @@ static void	__init_kernel(multiboot_info_t *boot_info)
 void	kernel_main(uint32_t magic, multiboot_info_t *boot_info, uint32_t *stack_top)
 {
 	UNUSED(stack_top);
-	if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
-		return ;
+	assert(magic == MULTIBOOT_BOOTLOADER_MAGIC);
 	__init_kernel(boot_info);
 	shell();
 }

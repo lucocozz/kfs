@@ -2,15 +2,15 @@
 #include "interrupt/interrupts.h"
 #include "memory/memory.h"
 
-IDT_t			g_idt = {0};
+IDT_t		g_idt = {0};
 IDT_entry_t	g_idt_entries[IDT_ENTRIES_SIZE] = {0};
 
-/// Set IDT descriptor for interrupt handler at index `n`
+/// Set IDT descriptor for interrupt handler at `index`
 ///
 /// ## Parameters
 ///
-/// - `n` - index of interrupt handler
-/// - `handler` - address of interrupt handler
+/// - `index` - index of interrupt handler
+/// - `isr` - address of interrupt handler
 ///
 /// ## Examples
 ///
@@ -22,13 +22,13 @@ IDT_entry_t	g_idt_entries[IDT_ENTRIES_SIZE] = {0};
 ///
 /// - `n` must be less than `IDT_ENTRIES_SIZE`
 /// - `handler` must be a valid address
-void set_idt_descriptor(int n , uint32_t handler)
+void set_idt_descriptor(int index, uint32_t isr) //! idt_set_gate
 {
-	g_idt_entries[n].offset_low = LOW_B16(handler);
-	g_idt_entries[n].selector = KERNEL_CODE_SEG;
-	g_idt_entries[n].zero = 0;
-	g_idt_entries[n].flags = 0x8E;
-	g_idt_entries[n].offset_high = HIGH_B16(handler);
+	g_idt_entries[index].base_low = LOW_B16(isr);
+	g_idt_entries[index].base_high = HIGH_B16(isr);
+	g_idt_entries[index].selector = KERNEL_CODE_SEG;
+	g_idt_entries[index].zero = 0;
+	g_idt_entries[index].flags = 0x8E;
 }
 EXPORT_SYMBOL(set_idt_descriptor);
 
@@ -46,7 +46,7 @@ void interrupts_init(void)
 	// set_idt_descriptor(INTERRUPT_SYSCALL, (uint32_t)interrupt_handler_128);
 	idt_load((uint32_t)&g_idt);
 
-	pic_remap(PIC_1_OFFSET, PIC_2_OFFSET);
+	pic_remap(PIC_MASTER_OFFSET, PIC_SLAVE_OFFSET);
 }
 EXPORT_SYMBOL(interrupts_init);
 

@@ -50,11 +50,11 @@ typedef struct IDT {
 
 /// Interrupt Descriptor Table (IDT) entry
 typedef struct IDT_entry {
-	uint16_t	offset_low;
+	uint16_t	base_low;
 	uint16_t	selector;
 	uint8_t		zero;
 	uint8_t		flags;
-	uint16_t	offset_high;
+	uint16_t	base_high;
 } __attribute__((packed)) IDT_entry_t;
 
 typedef struct registers {

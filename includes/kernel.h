@@ -22,11 +22,9 @@
 
 #include "memory/memory.h"
 #include "memory/segments.h"
+#include "memory/memory_map.h"
 
-#include "interrupt/pic.h"
-#include "interrupt/interrupts.h"
-
-
+#include "interrupts/interrupts.h"
 
 #include "driver/serials.h"
 #include "driver/keyboard.h"

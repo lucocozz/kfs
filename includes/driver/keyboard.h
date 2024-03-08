@@ -103,7 +103,7 @@ typedef struct stack_state	stack_state_t;
 extern uint8_t	g_keyboard_states;
 extern key_t	g_keyboard_poll;
 
-void	keyboard_handler(registers_t regs, stack_state_t stack);
+void	isr_keyboard(registers_t regs, stack_state_t stack);
 key_t	keyboard_get_keypoll(void);
 void	keyboard_set_keypoll(key_t key);
 

@@ -1,6 +1,6 @@
 #include "memory/memory.h"
 
-void	page_fault_handler(registers_t regs, struct stack_state stack)
+void	isr_page_fault(registers_t regs, struct stack_state stack)
 {
 	uint32_t faulting_address;
 
@@ -16,4 +16,4 @@ void	page_fault_handler(registers_t regs, struct stack_state stack)
 		faulting_address
 	);
 }
-EXPORT_SYMBOL(page_fault_handler);
+EXPORT_SYMBOL(isr_page_fault);

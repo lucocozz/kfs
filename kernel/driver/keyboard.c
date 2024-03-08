@@ -41,7 +41,7 @@ static void __handle_states_keys(uint8_t code)
 		g_keyboard_states ^= KEY_CAPSLOCK_MASK;
 }
 
-void	keyboard_handler(registers_t regs, struct stack_state stack)
+void	isr_keyboard(registers_t regs, struct stack_state stack)
 {
 	UNUSED(regs); UNUSED(stack);
 	uint8_t code = inb(KEYBOARD_PORT_DATA);
@@ -58,7 +58,7 @@ void	keyboard_handler(registers_t regs, struct stack_state stack)
 		keyboard_set_keypoll(key);
 	}
 }
-EXPORT_SYMBOL(keyboard_handler);
+EXPORT_SYMBOL(isr_keyboard);
 
 key_t	keyboard_get_keypoll(void)
 {

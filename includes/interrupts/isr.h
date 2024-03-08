@@ -18,11 +18,6 @@ typedef struct stack_state {
 	uint32_t eflags;
 } __attribute__((packed)) stack_state_t;
 
-void	isr_14(); // page fault
-void	isr_32(); // timer
-void	isr_33(); // keyboard
-void	isr_128(); // system call
-
 void	isr_callbacks(registers_t regs, uint8_t interrupt, struct stack_state stack);
 
 #endif

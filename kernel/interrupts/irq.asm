@@ -1,25 +1,23 @@
-;Generic Interrupt Handler
-;
 extern isr_callbacks
 
-%macro no_error_code_isr 1
-global isr_%1
-isr_%1:
+%macro no_error_code_irq 1
+global irq_%1
+irq_%1:
 	push dword 0	; push 0 as error code
 	push dword %1	; push the interrupt number
 	jmp	call_isr	; jump to the common handler
 %endmacro
 
-%macro error_code_isr 1
-global isr_%1
-isr_%1:
+%macro error_code_irq 1
+global irq_%1
+irq_%1:
 	push dword 1	; push 1 as error code
 	push dword %1	; push the interrupt number
 	jmp call_isr	; jump to the common handler
 %endmacro
 
 
-call_isr:               ; the common parts of the generic interrupt handler
+call_isr:
 	; save the registers
 	push eax
 	push ebx
@@ -38,13 +36,13 @@ call_isr:               ; the common parts of the generic interrupt handler
 	pop	edx
 	pop	ecx
 	pop	ebx
-	pop     eax
+	pop eax
 
 	; restore the esp
-	add     esp, 8
+	add esp, 8
 
 	; return to the code that got interrupted
 	iret
 
-no_error_code_isr 14	; create handler for interrupt 14 (page fault)
-no_error_code_isr 33	; create handler for interrupt 33 (keyboard)
+no_error_code_irq 14	; create handler for interrupt 14 (page fault)
+no_error_code_irq 33	; create handler for interrupt 33 (keyboard)

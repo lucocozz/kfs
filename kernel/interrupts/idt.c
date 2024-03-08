@@ -20,8 +20,8 @@ void idt_init(void)
 	g_idt_ptr.size = (sizeof(IDT_entry_t) * IDT_SIZE) - 1;
 	g_idt_ptr.address = (uint32_t)&g_idt;
 
-	idt_set(INTERRUPT_PAGE_FAULT, (uint32_t)isr_14);
-	idt_set(INTERRUPT_KEYBOARD, (uint32_t)isr_33);
+	idt_set(INTERRUPT_PAGE_FAULT, (uint32_t)irq_14);
+	idt_set(INTERRUPT_KEYBOARD, (uint32_t)irq_33);
 
 	idt_load((uint32_t)&g_idt_ptr);
 

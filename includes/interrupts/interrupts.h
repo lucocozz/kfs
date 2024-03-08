@@ -7,5 +7,6 @@
 #include "interrupts/pic.h"
 #include "interrupts/idt.h"
 #include "interrupts/isr.h"
+#include "interrupts/irq.h"
 
 #endif

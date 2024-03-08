@@ -50,7 +50,7 @@ extern IDT_entry_t	g_idt[IDT_SIZE];
 
 
 void	idt_init(void);
-void	idt_load(uint32_t idt_ptr_address);
+void	idt_load(uint32_t idt_ptr);
 void	idt_set(uint8_t interrupt, uint32_t isr);
 
 #endif

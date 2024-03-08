@@ -5,6 +5,5 @@ interrupts_c = files([
 ])
 
 interrupts_asm = files([
-	'idt_load.asm',
 	'irq.asm',
 ])

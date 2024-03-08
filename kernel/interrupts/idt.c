@@ -15,6 +15,12 @@ void idt_set(uint8_t interrupt, uint32_t isr)
 }
 EXPORT_SYMBOL(idt_set);
 
+void idt_load(uint32_t idt_ptr)
+{
+	ASM("lidt (%0)" : : "r" (idt_ptr));
+}
+EXPORT_SYMBOL(idt_load);
+
 void idt_init(void)
 {
 	g_idt_ptr.size = (sizeof(IDT_entry_t) * IDT_SIZE) - 1;

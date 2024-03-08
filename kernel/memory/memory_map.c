@@ -20,14 +20,6 @@ int init_memory_map(multiboot_info_t *boot_info)
     CHECK_AND_LOG_FLAG(g_boot_info, MULTIBOOT_INFO_BOOTDEV, "BOOTDEV");
     CHECK_AND_LOG_FLAG(g_boot_info, MULTIBOOT_INFO_DEVICE, "DEVICE");
 
-	return (0);
-}
-EXPORT_SYMBOL(init_memory_map);
-
-int get_memory_map()
-{
-	assert(g_boot_info != NULL);
-
 	kernel_memory_map.sections.kernel.start = (uint32_t)&_kernel_start;
 	kernel_memory_map.sections.kernel.end = (uint32_t)&_kernel_end;
 	kernel_memory_map.sections.kernel.length = kernel_memory_map.sections.kernel.end - kernel_memory_map.sections.kernel.start;
@@ -49,6 +41,13 @@ int get_memory_map()
 	kernel_memory_map.sections.bss.length = kernel_memory_map.sections.bss.end - kernel_memory_map.sections.bss.start;
 
 	kernel_memory_map.total_memory_length = g_boot_info->mem_upper + g_boot_info->mem_lower;
+	
+	return (0);
+}
+
+int get_memory_map()
+{
+	assert(g_boot_info != NULL);
 
 	mmap_print();
 

@@ -1,12 +1,10 @@
 #include "kernel.h"
-#include "multiboot.h"
-#include "memory/memory_map.h"
 
 static void	__init_kernel(multiboot_info_t *boot_info)
 {
-	gdt_init();
-	interrupts_init();
 	term_init();
+	gdt_init();
+	idt_init();
 
 
 	// Check flags

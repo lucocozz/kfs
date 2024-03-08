@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 #include "symbol_table.h"
-#include "interrupt/interrupts.h"
+#include "interrupts/interrupts.h"
 
 #define LEFT_CTRL			0x1D
 #define LEFT_CTRL_PRESSED	0x1D

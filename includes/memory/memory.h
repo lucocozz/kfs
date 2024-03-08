@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "interrupt/interrupts.h"
+#include "interrupts/interrupts.h"
 #include "utils.h"
 
 #define CPU_ARCH_BITS	32

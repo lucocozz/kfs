@@ -83,7 +83,7 @@ HigherHalfKernel:
 	push ebx                            ; pass Multiboot info structure
 	push eax                            ; pass Multiboot magic number 
 
-	cli
+	cli 
 	extern kernel_main
 	call kernel_main 
 	

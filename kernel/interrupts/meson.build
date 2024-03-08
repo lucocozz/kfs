@@ -1,9 +1,10 @@
 interrupts_c = files([
-	'interrupts.c',
+	'idt.c',
 	'pic.c',
+	'isr_callbacks.c',
 ])
 
 interrupts_asm = files([
-	'idt.asm',
-	'interrupt_handlers.asm',
+	'idt_load.asm',
+	'isr.asm',
 ])

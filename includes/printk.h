@@ -40,6 +40,7 @@ typedef struct g_printk_buffer {
 } printk_buffer_t;
 
 int				printk(const char *format, ...);
+int				vprintk(const char *format, va_list ap);
 void			printk_print_buffer(void);
 void			printk_write(const char *str, size_t len);
 void			printk_puts(printk_flags_t *flags, char *str);

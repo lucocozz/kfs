@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "interrupts/interrupts.h"
-#include "utils.h"
+#include "system/interrupts/interrupts.h"
+#include "system/utils.h"
 
 #define CPU_ARCH_BITS	32
 #define KERNEL_START	0xC0000000

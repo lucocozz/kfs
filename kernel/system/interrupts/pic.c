@@ -1,4 +1,4 @@
-#include "interrupts/interrupts.h"
+#include "system/interrupts/interrupts.h"
 
 void	pic_ack(uint8_t irq)
 {

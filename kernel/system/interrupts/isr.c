@@ -1,4 +1,4 @@
-#include "interrupts/interrupts.h"
+#include "system/interrupts/interrupts.h"
 #include "memory/memory.h"
 
 void isr_callbacks(registers_t regs, uint8_t interrupt, stack_state_t stack)

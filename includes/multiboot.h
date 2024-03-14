@@ -19,7 +19,7 @@
  *  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "utils.h"
+#include "system/utils.h"
 
 #ifndef KERNEL_MULTIBOOT_H
 #define KERNEL_MULTIBOOT_H

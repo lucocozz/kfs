@@ -1,5 +1,6 @@
 printk = files([
 	'printk.c',
+	'vprintk.c',
 	'utils.c',
 	'parsers.c',
 	'formater_p.c',

@@ -1,7 +1,7 @@
 #ifndef KERNEL_ASSERT_H
 #define KERNEL_ASSERT_H
 
-#include "utils.h"
+#include "system/utils.h"
 
 #define assert(x)	\
 	do {	\

@@ -1,5 +1,5 @@
-#ifndef KERNEL_UTILS_H
-#define KERNEL_UTILS_H
+#ifndef KERNEL_SYSTEM_UTILS_H
+#define KERNEL_SYSTEM_UTILS_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -12,7 +12,6 @@
 #define UNUSED(x)		(void)(x)
 #define ASM(...)		__asm__ volatile(__VA_ARGS__)
 #define PAUSE_RUNTIME	printk("PAUSE_RUNTIME\n"); while (1) ASM("hlt")
-#define KERNEL_PANIC	printk("KERNEL PANIC!\n"); while (1) ASM("hlt")
 
 #define ARRAY_SIZE(x)		(sizeof(x) / sizeof(*x))
 #define CEIL_DIV(a, b)		(((a + b) - 1) / b) // a / b rounded up
@@ -44,5 +43,7 @@
 #define DEBUGF(...)
 
 #endif
+
+void panic(const char *msg);
 
 #endif

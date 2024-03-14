@@ -14,7 +14,6 @@
 
 #include "libc.h"
 
-#include "utils.h"
 #include "assert.h"
 #include "symbol_table.h"
 #include "multiboot.h"
@@ -24,7 +23,8 @@
 #include "memory/segments.h"
 #include "memory/memory_map.h"
 
-#include "interrupts/interrupts.h"
+#include "system/utils.h"
+#include "system/interrupts/interrupts.h"
 
 #include "driver/serials.h"
 #include "driver/keyboard.h"

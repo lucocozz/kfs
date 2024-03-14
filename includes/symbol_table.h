@@ -5,7 +5,7 @@
 #include <stddef.h>
 
 #include "printk.h"
-#include "utils.h"
+#include "system/utils.h"
 
 #define SYMBOL_SECTION_NAME "symbol_table"
 

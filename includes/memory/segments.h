@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include "symbol_table.h"
-#include "utils.h"
+#include "system/utils.h"
 
 #define GDT_ADDRESS 0xC0000800
 

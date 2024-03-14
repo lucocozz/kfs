@@ -1,4 +1,4 @@
-#include "interrupts/interrupts.h"
+#include "system/interrupts/interrupts.h"
 #include "memory/segments.h"
 
 IDT_t		g_idt_ptr = {0};

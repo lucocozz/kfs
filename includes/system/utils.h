@@ -44,6 +44,6 @@
 
 #endif
 
-void panic(const char *msg);
+void panic(const char *format, ...);
 
 #endif

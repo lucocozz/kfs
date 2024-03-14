@@ -10,11 +10,14 @@ static void	__clean_registers(void)
 	);
 }
 
-void panic(const char *msg)
+void panic(const char *format, ...)
 {
+	va_list ap;
 	stack_state_t *stack;
 
-	printk("KERNEL PANIC: %s\n", msg);
+	va_start(ap, format);
+	printk("KERNEL PANIC: ");
+	vprintk(format, ap);
 	
 	ASM("mov %%esp, %0" : "=r"(stack));	// to save a trace of the stack at panic
 	__clean_registers();				// to avoid somes exceptions

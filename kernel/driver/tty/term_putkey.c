@@ -5,11 +5,9 @@ static void	__handle_function_key(key_t key)
 {
 	if (key.code < KEY_F1 + TTY_COUNT)
 	{
-		for (size_t i = 0; i < VGA_BUFFER_SIZE; ++i)
-			g_tty[g_tty_index].buffer[i] = g_vga_buffer[i];
+		memcpy(g_tty[g_tty_index].buffer, g_vga_buffer, VGA_BUFFER_SIZE * sizeof(uint16_t));
 		g_tty_index = key.code - KEY_F1;
-		for (size_t i = 0; i < VGA_BUFFER_SIZE; ++i)
-			g_vga_buffer[i] = g_tty[g_tty_index].buffer[i];
+		memcpy(g_vga_buffer, g_tty[g_tty_index].buffer, VGA_BUFFER_SIZE * sizeof(uint16_t));
 		set_vga_cursor(g_tty[g_tty_index].column, g_tty[g_tty_index].row);
 	}
 }

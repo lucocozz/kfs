@@ -9,7 +9,7 @@ void idt_set(uint8_t interrupt, uint32_t isr)
 {
 	g_idt[interrupt].isr_low = LOW_B16(isr);
 	g_idt[interrupt].isr_high = HIGH_B16(isr);
-	g_idt[interrupt].selector = 0x08;
+	g_idt[interrupt].selector = 0x08; //! check why if we set the same GDT segment as used in kernel, that make interrupt don't working
 	g_idt[interrupt].flags = 0x8E;
 	g_idt[interrupt]._reserved = 0;
 }
@@ -27,7 +27,7 @@ void idt_init(void)
 	g_idt_ptr.address = (uint32_t)&g_idt;
 
 	idt_set(INTERRUPT_PAGE_FAULT, (uint32_t)irq_14);
-	idt_set(INTERRUPT_KEYBOARD, (uint32_t)irq_33);
+	idt_set(INTERRUPT_KEYBOARD, (uint32_t)irq_33); //? Perhaps consider changing this to directly use ISR instead of the IRQ overlay. This would significantly simplify the code, but it might be less modular.
 
 	idt_load((uint32_t)&g_idt_ptr);
 

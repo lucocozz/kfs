@@ -9,9 +9,8 @@
 #include "printk.h"
 
 
-#define UNUSED(x)		(void)(x)
-#define ASM(...)		__asm__ volatile(__VA_ARGS__)
-#define PAUSE_RUNTIME	printk("PAUSE_RUNTIME\n"); while (1) ASM("hlt")
+#define UNUSED(x)	(void)(x)
+#define ASM(...)	__asm__ volatile(__VA_ARGS__)
 
 #define ARRAY_SIZE(x)		(sizeof(x) / sizeof(*x))
 #define CEIL_DIV(a, b)		(((a + b) - 1) / b) // a / b rounded up
@@ -22,6 +21,8 @@
 #define HIGH_B16(address)	(uint16_t)(((address) >> 16) & 0xFFFF)
 #define LOW_B8(address)		(uint8_t)((address) & 0xFF)
 #define HIGH_B8(address)	(uint8_t)(((address) >> 8) & 0xFF)
+#define BIT_MASK(bit)		(1UL << bit)
+#define BIT_UNMASK(bit)		~(1UL << bit)
 
 
 #define __Packed__			__attribute__((__packed__))

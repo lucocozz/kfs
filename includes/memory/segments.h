@@ -5,7 +5,11 @@
 #include "symbol_table.h"
 #include "system/utils.h"
 
+#ifdef HIGH_KERNEL
 #define GDT_ADDRESS 0xC0000800
+#else
+#define GDT_ADDRESS 0x800
+#endif
 
 #define SEGMENT_DESCRIPTOR_COUNT 7
 

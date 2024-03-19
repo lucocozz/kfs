@@ -19,6 +19,7 @@
 #include "multiboot.h"
 #include "printk.h"
 
+#include "memory/pmm.h"
 #include "memory/memory.h"
 #include "memory/segments.h"
 #include "memory/memory_map.h"

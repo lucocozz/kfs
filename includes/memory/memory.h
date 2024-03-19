@@ -8,7 +8,12 @@
 #include "system/utils.h"
 
 #define CPU_ARCH_BITS	32
+#ifdef HIGH_KERNEL
 #define KERNEL_START	0xC0000000
+#else
+#define KERNEL_START	0x00000000
+#endif
+
 
 #define PAGE_SIZE			4096
 #define PAGE_DIR_SIZE		1024
@@ -67,14 +72,14 @@ extern void enable_paging(uint32_t page_directory);
 void	paging_init(void);
 void	isr_page_fault(registers_t regs, struct stack_state stack);
 void	alloc_frame(page_t *page, bool is_kernel, bool is_writeable);
-page_t	*get_page(uint32_t address, page_directory_t *directory, bool make);
-
+page_t	*get_page(uint32_t address, page_directory_t *dir);
+page_t	*create_page(uint32_t address, page_directory_t *directory);
 
 /* MEMORY/KHEAP/KMALLOC.C */
 uint32_t	kmalloc_internal(uint32_t size, bool align, uint32_t *phys);
 uint32_t	kmalloc_a(uint32_t size);
 uint32_t	kmalloc_p(uint32_t size, uint32_t *phys);
 uint32_t	kmalloc_ap(uint32_t size, uint32_t *phys);
-uint32_t	kmalloc(uint32_t size);
+// uint32_t	kmalloc(uint32_t size);
 
 #endif

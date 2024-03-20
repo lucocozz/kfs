@@ -30,6 +30,13 @@
 #define INTERRUPT_KEYBOARD						33
 #define INTERRUPT_SYSCALL						128
 
+#define GATE_INTERRUPT	0x8E
+#define GATE_TRAP		0x8F
+#define GATE_TASK		0x85
+
+#define IDT_SET(interrupt, addr)		idt_set(interrupt, addr, GATE_INTERRUPT)
+#define IDT_SET_TRAP(interrupt, addr)	idt_set(interrupt, addr, GATE_TRAP)
+#define IDT_SET_TASK(interrupt, addr)	idt_set(interrupt, addr, GATE_TASK)
 
 typedef struct IDT {
 	uint16_t	size;
@@ -37,11 +44,11 @@ typedef struct IDT {
 } __attribute__((packed)) IDT_t;
 
 typedef struct IDT_entry {
-	uint16_t	isr_low;
+	uint16_t	addr_low;
 	uint16_t	selector;
 	uint8_t		_reserved;
 	uint8_t		flags;
-	uint16_t	isr_high;
+	uint16_t	addr_high;
 } __attribute__((packed)) IDT_entry_t;
 
 
@@ -51,6 +58,6 @@ extern IDT_entry_t	g_idt[IDT_SIZE];
 
 void	idt_init(void);
 void	idt_load(uint32_t idt_ptr);
-void	idt_set(uint8_t interrupt, uint32_t isr);
+void	idt_set(uint8_t interrupt, uint32_t addr, uint8_t flags);
 
 #endif

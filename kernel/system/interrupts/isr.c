@@ -1,15 +1,17 @@
-#include "system/interrupts/interrupts.h"
+#include "system/interrupts.h"
 #include "memory/memory.h"
+
+typedef void (*isr_handler_t)(registers_t, stack_state_t);
 
 void isr_callbacks(registers_t regs, uint8_t interrupt, stack_state_t stack)
 {
-	static void (*isr_handlers[IDT_SIZE])(registers_t, stack_state_t) = {
+	static isr_handler_t handlers[IDT_SIZE] = {
 		[INTERRUPT_PAGE_FAULT]	= isr_page_fault,
 		[INTERRUPT_KEYBOARD]	= isr_keyboard,
 	};
 
-	if (isr_handlers[interrupt] != NULL) {
-		isr_handlers[interrupt](regs, stack);
+	if (handlers[interrupt] != NULL) {
+		handlers[interrupt](regs, stack);
 		pic_ack(interrupt);
 	}
 }

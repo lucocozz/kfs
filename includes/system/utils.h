@@ -24,7 +24,6 @@
 #define BIT_MASK(bit)		(1UL << bit)
 #define BIT_UNMASK(bit)		~(1UL << bit)
 
-
 #define __Packed__			__attribute__((__packed__))
 #define __Aligned__(x)		__attribute__((__aligned__(x)))
 #define __Section__(name)	__attribute__((__section__(name)))

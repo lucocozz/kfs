@@ -24,7 +24,10 @@
 #include "memory/memory_map.h"
 
 #include "system/utils.h"
-#include "system/interrupts/interrupts.h"
+#include "system/interrupts.h"
+#include "system/signals.h"
+#include "system/errno.h"
+#include "system/process.h"
 
 #include "driver/serials.h"
 #include "driver/keyboard.h"

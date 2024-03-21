@@ -86,11 +86,11 @@ typedef struct k_sigaction {
 	uint32_t		flags;
 } k_sigaction_t;
 
-typedef struct signal {
-	atomic_t			count;
-	struct k_sigaction	action[_NSIG];
-	spinlock_t			siglock;
-} signal_t;
+// typedef struct signal {
+// 	atomic_t			count;
+// 	struct k_sigaction	action[_NSIG];
+// 	spinlock_t			siglock;
+// } signal_t;
 
 /// @brief Signal information
 /// @note Used to store information about a signal

@@ -8,11 +8,5 @@ typedef int pid_t;
 typedef int uid_t;
 typedef int gid_t;
 
-typedef struct task {
-	pid_t pid;
-	uid_t uid;
-	gid_t gid;
-	sigset_t sigmask;
-} task_t;
 
 #endif

@@ -2,22 +2,23 @@
 #define KERNEL_SYSTEM_SIGNALS_H
 
 #include "system/utils.h"
+#include "system/process.h"
 
 #define _NSIG 20 // Number of signals used
 
-#define SIG_MASK(sig) (1UL << sig)
-#define SIG_UNMASK(sig) (1UL << sig)
+#define SIG_MASK(sig)	(1UL << sig)  // Mask for a signal
+#define SIG_UNMASK(sig)	~(1UL << sig) // Unmask for a signal
 
-#define SIGHUP		1 // Abort - Hangup of controlling terminal or process
-#define SIGINT		2 // Abort - Interrupt from keyboard
-#define SIGQUIT		3 // Dump - Quit from keyboard
-#define SIGILL		4 // Dump - Illegal Instruction
-#define SIGTRAP		5 // Dump - Trace/breakpoint trap
-#define SIGABRT		6 // Dump - Abort signal from abort(3)
-#define SIGIOT		6 // Dump - Equivalent to SIGABRT
-#define SIGBUS		7 // Dump - Bus error (bad memory access)
-#define SIGFPE		8 // Dump - Floating point exception
-#define SIGKILL		9 // Abort - Force process termination
+#define SIGHUP		 1 // Abort - Hangup of controlling terminal or process
+#define SIGINT		 2 // Abort - Interrupt from keyboard
+#define SIGQUIT		 3 // Dump - Quit from keyboard
+#define SIGILL		 4 // Dump - Illegal Instruction
+#define SIGTRAP		 5 // Dump - Trace/breakpoint trap
+#define SIGABRT		 6 // Dump - Abort signal from abort(3)
+#define SIGIOT		 6 // Dump - Equivalent to SIGABRT
+#define SIGBUS		 7 // Dump - Bus error (bad memory access)
+#define SIGFPE		 8 // Dump - Floating point exception
+#define SIGKILL		 9 // Abort - Force process termination
 #define SIGUSR1		10 // Abort - User-defined signal 1
 #define SIGSEGV		11 // Dump - Invalid memory reference
 #define SIGUSR2		12 // Abort - User-defined signal 2
@@ -50,34 +51,153 @@
 #define SA_RESTART		(1UL << 5) // Interrupted system calls are automatically restarted.
 #define SA_SIGINFO		(1UL << 6) // Provide additional information to the signal handler.
 
-#define sigaddset(set, nsig) set->sig[(nsig - 1) / 32] |= SIG_MASK((nsig - 1) % 32)
-#define sigdelset(set, nsig) set->sig[(nsig - 1) / 32] &= SIG_UNMASK((nsig - 1) % 32)
-#define sigaddsetmask(set, mask) set->sig[0] |= mask
-#define sigdelsetmask(set, mask) set->sig[0] &= ~mask
-#define sigismember(set, nsig) 1 & (set->sig[(nsig - 1) / 32] >> ((nsig - 1) % 32))
-// #define sigmask(nsig)
+#define	SIG_DFL		((void (*)(int))  0)
+#define	SIG_IGN		((void (*)(int))  1)
+#define	SIG_ERR		((void (*)(int)) -1)
+#define	SIG_HOLD	((void (*)(int))  3)
 
-typedef void (*sighandler_t)(int);
+#define SIG_KERNEL_ONLY_MASK (sigmask(SIGKILL) | sigmask(SIGSTOP))
 
-typedef struct sigset_s {
+
+typedef union sigval {
+	int		sigval_int;
+	void	*sigval_ptr;
+} sigval_t;
+
+typedef struct sigset {
 	uint32_t sig[2]; //Used like 64bits
 } sigset_t;
 
+typedef void (*sighandler_t)(int);
+typedef void (*sigrestore_t)(void);
+
+/// @brief Signal action
+/// @note Used to store information about a signal action
 typedef struct sigaction {
 	sighandler_t	handler;
 	sigset_t		mask;
 	uint32_t		flags;
 } sigaction_t;
 
-// typedef signal_struct {
-// 	atomic_t			count;
-// 	struct k_sigaction	action[_NSIG];
-// 	spinlock_t			siglock;
-// };
+typedef struct k_sigaction {
+	sighandler_t	handler;
+	sigrestore_t	restorer;
+	sigset_t		mask;
+	uint32_t		flags;
+} k_sigaction_t;
 
+typedef struct signal {
+	atomic_t			count;
+	struct k_sigaction	action[_NSIG];
+	spinlock_t			siglock;
+} signal_t;
+
+/// @brief Signal information
+/// @note Used to store information about a signal
+typedef struct siginfo {
+	int		signo;	// Signal number
+	int		errno;	// An errno value
+	int		code;	// Signal code
+	pid_t	pid;	// Sending process ID
+	uid_t	uid;	// Real user ID of sending process
+	void 	*addr;	// Address of faulting instruction
+	int		status;	// Exit value or signal
+	int		band;	// Band event for SIGPOLL
+} siginfo_t;
+
+/// @brief Signal queue
+/// @note Used to store signals that are pending for a process
 typedef struct signal_queue {
 	siginfo_t 			info;
 	struct signal_queue *next;
 } signal_queue_t;
+
+typedef struct sighand {
+	sigaction_t	action[_NSIG];
+} sighand_t;
+
+typedef struct sigpending {
+	sigset_t		mask;
+	signal_queue_t	*queue;
+} sigpending_t;
+
+
+
+/// @brief Add a signal to the set
+/// @param set The set to add the signal to
+/// @param signum The signal to add
+static inline void sigaddset(sigset_t *set, int signum) {
+	signum -= 1;
+	set->sig[signum / 32] |= 1 << (signum % 32);
+}
+
+/// @brief Remove a signal from the set
+/// @param set The set to remove the signal from
+/// @param signum The signal to remove
+static inline void sigdelset(sigset_t *set, int signum) {
+	signum -= 1;
+	set->sig[signum / 32] &= ~(1 << (signum % 32));
+}
+
+/// @brief Set the signal mask
+/// @param set The set to set the mask for
+/// @param mask The mask to set
+static inline void sigsetmask(sigset_t *set, int mask) {
+	set->sig[0] |= mask;
+}
+
+/// @brief Remove the signal mask
+/// @param set The set to remove the mask for
+/// @param mask The mask to remove
+static inline void sigdelmask(sigset_t *set, int mask) {
+	set->sig[0] &= ~mask;
+}
+
+/// @brief Check if a signal is in the set
+/// @param set The set to check
+/// @param signum The signal to check
+/// @return 1 if the signal is in the set, 0 otherwise
+static inline int sigismember(sigset_t *set, int signum) {
+	signum -= 1;
+	return (1 & (set->sig[signum / 32] >> (signum % 32)));
+}
+
+/// @brief Create a signal mask
+/// @param signum The signal to create the mask for
+static inline uint32_t sigmask(int signum) {
+	return (1UL << (signum - 1));
+}
+
+/// @brief Empty the signal set (set all signals to 0)
+/// @param set The set to empty
+static inline void sigemptyset(sigset_t *set) {
+	sigsetmask(set, 0);
+}
+
+/// @brief Fill the signal set with all signals
+/// @param set The set to fill
+static inline void sigfillset(sigset_t *set) {
+	sigsetmask(set, 0xFFFFFFFF);
+}
+
+/// @brief Check if a signal is valid
+/// @param signum The signal to check
+static inline int valide_signal(int signum) {
+	return (signum > 0 && signum <= _NSIG ? 1 : 0);
+}
+
+/// @brief Check if a signal is in the mask
+/// @param signum The signal to check
+static inline int siginmask(int signum, int mask) {
+	return (valide_signal(signum) && (sigmask(signum) & mask));
+}
+
+sighandler_t	signal(int signum, sighandler_t handler);
+int				sigaction(int signum, const sigaction_t *action, sigaction_t *old_action);
+//do_signal()
+//dequeue_signal()
+//handle_signal()
+//send_sig_info()
+
 
 #endif

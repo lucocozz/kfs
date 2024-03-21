@@ -1,1 +1,4 @@
-signals = files([])
+signals = files([
+	'signal.c',
+	'sigaction.c',
+])

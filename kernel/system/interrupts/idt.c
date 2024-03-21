@@ -26,6 +26,7 @@ void idt_init(void)
 	g_idt_ptr.size = (sizeof(IDT_entry_t) * IDT_SIZE) - 1;
 	g_idt_ptr.address = (uint32_t)&g_idt;
 
+	IDT_SET_TRAP(INTERRUPT_DIVIDE_BY_ZERO, (uint32_t)irq_0);
 	IDT_SET(INTERRUPT_PAGE_FAULT, (uint32_t)irq_14);
 	IDT_SET(INTERRUPT_KEYBOARD, (uint32_t)irq_33); //? Perhaps consider changing this to directly use ISR or `isr_callbacks` instead of the IRQ overlay. This would significantly simplify the code, but it might be less modular.
 

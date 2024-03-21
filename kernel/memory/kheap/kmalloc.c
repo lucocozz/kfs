@@ -69,11 +69,11 @@ static block_header_t	*__find_fitting_block(page_header_t *page, size_t block_si
 	return (NULL);
 }
 
-static block_index_t	__find_first_fit(page_queue_t *binder, size_t block_size)
+static block_index_t	__find_first_fit(page_queue_t *queue, size_t block_size)
 {
 	block_header_t	*block = NULL;
 	page_header_t	*last_page = NULL;
-	page_header_t	*page = binder->pages;
+	page_header_t	*page = queue->pages;
 
 	// Search a page with a avalaible block
 	while (page != NULL) {
@@ -92,8 +92,8 @@ static block_index_t	__find_first_fit(page_queue_t *binder, size_t block_size)
 		page->prev = last_page;
 	}
 	else
-		binder->pages = page;
-	binder->count++;
+		queue->pages = page;
+	queue->count++;
 	return ((block_index_t){.page = page, .block = __find_fitting_block(page, block_size)});
 }
 
@@ -102,27 +102,25 @@ static int	__block_fragmentation(block_header_t *block)
 	page_header_t	*parent = block->parent;
 	block_header_t	*next_block = BLOCK_SHIFT(block, block->size);
 
-	if (address_distance(block->next, next_block) >= (uint32_t)BLOCK_SIZE(ALIGNMENT))
-	{
-		next_block->next = block->next;
-		block->next->prev = next_block;
-		next_block->prev = block;
-		next_block->allocated = false;
-		next_block->parent = parent;
-		next_block->size = block->next - next_block;
-		block->next = next_block;
-		parent->block_count++;
-		parent->freed_count++;
-		return (1);
-	}
-	return (0);
+	if (address_distance(block->next, next_block) < BLOCK_SIZE(ALIGNMENT))
+		return (0);
+	next_block->next = block->next;
+	block->next->prev = next_block;
+	next_block->prev = block;
+	next_block->allocated = false;
+	next_block->parent = parent;
+	next_block->size = block->next - next_block;
+	block->next = next_block;
+	parent->block_count++;
+	parent->freed_count++;
+	return (1);
 }
 
-static void	*__do_alloc(page_queue_t *binder, size_t block_size)
+static void	*__do_alloc(page_queue_t *queue, size_t block_size)
 {
 	block_index_t	index;
 
-	index = __find_first_fit(binder, block_size);
+	index = __find_first_fit(queue, block_size);
 	if (index.page == NULL)
 		return (NULL);
 	index.block->magic = MALLOC_MAGIC;

@@ -9,7 +9,7 @@
 #define ALIGNMENT		8
 #define ALIGN(size)		(((size) + (ALIGNMENT - 1)) & ~(ALIGNMENT - 1))
 
-#define BLOCK_SIZE(size)	ALIGN(size + sizeof(block_header_t))
+#define BLOCK_SIZE(size)	(ALIGN(size) + sizeof(block_header_t))
 
 // BLOCK
 #define HEADER_BLOCK_SIZE				sizeof(block_header_t)
@@ -48,7 +48,7 @@ typedef struct block_header {
 	struct page_header	*parent;
 	struct block_header	*next;
 	struct block_header	*prev;
-} __Packed__ block_header_t;
+} __Aligned__(8) block_header_t;
 
 typedef struct page_header {
 	size_t				size;
@@ -58,18 +58,18 @@ typedef struct page_header {
 	block_header_t		*blocks;
 	struct page_header	*next;
 	struct page_header	*prev;
-} __Packed__ page_header_t;
+} __Aligned__(8) page_header_t;
 
 typedef struct page_queue {
 	size_t			count;
 	page_header_t	*pages;
-} __Packed__ page_queue_t;
+} __Aligned__(8) page_queue_t;
 
 typedef struct s_heap {
 	page_queue_t	tiny;
 	page_queue_t	small;
 	page_queue_t	large;
-} __Packed__ t_heap;
+} __Aligned__(8) t_heap;
 
 extern t_heap g_heap;
 

@@ -9,6 +9,12 @@ memory_c = files([
 
 	'paging/page_fault.c',
 
+	'utils/show_page_num.c',
+	'utils/show_alloc_mem.c',
+	'utils/show_alloc_mem_hex.c',
+	'utils/show_alloc_mem_freed.c',
+	'utils/print_memory.c',
+
 	'memory_map.c',
 	'memory_init.c'
 ])

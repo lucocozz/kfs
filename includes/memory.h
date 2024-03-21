@@ -83,5 +83,10 @@ static inline uint32_t address_distance(void *ptr1, void *ptr2) {
 	return ((uint32_t)ptr2 - (uint32_t)ptr1);
 }
 
+void	show_alloc_mem(void);
+void	show_alloc_mem_hex(void);
+void	show_alloc_mem_freed(void);
+void	show_page_num(void);
+void	print_memory(void *address, uint size);
 
 #endif

@@ -8,25 +8,25 @@ SECTIONS {
 	_kernel_start_physical = .;
 	_kernel_start_virtual  = .;
 
-	.text BLOCK(4K) : ALIGN (4K) {
+	.text BLOCK(0x1000) : ALIGN (0x1000) {
 		_stext = .;    
 		*(.text)
 		_etext = .;
 	}
 
-	.rodata BLOCK(4K) : ALIGN (4K) {
+	.rodata BLOCK(0x1000) : ALIGN (0x1000) {
 		_srodata = .;
 		*(.rodata*)
 		_erodata = .;
 	}
 
-	.data BLOCK(4K) : ALIGN (4K) {
+	.data BLOCK(0x1000) : ALIGN (0x1000) {
 		_sdata = .;
 		*(.data)
 		_edata = .;
 	}
 
-	.bss BLOCK(4K) : ALIGN (4K) {
+	.bss BLOCK(0x1000) : ALIGN (0x1000) {
 		_sbss = .;
 		*(COMMON)
 		*(.bss)

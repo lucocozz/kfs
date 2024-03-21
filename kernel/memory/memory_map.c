@@ -4,6 +4,7 @@
 #include "multiboot.h"
 #include "assert.h"
 #include "system/utils.h"
+#include "kernel.h"
 
 multiboot_info_t	*g_boot_info = NULL;
 kernel_memory_map_t	kernel_memory_map = {0};
@@ -131,23 +132,47 @@ int init_memory_map(multiboot_info_t *boot_info)
 	check_flags();
 	init_sections_struct();
 
+	printk("--------------------\n");
+	printk("Physical Memory map\n");
+	printk("--------------------\n");
 
-    // uint32_t kernel_size = (uint32_t)&_kernel_end_physical - (uint32_t)&_kernel_start_physical;
-	// nb_frames = (main_memory_length - kernel_size) / PAGE_SIZE;
-    // nb_frames -= ((nb_frames + 7) / 8) / PAGE_SIZE;
-    // nb_frames -= 1;
+	mmap_print();
 
-    // /* Start of actual allocation is aligned by PAGE_SIZE bytes. Also add a bit of a buffer. */
-    // uint32_t start_addr_alloc = (uint32_t)&_kernel_end_physical;
-    // start_addr_alloc += nb_frames + PAGE_SIZE;
-    // start_addr_alloc &= ~(PAGE_SIZE - 1);
-    // alloc_start = (uint32_t*)start_addr_alloc;
+	uint32_t nb_of_mmap_entries = g_boot_info->mmap_length / sizeof(multiboot_mmap_entry_t);
+    multiboot_mmap_entry_t *mmap_entry = (multiboot_mmap_entry_t*)g_boot_info->mmap_addr + sizeof(multiboot_mmap_entry_t) * (nb_of_mmap_entries);
+    uint32_t total_memory = mmap_entry->addr_low + mmap_entry->len_low - 1;
 
-    // /* Print our memory info */
-    // printk("Memory Start: %x, Memory Length: %x, Allocatable Start: %x, Number of frames: %d \n", 
-    //     main_memory_start, main_memory_length, alloc_start, nb_frames);
-    // printk("kernel end physical: %x\n", &_kernel_end_physical);
-    // printk("Memory: %d MB\n", main_memory_length / 1024 / 1024);
+    printk("Total memory in bytes: 0x%X \n", total_memory);
+	printk("Total 4K blocks: 0x%x\n", total_memory / BLOCK_SIZE);
+
+    initialise_memory_manager((uint32_t)&_kernel_end_physical, total_memory);
+
+	for (uint32_t i = 0; i < g_boot_info->mmap_length; i += sizeof(multiboot_mmap_entry_t))
+	{
+		multiboot_mmap_entry_t *entry = (multiboot_mmap_entry_t*)(g_boot_info->mmap_addr + i);
+
+		if(entry->type == MULTIBOOT_MEMORY_AVAILABLE) {
+            initialise_memory_region(entry->addr_low, entry->len_low);
+		}
+	}
+
+	// set kernel memory as used and align it to 4K blocks above the kernel
+	uint32_t kernel_memory_length = ((uint32_t)&_kernel_end_physical - (uint32_t)&_kernel_start_physical + BLOCK_SIZE - 1) & ~(BLOCK_SIZE - 1);
+	// printk("Kernel start: %x\n", (uint32_t)&_kernel_start_physical);
+	// printk("Kernel end: %x\n", (uint32_t)&_kernel_end_physical);
+	// printk("Kernel memory length: %x\n", kernel_memory_length);
+	// printk("Kernel nb of blocks: %d\n", kernel_memory_length / BLOCK_SIZE);
+	deinitialise_memory_region((uint32_t)&_kernel_start_physical, kernel_memory_length);
+
+	// reserve the memory map
+	uint32_t memory_map_length = (max_blocks / BLOCKS_PER_BYTE + BLOCK_SIZE - 1) & ~(BLOCK_SIZE - 1);
+	// printk("Memory map length: %x\n", memory_map_length);
+	// printk("Memory map nb of blocks: %d\n", memory_map_length / BLOCK_SIZE);
+	deinitialise_memory_region((uint32_t)&_kernel_end_physical, memory_map_length);
+
+	printk("Total blocks: 0x%X\n", max_blocks);
+	printk("Used blocks: 0x%X\n", used_blocks);
+	printk("Free blocks: 0x%X\n", max_blocks - used_blocks);
 
 	return (0);
 }

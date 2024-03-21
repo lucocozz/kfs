@@ -1,8 +1,8 @@
 #include "memory/pmm.h"
 
-static uint32_t* memory_map = 0;
-static uint32_t max_blocks = 0;
-static uint32_t used_blocks = 0;
+uint32_t* memory_map = 0;
+uint32_t max_blocks = 0;
+uint32_t used_blocks = 0;
 
 // set a block/bit as used
 void set_block(uint32_t block)
@@ -38,13 +38,13 @@ int32_t find_first_free_block(uint32_t num_blocks) {
 				uint32_t bit = 1 << j;
 				if (!(memory_map[i] & bit)) {
 					// found start of free region of memory
-					uint32_t block = (i * 32) + j; // block number (0 to max_blocks)
+					uint32_t block = (i * 32) + bit; // block number (0 to max_blocks)
 					uint32_t free_blocks = 0; // keep track of how many free blocks we've found
 					for (uint32_t count = 0; count <= num_blocks; count++) {
 						if (!test_block(block + count)) free_blocks++;
 						if (free_blocks == num_blocks) {
 							// found enough free blocks
-							return block;
+							return i*32 + j;
 						}
 					}
 				}
@@ -64,7 +64,7 @@ void initialise_memory_manager(uint32_t start_address, uint32_t size) {
 
 void initialise_memory_region(uint32_t base_address, uint32_t size) {
 	uint32_t align = base_address / BLOCK_SIZE; // align the address to the block size
-	uint32_t num_blocks = size / BLOCK_SIZE; // calculate the number of blocks in the region
+	uint32_t num_blocks = size / BLOCK_SIZE; // calculate the number of blocks in the region and align it to 4K blocks
 
 	for (; num_blocks > 0; num_blocks--) {
 		free_block(align++);
@@ -83,10 +83,29 @@ void deinitialise_memory_region(uint32_t base_address, uint32_t size) {
 		used_blocks++;
 	}
 }
+uint32_t *kmalloc(uint32_t size) {
+	uint32_t num_blocks = size / BLOCK_SIZE;
+	if (size % BLOCK_SIZE) num_blocks++;
+
+	uint32_t *address = allocate_blocks(num_blocks);
+	if (address == 0) return 0;
+
+	return address;
+}
+
+void kfree(uint32_t *address, uint32_t size) {
+	uint32_t num_blocks = size / BLOCK_SIZE;
+	if (size % BLOCK_SIZE) num_blocks++;
+
+	free_blocks(address, num_blocks);
+}
 
 // Allocate a block of memory
 uint32_t *allocate_blocks(uint32_t num_blocks) {
-	if (max_blocks - used_blocks <= num_blocks) return 0; // not enough free blocks available
+	if (max_blocks - used_blocks <= num_blocks) {
+		printk("Not enough free blocks available\n");
+		return 0; // not enough free blocks available
+	}
 
 	int32_t start_block = find_first_free_block(num_blocks);
 	if (start_block == -1) return 0; // no free region of memory large enough found
@@ -99,6 +118,7 @@ uint32_t *allocate_blocks(uint32_t num_blocks) {
 	// convert the block number to a memory address and return it
 	uint32_t start_address = start_block * BLOCK_SIZE;
 
+	printk("Allocated %d blocks at 0x%x\n", num_blocks, start_address);
 	return (uint32_t*)start_address;
 }
 
@@ -111,4 +131,5 @@ void free_blocks(uint32_t *address, uint32_t num_blocks) {
 		free_block(start_block + i);
 		used_blocks--;
 	}
+	printk("Freed %d blocks at 0x%x\n", num_blocks, address);
 }

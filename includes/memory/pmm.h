@@ -6,6 +6,10 @@
 # define BLOCK_SIZE 4096 
 # define BLOCKS_PER_BYTE 8
 
+extern uint32_t *memory_map;
+extern uint32_t max_blocks;
+extern uint32_t used_blocks;
+
 void set_block(uint32_t block);
 void free_block(uint32_t block);
 uint32_t test_block(uint32_t block);

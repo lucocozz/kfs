@@ -1,5 +1,6 @@
 memory_c = files([
 	'pmm.c',
+	'vmm.c',
 	'kheap/kmalloc.c',
 	'segmentation/segments.c',
 	'paging/page_fault.c',

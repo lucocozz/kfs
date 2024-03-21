@@ -60,11 +60,6 @@ typedef struct page_header {
 	struct page_header	*prev;
 } __Packed__ page_header_t;
 
-typedef struct s_index {
-	block_header_t	*block;
-	page_header_t	*page;
-} __Packed__ t_index;
-
 typedef struct page_queue {
 	size_t			count;
 	page_header_t	*pages;

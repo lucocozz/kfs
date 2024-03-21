@@ -1,6 +1,12 @@
 #include "memory/kmalloc.h"
 
 
+typedef struct block_index {
+	block_header_t	*block;
+	page_header_t	*page;
+} __Packed__ block_index_t;
+
+
 static size_t	__page_size_from_block_size(size_t block_size)
 {
 	if (block_size <= TINY_BLOCK_SIZE_MAX)
@@ -27,7 +33,7 @@ static page_header_t	*__alloc_page(size_t size)
 
 static block_header_t	*__find_fitting_block(page_header_t *page, size_t block_size)
 {
-	block_header_t	*lasblock_header_t = NULL;
+	block_header_t	*last_block = NULL;
 	block_header_t	*block = page->blocks;
 
 	// Create block at start of page if none exists
@@ -46,16 +52,16 @@ static block_header_t	*__find_fitting_block(page_header_t *page, size_t block_si
 			page->freed_count--;
 			return (block);
 		}
-		lasblock_header_t = block;
+		last_block = block;
 		block = block->next;
 	}
 
 	// Add block at end if there is space available
 	if (block_size <= page->size - page->used_size) {
-		block = BLOCK_SHIFT(lasblock_header_t, lasblock_header_t->size);
+		block = BLOCK_SHIFT(last_block, last_block->size);
 		block->next = NULL;
-		block->prev = lasblock_header_t;
-		lasblock_header_t->next = block;
+		block->prev = last_block;
+		last_block->next = block;
 		page->used_size += block_size;
 		page->block_count++;
 		return (block);
@@ -63,48 +69,48 @@ static block_header_t	*__find_fitting_block(page_header_t *page, size_t block_si
 	return (NULL);
 }
 
-static t_index	__find_first_fit(page_queue_t *binder, size_t block_size)
+static block_index_t	__find_first_fit(page_queue_t *binder, size_t block_size)
 {
 	block_header_t	*block = NULL;
-	page_header_t	*laspage_header_t = NULL;
+	page_header_t	*last_page = NULL;
 	page_header_t	*page = binder->pages;
 
 	// Search a page with a avalaible block
 	while (page != NULL) {
 		if ((block = __find_fitting_block(page, block_size)) != NULL)
-			return ((t_index){.page = page, .block = block});
-		laspage_header_t = page;
+			return ((block_index_t){.page = page, .block = block});
+		last_page = page;
 		page = page->next;
 	}
 
 	// Create a new page if none is available
 	page = __alloc_page(__page_size_from_block_size(block_size));
 	if (page == NULL)
-		return ((t_index){NULL, NULL});
-	if (laspage_header_t != NULL) {
-		laspage_header_t->next = page;
-		page->prev = laspage_header_t;
+		return ((block_index_t){NULL, NULL});
+	if (last_page != NULL) {
+		last_page->next = page;
+		page->prev = last_page;
 	}
 	else
 		binder->pages = page;
 	binder->count++;
-	return ((t_index){.page = page, .block = __find_fitting_block(page, block_size)});
+	return ((block_index_t){.page = page, .block = __find_fitting_block(page, block_size)});
 }
 
 static int	__block_fragmentation(block_header_t *block)
 {
 	page_header_t	*parent = block->parent;
-	block_header_t	*nexblock_header_t = BLOCK_SHIFT(block, block->size);
+	block_header_t	*next_block = BLOCK_SHIFT(block, block->size);
 
-	if (address_distance(block->next, nexblock_header_t) >= (uint32_t)BLOCK_SIZE(ALIGNMENT))
+	if (address_distance(block->next, next_block) >= (uint32_t)BLOCK_SIZE(ALIGNMENT))
 	{
-		nexblock_header_t->next = block->next;
-		block->next->prev = nexblock_header_t;
-		nexblock_header_t->prev = block;
-		nexblock_header_t->allocated = false;
-		nexblock_header_t->parent = parent;
-		nexblock_header_t->size = block->next - nexblock_header_t;
-		block->next = nexblock_header_t;
+		next_block->next = block->next;
+		block->next->prev = next_block;
+		next_block->prev = block;
+		next_block->allocated = false;
+		next_block->parent = parent;
+		next_block->size = block->next - next_block;
+		block->next = next_block;
 		parent->block_count++;
 		parent->freed_count++;
 		return (1);
@@ -114,7 +120,7 @@ static int	__block_fragmentation(block_header_t *block)
 
 static void	*__do_alloc(page_queue_t *binder, size_t block_size)
 {
-	t_index	index;
+	block_index_t	index;
 
 	index = __find_first_fit(binder, block_size);
 	if (index.page == NULL)

@@ -52,13 +52,13 @@ static page_queue_t	*__get_page_queue(page_header_t *page)
 
 static void	__free_page(page_header_t *page)
 {
-	page_queue_t *binder = __get_page_queue(page);
+	page_queue_t *page_queue = __get_page_queue(page);
 
-	if (binder->count == 0)
+	if (page_queue->count == 0)
 		return;
-	binder->count--;
-	if (binder->pages == page)
-		binder->pages = page->next;
+	page_queue->count--;
+	if (page_queue->pages == page)
+		page_queue->pages = page->next;
 
 	if (page->prev != NULL)
 		page->prev->next = page->next;

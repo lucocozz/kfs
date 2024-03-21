@@ -47,7 +47,7 @@ static int __block_fragmentation(block_header_t *block, size_t size)
 			fragment->size = block->size - size;
 			fragment->next = block->next;
 			fragment->prev = block;
-			fragment->magic = MALLOC_MAGIC;
+			fragment->magic = KMALLOC_MAGIC;
 			block->next = fragment;
 			page->block_count++;
 			page->freed_count++;
@@ -83,7 +83,7 @@ void	*krealloc(void *ptr, size_t size)
 		return (kmalloc(size));
 
 	block_header_t	*block = BLOCK_HEADER_SHIFT_BACK(ptr);
-	if (block->magic != MALLOC_MAGIC)
+	if (block->magic != KMALLOC_MAGIC)
 		return (NULL);
 
 	// pthread_mutex_lock(&g_heap_mutex);

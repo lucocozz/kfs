@@ -76,7 +76,7 @@ void	kfree(void *ptr)
 
 	if (ptr == NULL)
 		return;
-	if (block->magic != MALLOC_MAGIC)
+	if (block->magic != KMALLOC_MAGIC)
 		return;
 
 	// pthread_mutex_lock(&g_heap_mutex);

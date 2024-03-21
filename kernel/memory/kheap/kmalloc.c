@@ -123,7 +123,7 @@ static void	*__do_alloc(page_queue_t *queue, size_t block_size)
 	index = __find_first_fit(queue, block_size);
 	if (index.page == NULL)
 		return (NULL);
-	index.block->magic = MALLOC_MAGIC;
+	index.block->magic = KMALLOC_MAGIC;
 	index.block->allocated = true;
 	index.block->size = block_size;
 	index.block->parent = index.page;

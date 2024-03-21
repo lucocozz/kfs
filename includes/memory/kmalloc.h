@@ -5,7 +5,7 @@
 #include "memory.h"
 #include "string.h"
 
-#define MALLOC_MAGIC	0xdeadbeef
+#define KMALLOC_MAGIC	0xdeadbeef
 #define ALIGNMENT		8
 #define ALIGN(size)		(((size) + (ALIGNMENT - 1)) & ~(ALIGNMENT - 1))
 
@@ -48,7 +48,7 @@ typedef struct block_header {
 	struct page_header	*parent;
 	struct block_header	*next;
 	struct block_header	*prev;
-} __Aligned__(8) block_header_t;
+} __Aligned__(ALIGNMENT) block_header_t;
 
 typedef struct page_header {
 	size_t				size;
@@ -58,20 +58,20 @@ typedef struct page_header {
 	block_header_t		*blocks;
 	struct page_header	*next;
 	struct page_header	*prev;
-} __Aligned__(8) page_header_t;
+} __Aligned__(ALIGNMENT) page_header_t;
 
 typedef struct page_queue {
 	size_t			count;
 	page_header_t	*pages;
-} __Aligned__(8) page_queue_t;
+} __Aligned__(ALIGNMENT) page_queue_t;
 
-typedef struct s_heap {
+typedef struct heap {
 	page_queue_t	tiny;
 	page_queue_t	small;
 	page_queue_t	large;
-} __Aligned__(8) t_heap;
+} __Aligned__(ALIGNMENT) heap_t;
 
-extern t_heap g_heap;
+extern heap_t g_heap;
 
 uint32_t	kbrk(uint32_t size);
 void		kfree(void *ptr);

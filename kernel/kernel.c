@@ -18,10 +18,6 @@ void	kernel_main(uint32_t magic, multiboot_info_t *boot_info, uint32_t *stack_to
 	UNUSED(stack_top);
 	assert(magic == MULTIBOOT_BOOTLOADER_MAGIC);
 	__init_kernel(boot_info);
-	int *toto = kmalloc(64);
-	kmalloc(128);
-	kfree(toto);
-	show_page_num();
 	shell();
 }
 EXPORT_SYMBOL(kernel_main);

@@ -1,4 +1,4 @@
-#include "memory/memory.h"
+#include "memory.h"
 
 void	isr_page_fault(registers_t regs, struct stack_state stack)
 {
@@ -7,7 +7,7 @@ void	isr_page_fault(registers_t regs, struct stack_state stack)
 	UNUSED(regs);
 	ASM("mov %%cr2, %0" : "=r" (faulting_address));
 
-	printk("Page fault! (%d, %d, %d, %d, %d) at %08p\n", 
+	panic("Page fault! (%d, %d, %d, %d, %d) at %08p\n", 
 		!(stack.error_code & 0x1),
 		stack.error_code & PAGE_FLAG_WRITE,
 		stack.error_code & PAGE_FLAG_USER,

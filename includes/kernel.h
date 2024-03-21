@@ -18,10 +18,7 @@
 #include "symbol_table.h"
 #include "multiboot.h"
 #include "printk.h"
-
-#include "memory/memory.h"
-#include "memory/segments.h"
-#include "memory/memory_map.h"
+#include "memory.h"
 
 #include "system/utils.h"
 #include "system/interrupts.h"

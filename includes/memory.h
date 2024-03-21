@@ -7,6 +7,10 @@
 #include "system/interrupts.h"
 #include "system/utils.h"
 
+#include "memory/kmalloc.h"
+#include "memory/memory_map.h"
+#include "memory/segments.h"
+
 #define CPU_ARCH_BITS	32
 #define KERNEL_START	0xC0000000
 
@@ -62,19 +66,22 @@ typedef struct page_directory {
 extern uint32_t	g_placement_address;
 extern uint32_t	*g_frames;
 
-extern void enable_paging(uint32_t page_directory);
-
-void	paging_init(void);
+// extern void enable_paging(uint32_t page_directory);
+void	memory_init(void);
 void	isr_page_fault(registers_t regs, struct stack_state stack);
-void	alloc_frame(page_t *page, bool is_kernel, bool is_writeable);
-page_t	*get_page(uint32_t address, page_directory_t *directory, bool make);
+// void	alloc_frame(page_t *page, bool is_kernel, bool is_writeable);
+// page_t	*gepage_header_t(uint32_t address, page_directory_t *directory, bool make);
 
 
-/* MEMORY/KHEAP/KMALLOC.C */
-uint32_t	kmalloc_internal(uint32_t size, bool align, uint32_t *phys);
-uint32_t	kmalloc_a(uint32_t size);
-uint32_t	kmalloc_p(uint32_t size, uint32_t *phys);
-uint32_t	kmalloc_ap(uint32_t size, uint32_t *phys);
-uint32_t	kmalloc(uint32_t size);
+static inline int getpagesize(void) {
+	return (PAGE_SIZE);
+}
+
+static inline uint32_t address_distance(void *ptr1, void *ptr2) {
+	if (ptr1 == NULL || ptr2 == NULL)
+		return (0);
+	return ((uint32_t)ptr2 - (uint32_t)ptr1);
+}
+
 
 #endif

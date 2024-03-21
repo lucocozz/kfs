@@ -1,5 +1,5 @@
 #include "memory/memory_map.h"
-#include "memory/memory.h"
+#include "memory.h"
 #include "shell/builtin.h"
 #include "multiboot.h"
 #include "assert.h"

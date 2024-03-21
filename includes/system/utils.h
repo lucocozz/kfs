@@ -8,6 +8,13 @@
 
 #include "printk.h"
 
+typedef uint8_t		u8;
+typedef int8_t		i8;
+typedef uint16_t	u16;
+typedef int16_t		i16;
+typedef uint32_t	u32;
+typedef int32_t		i32;
+typedef u16			uint;
 
 #define UNUSED(x)	(void)(x)
 #define ASM(...)	__asm__ volatile(__VA_ARGS__)

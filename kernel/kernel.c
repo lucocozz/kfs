@@ -10,7 +10,7 @@ static void	__init_kernel(multiboot_info_t *boot_info)
 	// Check flags
 	init_memory_map(boot_info);
 	get_memory_map();
-	// paging_init();
+	memory_init();
 }
 
 void	kernel_main(uint32_t magic, multiboot_info_t *boot_info, uint32_t *stack_top)

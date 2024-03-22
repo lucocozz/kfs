@@ -1,4 +1,6 @@
 memory_c = files([
+	'pmm.c',
+	'vmm.c',
 	'kheap/kmalloc.c',
 	'kheap/kfree.c',
 	'kheap/krealloc.c',

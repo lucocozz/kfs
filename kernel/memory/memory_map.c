@@ -9,89 +9,6 @@
 multiboot_info_t	*g_boot_info = NULL;
 kernel_memory_map_t	kernel_memory_map = {0};
 
-
-// uint32_t *main_memory_start = 0x00;
-// uint32_t main_memory_length = 0x00;
-// uint32_t nb_frames;
-// uint32_t *alloc_start = NULL;
-// uint32_t last_alloc_record = 0;
-
-// uint32_t pmem_to_entry(uint32_t* ptr)
-// {
-//     if(alloc_start > ptr)
-//         panic("pmem_to_entry: underflow error!\n");
-//     if((uint32_t *)((uint32_t)main_memory_start + main_memory_length) < ptr) {
-//         printk("ptr: %x\n", ptr);
-//         printk("main_memory_start: %x\n", main_memory_start);
-//         printk("memory_length: %x\n", main_memory_length);
-//         printk("main_memory_end: %x\n", (uint32_t *)((uint32_t)main_memory_start + main_memory_length));
-//         printk("last_alloc_record: %d\n", last_alloc_record);
-//         printk("nb_frames: %d\n", nb_frames);
-//         panic("pmem_to_entry: overflow error!\n");
-
-//     }
-//     uint32_t working_ptr = (uint32_t) ptr;
-//     working_ptr -= (uint32_t) alloc_start;
-//     working_ptr /= PAGE_SIZE;
-//     return working_ptr;
-// }
-
-// int kfree(uint32_t* ptr)
-// {
-//     uint32_t record = pmem_to_entry(ptr);
-//     uint8_t* record_ptr = (uint8_t*)_kernel_end_physical + record;
-
-//     /* Memory is already free */
-//     if(*record_ptr == 0x0)
-//         return -1;
-
-//     /* Mark record as free */
-//     *record_ptr = 0x0;
-// 	// printk("pmem: freeing record %d at record addr %x which points to %x\n", record, record_ptr, ptr);
-
-//     return 0;
-// }
-
-// uint32_t* entry_to_pmem(uint32_t entry)
-// {
-//     if(entry > nb_frames)
-//         panic("entry_to_pmem: entry out of bounds!\n");
-//     uint32_t return_ptr = PAGE_SIZE * entry;
-//     return_ptr += (uint32_t) alloc_start;
-//     return (uint32_t*) return_ptr;
-// }
-
-
-// uint32_t* kmalloc(void)
-// {
-//     uint32_t record = last_alloc_record + 1;
-
-//     if (record >= nb_frames) {
-//         record = 0;
-//     }
-
-//     while(record != last_alloc_record)
-//     {
-//         uint8_t* record_ptr = (uint8_t*)_kernel_end_physical + record;
-
-//         if(*record_ptr == 0x00)
-//         {
-//             *record_ptr = 0x1;
-//             uint32_t* pmem_addr = entry_to_pmem(record);
-//             // printk("pmem: allocating record %d at record addr %x which points to %x\n", record, record_ptr, pmem_addr);
-//             last_alloc_record = record;
-//             return pmem_addr;
-//         }
-
-//         record++;
-//         if(record >= nb_frames)
-//             record = 0;
-//     }
-
-//     panic("out of memory!\n");
-//     return NULL;
-// }
-
 int check_flags(void)
 {
 	CHECK_AND_LOG_FLAG(g_boot_info, 0, "FLAGS");
@@ -138,12 +55,14 @@ int init_memory_map(multiboot_info_t *boot_info)
 
 	mmap_print();
 
-	uint32_t nb_of_mmap_entries = g_boot_info->mmap_length / sizeof(multiboot_mmap_entry_t);
-    multiboot_mmap_entry_t *mmap_entry = (multiboot_mmap_entry_t*)g_boot_info->mmap_addr + sizeof(multiboot_mmap_entry_t) * (nb_of_mmap_entries);
-    uint32_t total_memory = mmap_entry->addr_low + mmap_entry->len_low - 1;
+	// uint32_t nb_of_mmap_entries = g_boot_info->mmap_length / sizeof(multiboot_mmap_entry_t);
+    // multiboot_mmap_entry_t *mmap_entry = (multiboot_mmap_entry_t*)g_boot_info->mmap_addr + sizeof(multiboot_mmap_entry_t) * (nb_of_mmap_entries);
+    // uint32_t total_memory = mmap_entry->addr_low + mmap_entry->len_low - 1;
+	uint32_t total_memory = MAX_MEMORY_SIZE; // 4GB address space for 32 bits = 0xFFFFFFFF
 
-    printk("Total memory in bytes: 0x%X \n", total_memory);
-	printk("Total 4K blocks: 0x%x\n", total_memory / BLOCK_SIZE);
+    printk("MAx memory size in bytes (for a 32 bits system): 0x%X \n", total_memory);
+	// this is the nb blocks for the full 32 bits address space, we're mapping 4GB even if we have less memory
+	printk("Total 4K blocks: 0x%x\n", total_memory * 1024 / BLOCK_SIZE);
 
     initialise_memory_manager((uint32_t)&_kernel_end_physical, total_memory);
 
@@ -158,25 +77,18 @@ int init_memory_map(multiboot_info_t *boot_info)
 
 	// set kernel memory as used and align it to 4K blocks above the kernel
 	uint32_t kernel_memory_length = ((uint32_t)&_kernel_end_physical - (uint32_t)&_kernel_start_physical + BLOCK_SIZE - 1) & ~(BLOCK_SIZE - 1);
-	// printk("Kernel start: %x\n", (uint32_t)&_kernel_start_physical);
-	// printk("Kernel end: %x\n", (uint32_t)&_kernel_end_physical);
-	// printk("Kernel memory length: %x\n", kernel_memory_length);
-	// printk("Kernel nb of blocks: %d\n", kernel_memory_length / BLOCK_SIZE);
 	deinitialise_memory_region((uint32_t)&_kernel_start_physical, kernel_memory_length);
 
-	// reserve the memory map
+	// reserve the memory map and align it to 4K blocks
 	uint32_t memory_map_length = (max_blocks / BLOCKS_PER_BYTE + BLOCK_SIZE - 1) & ~(BLOCK_SIZE - 1);
-	// printk("Memory map length: %x\n", memory_map_length);
-	// printk("Memory map nb of blocks: %d\n", memory_map_length / BLOCK_SIZE);
 	deinitialise_memory_region((uint32_t)&_kernel_end_physical, memory_map_length);
 
-	printk("Total blocks: 0x%X\n", max_blocks);
-	printk("Used blocks: 0x%X\n", used_blocks);
-	printk("Free blocks: 0x%X\n", max_blocks - used_blocks);
+	printk("Total blocks: 0x%u\n", max_blocks);
+	printk("Used blocks: 0x%u\n", used_blocks);
+	printk("Free blocks: 0x%u\n", max_blocks - used_blocks);
 
 	return (0);
 }
-// 12f810 + 0b0000 = 1e810
 
 int get_memory_map()
 {

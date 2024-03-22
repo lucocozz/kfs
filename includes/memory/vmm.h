@@ -82,6 +82,7 @@ bool switch_page_directory(page_directory_t *dir);
 
 // Flush a single page in TLB
 void flush_tlb_entry(virt_addr address);
+
 // Map a page
 bool map_page(void *paddr, void *vaddr);
 
@@ -90,4 +91,5 @@ void unmap_page(void *virt_addr);
 
 // Initialise the virtual memory manager
 bool initialise_virtual_memory_manager(void);
+
 #endif

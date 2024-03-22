@@ -83,22 +83,23 @@ void deinitialise_memory_region(uint32_t base_address, uint32_t size) {
 		used_blocks++;
 	}
 }
-uint32_t *kmalloc(uint32_t size) {
-	uint32_t num_blocks = size / BLOCK_SIZE;
-	if (size % BLOCK_SIZE) num_blocks++;
 
-	uint32_t *address = allocate_blocks(num_blocks);
-	if (address == 0) return 0;
+// uint32_t *kmalloc(uint32_t size) {
+// 	uint32_t num_blocks = size / BLOCK_SIZE;
+// 	if (size % BLOCK_SIZE) num_blocks++;
 
-	return address;
-}
+// 	uint32_t *address = allocate_blocks(num_blocks);
+// 	if (address == 0) return 0;
 
-void kfree(uint32_t *address, uint32_t size) {
-	uint32_t num_blocks = size / BLOCK_SIZE;
-	if (size % BLOCK_SIZE) num_blocks++;
+// 	return address;
+// }
 
-	free_blocks(address, num_blocks);
-}
+// void kfree(uint32_t *address, uint32_t size) {
+// 	uint32_t num_blocks = size / BLOCK_SIZE;
+// 	if (size % BLOCK_SIZE) num_blocks++;
+
+// 	free_blocks(address, num_blocks);
+// }
 
 // Allocate a block of memory
 uint32_t *allocate_blocks(uint32_t num_blocks) {

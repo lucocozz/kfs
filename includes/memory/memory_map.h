@@ -79,7 +79,5 @@ int check_flags(void);
 void init_sections_struct(void);
 int init_memory_map(multiboot_info_t *boot_info);
 int get_memory_map();
-uint32_t* kmalloc();
-int kfree(uint32_t *ptr);
 
 #endif // MEMORY_MAP_H

@@ -3,6 +3,9 @@
 
 #include "system/utils.h"
 
+// Maximumu memory size for a 32-bit system
+# define MAX_MEMORY_SIZE 0xFFFFFFFF
+
 # define BLOCK_SIZE 4096 
 # define BLOCKS_PER_BYTE 8
 

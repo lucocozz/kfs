@@ -2,6 +2,8 @@
 #include "memory/pmm.h"
 #include "kernel.h"
 
+page_directory_t *current_directory = 0;
+
 // Get entry from page table for a given virtual address
 page_table_entry *get_page_table_entry(page_table_t *table, virt_addr address) {
 	if (table) {

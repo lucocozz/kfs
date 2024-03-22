@@ -1,4 +1,7 @@
-#include "memory/pmm.h"
+#include "memory.h"
+
+uint32_t	g_placement_address = (uint32_t)&_kernel_end_physical;
+heap_t		g_heap = INITIALIZE_HEAP;
 
 uint32_t* memory_map = 0;
 uint32_t max_blocks = 0;
@@ -56,15 +59,15 @@ int32_t find_first_free_block(uint32_t num_blocks) {
 
 void initialise_memory_manager(uint32_t start_address, uint32_t size) {
 	memory_map = (uint32_t*)start_address;
-	max_blocks = size / BLOCK_SIZE;
+	max_blocks = size / FRAME_SIZE;
 	used_blocks = max_blocks;
 
-	memset(memory_map, 0xFF, max_blocks / BLOCKS_PER_BYTE);
+	memset(memory_map, 0xFF, max_blocks / FRAMES_PER_BYTE);
 }
 
 void initialise_memory_region(uint32_t base_address, uint32_t size) {
-	uint32_t align = base_address / BLOCK_SIZE; // align the address to the block size
-	uint32_t num_blocks = size / BLOCK_SIZE; // calculate the number of blocks in the region and align it to 4K blocks
+	uint32_t align = base_address / FRAME_SIZE; // align the address to the block size
+	uint32_t num_blocks = size / FRAME_SIZE; // calculate the number of blocks in the region and align it to 4K blocks
 
 	for (; num_blocks > 0; num_blocks--) {
 		free_block(align++);
@@ -75,8 +78,8 @@ void initialise_memory_region(uint32_t base_address, uint32_t size) {
 }
 
 void deinitialise_memory_region(uint32_t base_address, uint32_t size) {
-	uint32_t align = base_address / BLOCK_SIZE;
-	uint32_t num_blocks = size / BLOCK_SIZE;
+	uint32_t align = base_address / FRAME_SIZE;
+	uint32_t num_blocks = size / FRAME_SIZE;
 
 	for (; num_blocks > 0; num_blocks--) {
 		set_block(align++);
@@ -117,7 +120,7 @@ uint32_t *allocate_blocks(uint32_t num_blocks) {
 	}
 
 	// convert the block number to a memory address and return it
-	uint32_t start_address = start_block * BLOCK_SIZE;
+	uint32_t start_address = start_block * FRAME_SIZE;
 
 	printk("Allocated %d blocks at 0x%x\n", num_blocks, start_address);
 	return (uint32_t*)start_address;
@@ -126,7 +129,7 @@ uint32_t *allocate_blocks(uint32_t num_blocks) {
 
 // Free a block of memory
 void free_blocks(uint32_t *address, uint32_t num_blocks) {
-	uint32_t start_block = (uint32_t)address / BLOCK_SIZE;
+	uint32_t start_block = (uint32_t)address / FRAME_SIZE;
 
 	for (uint32_t i = 0; i < num_blocks; i++) {
 		free_block(start_block + i);

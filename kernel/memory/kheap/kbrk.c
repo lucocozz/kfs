@@ -1,7 +1,6 @@
 #include "memory.h"
 #include "system/utils.h"
 
-
 static void __align_memory(void)
 {
 	if (g_placement_address & 0xFFFFF000) {

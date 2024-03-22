@@ -62,7 +62,7 @@ int init_memory_map(multiboot_info_t *boot_info)
 
     printk("MAx memory size in bytes (for a 32 bits system): 0x%X \n", total_memory);
 	// this is the nb blocks for the full 32 bits address space, we're mapping 4GB even if we have less memory
-	printk("Total 4K blocks: 0x%x\n", total_memory * 1024 / BLOCK_SIZE);
+	printk("Total 4K blocks: 0x%x\n", total_memory * 1024 / FRAME_SIZE);
 
     initialise_memory_manager((uint32_t)&_kernel_end_physical, total_memory);
 
@@ -76,11 +76,11 @@ int init_memory_map(multiboot_info_t *boot_info)
 	}
 
 	// set kernel memory as used and align it to 4K blocks above the kernel
-	uint32_t kernel_memory_length = ((uint32_t)&_kernel_end_physical - (uint32_t)&_kernel_start_physical + BLOCK_SIZE - 1) & ~(BLOCK_SIZE - 1);
+	uint32_t kernel_memory_length = ((uint32_t)&_kernel_end_physical - (uint32_t)&_kernel_start_physical + FRAME_SIZE - 1) & ~(FRAME_SIZE - 1);
 	deinitialise_memory_region((uint32_t)&_kernel_start_physical, kernel_memory_length);
 
 	// reserve the memory map and align it to 4K blocks
-	uint32_t memory_map_length = (max_blocks / BLOCKS_PER_BYTE + BLOCK_SIZE - 1) & ~(BLOCK_SIZE - 1);
+	uint32_t memory_map_length = (max_blocks / FRAMES_PER_BYTE + FRAME_SIZE - 1) & ~(FRAME_SIZE - 1);
 	deinitialise_memory_region((uint32_t)&_kernel_end_physical, memory_map_length);
 
 	printk("Total blocks: 0x%u\n", max_blocks);

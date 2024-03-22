@@ -2,12 +2,10 @@
 # define VMM_H
 
 #include "system/utils.h"
-#include "memory/pmm.h"
-#include "memory/memory.h"
 
 # define PAGE_PER_TABLE 1024
 # define TABLES_PER_DIR 1024
-// # define PAGE_SIZE 4096
+# define PAGE_SIZE 4096
 
 #define PAGE_DIRECTORY_INDEX(virt_addr) ((virt_addr) >> 22)
 #define PAGE_TABLE_INDEX(virt_addr) (((virt_addr) >> 12) & 0x3FF)
@@ -29,7 +27,7 @@ typedef enum {
 	PTE_WRITETHROUGH 	= 0x08,
 	PTE_NOT_CACHEABLE 	= 0x10,
 	PTE_ACCESSED 		= 0x20,
-	PTE_DIRTY 			= 0x40,
+	PTE_DIRTY 			= 0x40, // 
 	PTE_PAT 			= 0x80,
 	PTE_CPU_GLOBAL 		= 0x100,
 	PTE_FRAME 			= 0x7FFFF000,
@@ -60,7 +58,7 @@ typedef struct {
 	page_directory_entry entries[TABLES_PER_DIR];
 } page_directory_t;
 
-page_directory_t *current_directory = 0;
+extern page_directory_t *current_directory;
 
 // Get entry from page table for a given virtual address
 page_table_entry *get_page_table_entry(page_table_t *table, virt_addr address);

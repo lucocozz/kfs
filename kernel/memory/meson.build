@@ -18,7 +18,6 @@ memory_c = files([
 	'utils/print_memory.c',
 
 	'memory_map.c',
-	'memory_init.c'
 ])
 
 memory_asm = files([

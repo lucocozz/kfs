@@ -9,10 +9,10 @@ void	isr_page_fault(registers_t regs, struct stack_state stack)
 
 	panic("Page fault! (%d, %d, %d, %d, %d) at %08p\n", 
 		!(stack.error_code & 0x1),
-		stack.error_code & PAGE_FLAG_WRITE,
-		stack.error_code & PAGE_FLAG_USER,
-		stack.error_code & PAGE_FLAG_RESERVED,
-		stack.error_code & PAGE_FLAG_GLOBAL,
+		stack.error_code & PTE_READ_WRITE,
+		stack.error_code & PTE_USER,
+		stack.error_code & PTE_WRITETHROUGH,
+		stack.error_code & PTE_NOT_CACHEABLE,
 		faulting_address
 	);
 }

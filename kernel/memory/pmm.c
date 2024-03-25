@@ -27,7 +27,7 @@ int32_t find_first_free_frame(uint32_t num_frames) {
 
 	// test 32 frames at a time
 	for (uint32_t i = 0; i < g_max_frames / 32; i++) {
-		if (g_frames[i] != 0xFFFFFFFF) {
+		if (g_frames[i] != FRAMES_FULL_DWORD) {
 			// at least one bit is free in this 32bit chunk of memory
 			// test each bit to find the first free frame
 			for (uint32_t j = 0; j < 32; j++) {

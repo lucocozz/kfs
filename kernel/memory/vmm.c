@@ -59,14 +59,14 @@ bool switch_page_directory(page_directory_t *dir) {
 	if (!dir) return false;
 
 	current_directory = dir;
-	__asm__ __volatile__("movl %%eax, %%cr3":: "a"(current_directory));
+	ASM("movl %%eax, %%cr3":: "a"(current_directory));
 
 	return true;
 }
 
 // Flush a single page in TLB
 void flush_tlb_entry(virt_addr address) {
-	__asm__ __volatile__("cli; invlpg (%0); sti":: "r"(address) );
+	ASM("cli; invlpg (%0); sti":: "r"(address) );
 }
 
 // Map a page
@@ -161,7 +161,7 @@ bool initialise_virtual_memory_manager(void) {
 	switch_page_directory(dir);
 
 	// Enable paging: Set PG bit 31 and PE bit 0 of CR0
-	__asm__ __volatile__("movl %%cr0, %%eax; orl $0x80000001, %%eax; movl %%eax, %%cr0"::: "eax");
+	ASM("movl %%cr0, %%eax; orl $0x80000001, %%eax; movl %%eax, %%cr0"::: "eax");
 
 	return true;	
 }

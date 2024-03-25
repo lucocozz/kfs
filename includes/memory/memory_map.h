@@ -44,7 +44,7 @@ extern uint32_t *main_memory_start;
 extern uint32_t main_memory_length;
 extern uint32_t nb_frames;
 
-void     memory_map_init(multiboot_info_t *boot_info);
-void     get_memory_map(void);
+void	memory_map_init(multiboot_info_t *boot_info);
+void	memory_map_print(void);
 
 #endif // MEMORY_MAP_H

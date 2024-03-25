@@ -1,6 +1,6 @@
 #include "multiboot.h"
 #include "printk.h"
-#include "memory/memory_map.h"
+#include "memory.h"
 
 
 static void __print_device_info(void)
@@ -24,7 +24,7 @@ static void __print_device_info(void)
 	printk("\n");
 }
 
-void mmap_print(void)
+void memory_map_print(void)
 {
 	static const char *memory_types[] = {
 		"Available",
@@ -49,5 +49,22 @@ void mmap_print(void)
 		);
 	}
 	printk("------------------------------------------------------------\n");
+
+		// physical memory map
+	printk("Kernel physical start  : 0x%X\n", g_memory_map.kernel.start - KERNEL_START);
+	printk("Kernel physical end    : 0x%X\n", g_memory_map.kernel.end - KERNEL_START);
+	printk("Kernel physical length : 0x%X\n", g_memory_map.kernel.length);
+	printk("\n");
+
+	// virtual memory map
+	printk("Kernel virtual start   : 0x%X\n", g_memory_map.kernel.start);
+	printk("Kernel virtual end     : 0x%X\n", g_memory_map.kernel.end);
+	printk("Kernel virtual length  : 0x%X\n", g_memory_map.kernel.length);
+	printk("\n");
+
+	// Total memory
+	printk("Memory Lower : %dKB\n", g_boot_info->mem_lower);
+	printk("Memory Upper : %dKB\n", g_boot_info->mem_upper);
+	printk("Total Memory : %dMB (lower + upper)\n", (g_boot_info->mem_lower + g_boot_info->mem_upper) / 1024);
 }
-EXPORT_SYMBOL(mmap_print);
+EXPORT_SYMBOL(memory_map_print);

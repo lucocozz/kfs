@@ -38,19 +38,19 @@ page_table_entry *get_page(const virt_addr vaddr) {
 
 // Allocate a page in memory
 void *alloc_page(page_table_entry *page) {
-	void *block = allocate_blocks(1);
-	if (block) {
-		SET_FRAME(page, (phys_addr)block);
+	void *frame = allocate_frames(1);
+	if (frame) {
+		SET_FRAME(page, (phys_addr)frame);
 		SET_ATTRIBUTE(page, PTE_PRESENT);
 	}
-	return block;
+	return frame;
 }
 
 // Free a page in memory
 void free_page(page_table_entry *page) {
 	void *address = (void *)PAGE_GET_PHYSICAL_ADDRESS(page);
 	if (address)
-		free_blocks(address, 1);
+		free_frames(address, 1);
 	CLEAR_ATTRIBUTE(page, PTE_PRESENT);
 }
 
@@ -78,7 +78,7 @@ bool map_page(void *paddr, void *vaddr) {
 	page_directory_entry *entry = &dir->entries[PAGE_DIRECTORY_INDEX((uint32_t)vaddr)];
 
 	if ((*entry & PTE_PRESENT) != PTE_PRESENT) {
-		page_table_t *table = (page_table_t *)allocate_blocks(1);
+		page_table_t *table = (page_table_t *)allocate_frames(1);
 		if (!table) return false;
 
 		memset(table, 0, sizeof(page_table_t));
@@ -107,7 +107,7 @@ void unmap_page(void *virt_addr) {
 
 // Initialise the virtual memory manager
 bool initialise_virtual_memory_manager(void) {
-	page_directory_t *dir = (page_directory_t *)allocate_blocks(3);
+	page_directory_t *dir = (page_directory_t *)allocate_frames(3);
 	if (!dir) return false;
 
 	// Clear the page directory
@@ -116,12 +116,12 @@ bool initialise_virtual_memory_manager(void) {
 		dir->entries[i] = 0x02; // supervisor, read/write, not present
 	}
 
-	page_table_t *table = (page_table_t *)allocate_blocks(1);
+	page_table_t *table = (page_table_t *)allocate_frames(1);
 
 	if (!table) return false; // Out of memory
 
 	// Allocate a 3GB page table
-	page_table_t *table3 = (page_table_t *)allocate_blocks(1);
+	page_table_t *table3 = (page_table_t *)allocate_frames(1);
 
 	if (!table3) return false; // Out of memory
 

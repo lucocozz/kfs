@@ -4,7 +4,7 @@
 #include "multiboot.h"
 
 
-typedef struct {
+typedef struct kernel_section {
 	uint32_t start;
 	uint32_t end;
 	uint32_t length;
@@ -40,9 +40,6 @@ extern uint32_t _ebss;
 extern memory_map_t		g_memory_map;
 extern multiboot_info_t	*g_boot_info;
 
-extern uint32_t *main_memory_start;
-extern uint32_t main_memory_length;
-extern uint32_t nb_frames;
 
 void	memory_map_init(multiboot_info_t *boot_info);
 void	memory_map_print(void);

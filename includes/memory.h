@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "string.h"
 
 #include "system/interrupts.h"
 #include "system/utils.h"

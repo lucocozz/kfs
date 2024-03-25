@@ -1,11 +1,10 @@
 #include "../includes/memory.h"
 
-uint32_t	g_placement_address = (uint32_t)&_kernel_end_physical;
-heap_t		g_heap = INITIALIZE_HEAP;
 
 uint32_t	*memory_map = NULL;
 uint32_t	g_max_blocks = 0;
 uint32_t	g_used_blocks = 0;
+
 
 // set a block/bit as used
 void set_block(uint32_t block)
@@ -62,7 +61,7 @@ void initialise_memory_manager(uint32_t start_address, uint32_t size) {
 	g_max_blocks = size / FRAME_SIZE;
 	g_used_blocks = g_max_blocks;
 
-	memset(memory_map, 0xFF, g_max_blocks / FRAMES_PER_BYTE);
+	memset32(memory_map, FRAMES_FULL_DWORD, BITMAP_SIZE(g_max_blocks));
 }
 
 void initialise_memory_region(uint32_t base_address, uint32_t size) {

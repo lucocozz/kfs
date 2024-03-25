@@ -2,6 +2,8 @@
 #include "system/utils.h"
 #include "symbol_table.h"
 
+uint32_t	g_placement_address = 0;
+heap_t		g_heap = INITIALIZE_HEAP;
 
 static void	__print_header(uint32_t total_memory)
 {
@@ -11,15 +13,15 @@ static void	__print_header(uint32_t total_memory)
 
 	printk("Max memory size in bytes (for a 32 bits system): 0x%X \n", total_memory);
 	// this is the nb blocks for the full 32 bits address space, we're mapping 4GB even if we have less memory
-	// printk("Total 4K blocks: 0x%x\n", total_memory * 1024 / FRAME_SIZE); //! UNDERFLOW HERE
+	// printk("Total 4K blocks: 0x%x\n", total_memory * 1024 / FRAME_SIZE); //! OVERFLOW HERE
 	printk("Total 4K blocks: 0x%x\n", total_memory / FRAME_SIZE); //? CORRECTED (result dont change, but the calculation is correct)
 }
 
 static void	__print_footer(void)
 {
-	printk("Total blocks: 0x%u\n", g_max_blocks);
-	printk("Used blocks: 0x%u\n", g_used_blocks);
-	printk("Free blocks: 0x%u\n", g_max_blocks - g_used_blocks);
+	printk("Total blocks : %d\n", g_max_blocks);
+	printk("Used blocks :  %d\n", g_used_blocks);
+	printk("Free blocks :  %d\n", g_max_blocks - g_used_blocks);
 }
 
 void	memory_init(void)
@@ -48,6 +50,7 @@ void	memory_init(void)
 	// reserve the memory map and align it to 4K blocks
 	uint32_t memory_map_length = ALIGN_WITH(g_max_blocks / FRAMES_PER_BYTE, FRAME_SIZE);
 	deinitialise_memory_region(g_memory_map.kernel_physical.end, memory_map_length);
+	g_placement_address = g_memory_map.kernel_physical.end + memory_map_length;
 
 	__print_footer();
 }

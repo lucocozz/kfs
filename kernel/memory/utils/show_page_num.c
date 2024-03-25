@@ -17,3 +17,4 @@ void	show_page_num(void)
 	printk("Total : %d page(s)\n", total);
 	// pthread_mutex_unlock(&g_heap_mutex);
 }
+EXPORT_SYMBOL(show_page_num);

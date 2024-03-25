@@ -45,3 +45,4 @@ void	show_alloc_mem_freed(void)
 	printk("Total : %d bytes\n", total);
 	// pthread_mutex_unlock(&g_heap_mutex);
 }
+EXPORT_SYMBOL(show_alloc_mem_freed);

@@ -34,4 +34,6 @@ static inline uint32_t address_distance(void *ptr1, void *ptr2) {
 	return ((uint32_t)ptr2 - (uint32_t)ptr1);
 }
 
+void	memory_init(void);
+
 #endif

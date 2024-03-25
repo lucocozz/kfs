@@ -7,7 +7,7 @@
 #include "kernel.h"
 
 multiboot_info_t	*g_boot_info = NULL;
-kernel_memory_map_t	g_kernel_memory_map = {0};
+memory_map_t	g_memory_map = {0};
 
 static int __check_flags(void)
 {
@@ -27,11 +27,11 @@ static void	__set_section_limit(kernel_section_t *section, uint32_t start, uint3
 
 static void __sections_init(void)
 {
-	__set_section_limit(&g_kernel_memory_map.sections.kernel, (uint32_t)&_kernel_start_virtual, (uint32_t)&_kernel_end_virtual);
-	__set_section_limit(&g_kernel_memory_map.sections.text, (uint32_t)&_stext, (uint32_t)&_etext);
-	__set_section_limit(&g_kernel_memory_map.sections.rodata, (uint32_t)&_srodata, (uint32_t)&_erodata);
-	__set_section_limit(&g_kernel_memory_map.sections.data, (uint32_t)&_sdata, (uint32_t)&_edata);
-	__set_section_limit(&g_kernel_memory_map.sections.bss, (uint32_t)&_sbss, (uint32_t)&_ebss);
+	__set_section_limit(&g_memory_map.kernel, (uint32_t)&_kernel_start_virtual, (uint32_t)&_kernel_end_virtual);
+	__set_section_limit(&g_memory_map.text, (uint32_t)&_stext, (uint32_t)&_etext);
+	__set_section_limit(&g_memory_map.rodata, (uint32_t)&_srodata, (uint32_t)&_erodata);
+	__set_section_limit(&g_memory_map.data, (uint32_t)&_sdata, (uint32_t)&_edata);
+	__set_section_limit(&g_memory_map.bss, (uint32_t)&_sbss, (uint32_t)&_ebss);
 }
 
 void	memory_map_init(multiboot_info_t *boot_info)
@@ -51,15 +51,15 @@ void	get_memory_map(void)
 	mmap_print();
 
 	// physical memory map
-	printk("Kernel physical start  : 0x%X\n", g_kernel_memory_map.sections.kernel.start - KERNEL_START);
-	printk("Kernel physical end    : 0x%X\n", g_kernel_memory_map.sections.kernel.end - KERNEL_START);
-	printk("Kernel physical length : 0x%X\n", g_kernel_memory_map.sections.kernel.length);
+	printk("Kernel physical start  : 0x%X\n", g_memory_map.kernel.start - KERNEL_START);
+	printk("Kernel physical end    : 0x%X\n", g_memory_map.kernel.end - KERNEL_START);
+	printk("Kernel physical length : 0x%X\n", g_memory_map.kernel.length);
 	printk("\n");
 
 	// virtual memory map
-	printk("Kernel virtual start   : 0x%X\n", g_kernel_memory_map.sections.kernel.start);
-	printk("Kernel virtual end     : 0x%X\n", g_kernel_memory_map.sections.kernel.end);
-	printk("Kernel virtual length  : 0x%X\n", g_kernel_memory_map.sections.kernel.length);
+	printk("Kernel virtual start   : 0x%X\n", g_memory_map.kernel.start);
+	printk("Kernel virtual end     : 0x%X\n", g_memory_map.kernel.end);
+	printk("Kernel virtual length  : 0x%X\n", g_memory_map.kernel.length);
 	printk("\n");
 
 	// Total memory

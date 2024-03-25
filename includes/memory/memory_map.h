@@ -10,18 +10,14 @@ typedef struct {
 	uint32_t length;
 } kernel_section_t;
 
-typedef struct s_kernel_memory_map
+typedef struct s_memory_map
 {
-	/* Kernel Sections */
-	struct
-	{
-		kernel_section_t kernel;
-		kernel_section_t text;
-		kernel_section_t rodata;
-		kernel_section_t data;
-		kernel_section_t bss;
-	} sections;
-} kernel_memory_map_t;
+	kernel_section_t kernel;
+	kernel_section_t text;
+	kernel_section_t rodata;
+	kernel_section_t data;
+	kernel_section_t bss;
+} memory_map_t;
 
 extern uint32_t _kernel_start_virtual;
 extern uint32_t _kernel_end_virtual;
@@ -41,8 +37,8 @@ extern uint32_t _sbss;
 extern uint32_t _ebss;
 
 
-extern kernel_memory_map_t  g_kernel_memory_map;
-extern multiboot_info_t     *g_boot_info;
+extern memory_map_t		g_memory_map;
+extern multiboot_info_t	*g_boot_info;
 
 extern uint32_t *main_memory_start;
 extern uint32_t main_memory_length;

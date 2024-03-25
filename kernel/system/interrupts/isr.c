@@ -1,4 +1,5 @@
 #include "system/interrupts.h"
+#include "system/signals.h"
 #include "memory.h"
 
 typedef void (*isr_handler_t)(registers_t, stack_state_t);
@@ -7,8 +8,10 @@ void isr_divide_by_zero(registers_t regs, stack_state_t stack)
 {
 	UNUSED(stack);
 	UNUSED(regs);
-	panic("Divide by zero\n");
+	do_signal(SIGFPE);
 }
+EXPORT_SYMBOL(isr_divide_by_zero);
+
 
 void isr_callbacks(registers_t regs, uint8_t interrupt, stack_state_t stack)
 {

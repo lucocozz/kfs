@@ -51,10 +51,10 @@
 #define SA_RESTART		(1UL << 5) // Interrupted system calls are automatically restarted.
 #define SA_SIGINFO		(1UL << 6) // Provide additional information to the signal handler.
 
-#define	SIG_DFL		((void (*)(int))  0)
-#define	SIG_IGN		((void (*)(int))  1)
-#define	SIG_ERR		((void (*)(int)) -1)
-#define	SIG_HOLD	((void (*)(int))  3)
+#define	SIG_DFL		((void (*)(int))  0) // Default signal
+#define	SIG_IGN		((void (*)(int))  1) // Ignored signal
+#define	SIG_ERR		((void (*)(int)) -1) // Signal Error
+#define	SIG_HOLD	((void (*)(int))  3) // Hold signal
 
 #define SIG_KERNEL_ONLY_MASK (sigmask(SIGKILL) | sigmask(SIGSTOP))
 
@@ -121,6 +121,9 @@ typedef struct sigpending {
 	signal_queue_t	*queue;
 } sigpending_t;
 
+
+extern sigaction_t	g_sigaction[_NSIG];
+extern sighandler_t	g_default_sigaction[_NSIG];
 
 
 /// @brief Add a signal to the set
@@ -192,12 +195,17 @@ static inline int siginmask(int signum, int mask) {
 	return (valide_signal(signum) && (sigmask(signum) & mask));
 }
 
+void			signals_init(void);
 sighandler_t	signal(int signum, sighandler_t handler);
 int				sigaction(int signum, const sigaction_t *action, sigaction_t *old_action);
-//do_signal()
+void			do_signal(int signum);
+
 //dequeue_signal()
 //handle_signal()
 //send_sig_info()
+
+void	signal_default_handler(int signum);
+void	sigfpe_default_handler(int signum);
 
 
 #endif

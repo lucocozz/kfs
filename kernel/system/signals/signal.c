@@ -1,4 +1,6 @@
 #include "system/signals.h"
+#include "symbol_table.h"
+
 
 sighandler_t	signal(int signum, sighandler_t handler)
 {
@@ -16,3 +18,4 @@ sighandler_t	signal(int signum, sighandler_t handler)
 		return (SIG_ERR);
 	return (old_action.handler);
 }
+EXPORT_SYMBOL(signal);

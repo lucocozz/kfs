@@ -18,7 +18,7 @@
 #include "symbol_table.h"
 #include "multiboot.h"
 #include "printk.h"
-#include "memory.h"
+#include "../includes/memory.h"
 
 #include "system/utils.h"
 #include "system/interrupts.h"

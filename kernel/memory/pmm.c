@@ -1,4 +1,4 @@
-#include "memory.h"
+#include "../includes/memory.h"
 
 uint32_t	g_placement_address = (uint32_t)&_kernel_end_physical;
 heap_t		g_heap = INITIALIZE_HEAP;

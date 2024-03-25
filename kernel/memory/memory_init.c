@@ -1,4 +1,4 @@
-#include "memory.h"
+#include "../includes/memory.h"
 #include "system/utils.h"
 #include "symbol_table.h"
 

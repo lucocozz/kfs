@@ -2,7 +2,7 @@
 #define KERNEL_MEMORY_KMALLOC_H
 
 #include "system/utils.h"
-#include "memory.h"
+#include "../includes/memory.h"
 #include "string.h"
 
 #define KMALLOC_MAGIC	0xdeadbeef

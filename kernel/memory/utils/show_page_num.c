@@ -1,4 +1,4 @@
-#include "memory.h"
+#include "../includes/memory.h"
 
 static int	__print_pages(page_queue_t *queue, const char *type)
 {

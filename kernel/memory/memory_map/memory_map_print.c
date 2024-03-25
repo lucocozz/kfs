@@ -1,6 +1,6 @@
 #include "multiboot.h"
 #include "printk.h"
-#include "memory.h"
+#include "../includes/memory.h"
 
 
 static void __print_device_info(void)

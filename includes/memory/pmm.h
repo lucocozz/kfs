@@ -11,8 +11,8 @@
 
 // Memory map
 extern uint32_t *memory_map;
-extern uint32_t max_blocks;
-extern uint32_t used_blocks;
+extern uint32_t g_max_blocks;
+extern uint32_t g_used_blocks;
 
 void set_block(uint32_t block);
 void free_block(uint32_t block);

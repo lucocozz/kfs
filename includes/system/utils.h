@@ -19,10 +19,11 @@ typedef u16			uint;
 #define UNUSED(x)	(void)(x)
 #define ASM(...)	__asm__ volatile(__VA_ARGS__)
 
-#define ARRAY_SIZE(x)		(sizeof(x) / sizeof(*x))
-#define CEIL_DIV(a, b)		(((a + b) - 1) / b) // a / b rounded up
-#define ALIGN_DOWN(a, b)	(a + b) & ~b
-#define ALIGN_UP(a, b)		(((a + b) - 1) & ~(b - 1))
+#define ARRAY_SIZE(x)			(sizeof(x) / sizeof(*x))
+#define CEIL_DIV(a, b)			(((a + b) - 1) / b) // a / b rounded up
+#define ALIGN_DOWN(a, b)		(a + b) & ~b
+#define ALIGN_UP(a, b)			(((a + b) - 1) & ~(b - 1))
+#define ALIGN_WITH(size, align)	((size + align - 1) & ~(align - 1))
 
 #define LOW_B16(address)	(uint16_t)((address) & 0xFFFF)
 #define HIGH_B16(address)	(uint16_t)(((address) >> 16) & 0xFFFF)

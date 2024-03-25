@@ -6,21 +6,18 @@
 // Maximum memory size for a 32-bit system
 #define MAX_MEMORY_SIZE 0xFFFFFFFF
 
-#define BITMAP_SIZE(size)	(size / FRAMES_PER_DWORD)
-#define BITMAP_INDEX(addr) 	(addr / FRAMES_PER_DWORD)
-#define BITMAP_OFFSET(addr)	(addr % FRAMES_PER_DWORD)
-
 #define FRAME_SIZE						4096 
 #define FRAMES_PER_BYTE					8
-#define FRAMES_PER_DWORD				32
-#define FRAMES_FULL_BYTE				0xFF
-#define FRAMES_FULL_DWORD				0xFFFFFFFF
-#define FRAME_FREE						0
-#define ADDR_FROM_BITFRAME(chunk, bit)	(chunk * FRAMES_PER_DWORD + bit)
-#define FRAME_CHUNK(addr)				BITMAP_INDEX(addr)
-#define FRAME_BIT(addr)					BITMAP_OFFSET(addr)
+#define FRAMES_PER_CHUNK				32
+#define FRAME_CHUNK_FULL				0xFFFFFFFF
+#define FRAME_FREE						0x0
+#define ADDR_FROM_BITFRAME(chunk, bit)	(chunk * FRAMES_PER_CHUNK + bit)
+#define FRAME_CHUNK(addr)				(addr / FRAMES_PER_CHUNK)
+#define FRAME_BIT(addr)					(addr % FRAMES_PER_CHUNK)
 
 #define ERR_NO_FRAME (uint32_t)(-1)
+
+#define BITMAP_SIZE(size)	(size / FRAMES_PER_CHUNK)
 
 
 // Memory map

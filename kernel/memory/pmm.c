@@ -50,10 +50,10 @@ static uint32_t __find_first_free_frame(uint32_t num_frames)
 	size_t num_chunks = BITMAP_SIZE(g_max_frames);
 	for (size_t chunk = 0; chunk < num_chunks; ++chunk)
 	{
-		if (g_frames[chunk] == FRAMES_FULL_DWORD)
+		if (g_frames[chunk] == FRAME_CHUNK_FULL)
 			continue;
 
-		for (uint8_t bit = 0; bit < FRAMES_PER_DWORD; ++bit)
+		for (uint8_t bit = 0; bit < FRAMES_PER_CHUNK; ++bit)
 		{
 			uint32_t tested_bit_mask = BIT_MASK(bit);
 			if (g_frames[chunk] & tested_bit_mask)
@@ -72,7 +72,7 @@ void initialise_memory_manager(uint32_t start_address, uint32_t size) {
 	g_max_frames = size / FRAME_SIZE;
 	g_used_frames = g_max_frames;
 
-	memset32(g_frames, FRAMES_FULL_DWORD, BITMAP_SIZE(g_max_frames));
+	memset32(g_frames, FRAME_CHUNK_FULL, BITMAP_SIZE(g_max_frames));
 }
 
 void initialise_memory_region(uint32_t base_address, uint32_t size) {

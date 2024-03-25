@@ -12,7 +12,8 @@ typedef struct kernel_section {
 
 typedef struct s_memory_map
 {
-	kernel_section_t kernel;
+	kernel_section_t kernel_physical;
+	kernel_section_t kernel_virtual;
 	kernel_section_t text;
 	kernel_section_t rodata;
 	kernel_section_t data;

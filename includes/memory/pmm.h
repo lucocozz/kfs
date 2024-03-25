@@ -3,7 +3,7 @@
 
 #include "system/utils.h"
 
-// Maximumu memory size for a 32-bit system
+// Maximum memory size for a 32-bit system
 # define MAX_MEMORY_SIZE 0xFFFFFFFF
 
 # define FRAME_SIZE 4096 

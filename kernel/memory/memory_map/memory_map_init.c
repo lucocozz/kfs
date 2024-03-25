@@ -27,7 +27,8 @@ static void	__set_section_limit(kernel_section_t *section, uint32_t start, uint3
 
 static void __sections_init(void)
 {
-	__set_section_limit(&g_memory_map.kernel, (uint32_t)&_kernel_start_virtual, (uint32_t)&_kernel_end_virtual);
+	__set_section_limit(&g_memory_map.kernel_physical, (uint32_t)&_kernel_start_physical, (uint32_t)&_kernel_end_physical);
+	__set_section_limit(&g_memory_map.kernel_virtual, (uint32_t)&_kernel_start_virtual, (uint32_t)&_kernel_end_virtual);
 	__set_section_limit(&g_memory_map.text, (uint32_t)&_stext, (uint32_t)&_etext);
 	__set_section_limit(&g_memory_map.rodata, (uint32_t)&_srodata, (uint32_t)&_erodata);
 	__set_section_limit(&g_memory_map.data, (uint32_t)&_sdata, (uint32_t)&_edata);

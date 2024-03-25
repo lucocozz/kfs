@@ -1,11 +1,11 @@
-#ifndef VMM_H
-# define VMM_H
+#ifndef KERNEL_MEMORY_VMM_H
+#define KERNEL_MEMORY_VMM_H
 
 #include "system/utils.h"
 
-# define PAGE_PER_TABLE 1024
-# define TABLES_PER_DIR 1024
-# define PAGE_SIZE 4096
+#define PAGE_PER_TABLE 1024
+#define TABLES_PER_DIR 1024
+#define PAGE_SIZE 4096
 
 #define PAGE_DIRECTORY_INDEX(virt_addr) ((virt_addr) >> 22)
 #define PAGE_TABLE_INDEX(virt_addr) (((virt_addr) >> 12) & 0x3FF)

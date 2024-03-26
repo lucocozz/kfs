@@ -10,29 +10,10 @@ uint32_t	g_max_frames = 0;
 uint32_t	g_used_frames = 0;
 
 
-static void	__print_header(uint32_t total_memory)
-{
-	printk("--------------------\n");
-	printk("Physical Memory map\n");
-	printk("--------------------\n");
-
-	printk("Max memory size in bytes (for a 32 bits system): 0x%X \n", total_memory);
-	printk("Total 4K frames: 0x%x\n", total_memory / FRAME_SIZE);
-}
-
-static void	__print_footer(void)
-{
-	printk("Total frames : %d\n", g_max_frames);
-	printk("Used frames :  %d\n", g_used_frames);
-	printk("Free frames :  %d\n", g_max_frames - g_used_frames);
-}
-
 void	memory_init(void)
 {
 	uint32_t total_memory = MAX_MEMORY_SIZE; // 4GB address space for 32 bits = 0xFFFFFFFF
 
-	__print_header(total_memory);
-	
 	pmm_init(g_memory_sections.kernel_physical.end, total_memory);
 	
 	for (uint32_t i = 0; i < g_boot_info->mmap_length; i += sizeof(multiboot_mmap_entry_t)) {
@@ -47,11 +28,9 @@ void	memory_init(void)
 	pmm_map_region(g_memory_sections.kernel_physical.start, kernel_memory_length);
 
 	// reserve the memory map and align it to 4K frames
-	uint32_t memory_map_length = ALIGN_WITH(g_max_frames / FRAMES_PER_BYTE, FRAME_SIZE);
+	uint32_t memory_map_length = ALIGN_WITH(BITMAP_SIZE(g_max_frames) * sizeof(uint32_t), FRAME_SIZE);
 	pmm_map_region(g_memory_sections.kernel_physical.end, memory_map_length);
 	g_placement_address = g_memory_sections.kernel_physical.end + memory_map_length;
 
 	initialise_virtual_memory_manager();
-
-	__print_footer();
 }

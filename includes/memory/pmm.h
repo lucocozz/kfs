@@ -7,16 +7,16 @@
 #define MAX_MEMORY_SIZE 0xFFFFFFFF
 
 #define FRAME_SIZE						4096 
-#define FRAMES_PER_BYTE					8 //! CHECK UTILITY
 #define FRAMES_PER_CHUNK				32
 #define FRAME_CHUNK_FULL				0xFFFFFFFF
 #define FRAME_FREE						0x0
-#define ADDR_FROM_BITFRAME(chunk, bit)	(chunk * FRAMES_PER_CHUNK + bit)
+#define FRAME_FROM_CHUNKBIT(chunk, bit)	(chunk * FRAMES_PER_CHUNK + bit)
 #define FRAME_CHUNK(addr)				(addr / FRAMES_PER_CHUNK)
 #define FRAME_BIT(addr)					(addr % FRAMES_PER_CHUNK)
 
 #define ERR_NO_FRAME (uint32_t)(-1)
 
+/// Returns the size of the bitmap in 32-bit words. multiplies the size by 4 to get the size in bytes
 #define BITMAP_SIZE(size)	(size / FRAMES_PER_CHUNK)
 
 

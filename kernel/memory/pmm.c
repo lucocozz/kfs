@@ -29,7 +29,7 @@ static uint32_t __find_first_free_frame(uint32_t num_frames)
 			if (g_memory_map[chunk] & tested_bit_mask)
 				continue;
 
-			uint32_t frame = __check_free_frame_continuity(ADDR_FROM_BITFRAME(chunk, bit), num_frames);
+			uint32_t frame = __check_free_frame_continuity(FRAME_FROM_CHUNKBIT(chunk, bit), num_frames);
 			if (frame != ERR_NO_FRAME)
 				return (frame);
 		}

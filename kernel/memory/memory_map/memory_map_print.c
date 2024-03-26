@@ -51,15 +51,15 @@ void memory_map_print(void)
 	printk("------------------------------------------------------------\n");
 
 		// physical memory map
-	printk("Kernel physical start  : 0x%X\n", g_memory_map.kernel_physical.start);
-	printk("Kernel physical end    : 0x%X\n", g_memory_map.kernel_physical.end);
-	printk("Kernel physical length : 0x%X\n", g_memory_map.kernel_physical.length);
+	printk("Kernel physical start  : 0x%X\n", g_memory_sections.kernel_physical.start);
+	printk("Kernel physical end    : 0x%X\n", g_memory_sections.kernel_physical.end);
+	printk("Kernel physical length : 0x%X\n", g_memory_sections.kernel_physical.length);
 	printk("\n");
 
 	// virtual memory map
-	printk("Kernel virtual start   : 0x%X\n", g_memory_map.kernel_virtual.start);
-	printk("Kernel virtual end     : 0x%X\n", g_memory_map.kernel_virtual.end);
-	printk("Kernel virtual length  : 0x%X\n", g_memory_map.kernel_virtual.length);
+	printk("Kernel virtual start   : 0x%X\n", g_memory_sections.kernel_virtual.start);
+	printk("Kernel virtual end     : 0x%X\n", g_memory_sections.kernel_virtual.end);
+	printk("Kernel virtual length  : 0x%X\n", g_memory_sections.kernel_virtual.length);
 	printk("\n");
 
 	// Total memory

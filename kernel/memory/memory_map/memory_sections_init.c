@@ -7,7 +7,7 @@
 #include "kernel.h"
 
 multiboot_info_t	*g_boot_info = NULL;
-memory_map_t		g_memory_map = {0};
+memory_map_t		g_memory_sections = {0};
 
 static int __check_flags(void)
 {
@@ -27,15 +27,15 @@ static void	__set_section_limit(kernel_section_t *section, uint32_t start, uint3
 
 static void __sections_init(void)
 {
-	__set_section_limit(&g_memory_map.kernel_physical, (uint32_t)&_kernel_start_physical, (uint32_t)&_kernel_end_physical);
-	__set_section_limit(&g_memory_map.kernel_virtual, (uint32_t)&_kernel_start_virtual, (uint32_t)&_kernel_end_virtual);
-	__set_section_limit(&g_memory_map.text, (uint32_t)&_stext, (uint32_t)&_etext);
-	__set_section_limit(&g_memory_map.rodata, (uint32_t)&_srodata, (uint32_t)&_erodata);
-	__set_section_limit(&g_memory_map.data, (uint32_t)&_sdata, (uint32_t)&_edata);
-	__set_section_limit(&g_memory_map.bss, (uint32_t)&_sbss, (uint32_t)&_ebss);
+	__set_section_limit(&g_memory_sections.kernel_physical, (uint32_t)&_kernel_start_physical, (uint32_t)&_kernel_end_physical);
+	__set_section_limit(&g_memory_sections.kernel_virtual, (uint32_t)&_kernel_start_virtual, (uint32_t)&_kernel_end_virtual);
+	__set_section_limit(&g_memory_sections.text, (uint32_t)&_stext, (uint32_t)&_etext);
+	__set_section_limit(&g_memory_sections.rodata, (uint32_t)&_srodata, (uint32_t)&_erodata);
+	__set_section_limit(&g_memory_sections.data, (uint32_t)&_sdata, (uint32_t)&_edata);
+	__set_section_limit(&g_memory_sections.bss, (uint32_t)&_sbss, (uint32_t)&_ebss);
 }
 
-void	memory_map_init(multiboot_info_t *boot_info)
+void	memory_sections_init(multiboot_info_t *boot_info)
 {
 	g_boot_info = (multiboot_info_t*)((uint32_t)boot_info + KERNEL_START);
 	g_boot_info->mmap_addr += KERNEL_START;
@@ -43,4 +43,4 @@ void	memory_map_init(multiboot_info_t *boot_info)
 	__check_flags();
 	__sections_init();
 }
-EXPORT_SYMBOL(memory_map_init);
+EXPORT_SYMBOL(memory_sections_init);

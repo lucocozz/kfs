@@ -38,7 +38,7 @@ page_table_entry *get_page(const virt_addr vaddr) {
 
 // Allocate a page in memory
 void *alloc_page(page_table_entry *page) {
-	void *frame = allocate_frames(1);
+	void *frame = pmm_alloc_frames(1);
 	if (frame) {
 		SET_FRAME(page, (phys_addr)frame);
 		SET_ATTRIBUTE(page, PTE_PRESENT);
@@ -50,7 +50,7 @@ void *alloc_page(page_table_entry *page) {
 void free_page(page_table_entry *page) {
 	void *address = (void *)PAGE_GET_PHYSICAL_ADDRESS(page);
 	if (address)
-		free_frames(address, 1);
+		pmm_free_frames(address, 1);
 	CLEAR_ATTRIBUTE(page, PTE_PRESENT);
 }
 
@@ -78,7 +78,7 @@ bool map_page(void *paddr, void *vaddr) {
 	page_directory_entry *entry = &dir->entries[PAGE_DIRECTORY_INDEX((uint32_t)vaddr)];
 
 	if ((*entry & PTE_PRESENT) != PTE_PRESENT) {
-		page_table_t *table = (page_table_t *)allocate_frames(1);
+		page_table_t *table = (page_table_t *)pmm_alloc_frames(1);
 		if (!table) return false;
 
 		memset(table, 0, sizeof(page_table_t));
@@ -107,7 +107,7 @@ void unmap_page(void *virt_addr) {
 
 // Initialise the virtual memory manager
 bool initialise_virtual_memory_manager(void) {
-	page_directory_t *dir = (page_directory_t *)allocate_frames(3);
+	page_directory_t *dir = (page_directory_t *)pmm_alloc_frames(3);
 	if (!dir) return false;
 
 	// Clear the page directory
@@ -116,18 +116,18 @@ bool initialise_virtual_memory_manager(void) {
 		dir->entries[i] = 0x02; // supervisor, read/write, not present
 	}
 
-	page_table_t *table = (page_table_t *)allocate_frames(1);
+	page_table_t *table = (page_table_t *)pmm_alloc_frames(1);
 
 	if (!table) return false; // Out of memory
 
 	// Allocate a 3GB page table
-	page_table_t *table3 = (page_table_t *)allocate_frames(1);
+	page_table_t *table3G = (page_table_t *)pmm_alloc_frames(1);
 
-	if (!table3) return false; // Out of memory
+	if (!table3G) return false; // Out of memory
 
 	// Clear the page table
 	memset(table, 0, sizeof(page_table_t));
-	memset(table3, 0, sizeof(page_table_t));
+	memset(table3G, 0, sizeof(page_table_t));
 
 	// Identity map the first 4MB
 	for (uint32_t i = 0, frame = 0x0, virt = 0x0; i < PAGE_PER_TABLE; i++, frame += PAGE_SIZE, virt += PAGE_SIZE) {
@@ -136,7 +136,7 @@ bool initialise_virtual_memory_manager(void) {
 		SET_FRAME(&page, frame);
 
 		// Add page to 3GB page table
-		table3->entries[PAGE_TABLE_INDEX(virt)] = page;
+		table3G->entries[PAGE_TABLE_INDEX(virt)] = page;
 	}
 
 	// Map kernel space to 3GB (Higher half kernel)
@@ -146,7 +146,7 @@ bool initialise_virtual_memory_manager(void) {
 		SET_FRAME(&page, frame);
 
 		// Add page to 3GB page table
-		table3->entries[PAGE_TABLE_INDEX(virt)] = page;
+		table->entries[PAGE_TABLE_INDEX(virt)] = page;
 	}
 
 	page_directory_entry *entry = &dir->entries[PAGE_DIRECTORY_INDEX(0xC0000000)];
@@ -155,13 +155,14 @@ bool initialise_virtual_memory_manager(void) {
 
 	page_directory_entry *entry2 = &dir->entries[PAGE_DIRECTORY_INDEX(0x00000000)];
 	SET_ATTRIBUTE(entry2, PDE_PRESENT | PDE_READ_WRITE);
-	SET_FRAME(entry2, (phys_addr)table3);
+	SET_FRAME(entry2, (phys_addr)table3G);
 
+	// panic("Virtual memory manager initialised\n");
 	// Switch to the new page directory
 	switch_page_directory(dir);
 
 	// Enable paging: Set PG bit 31 and PE bit 0 of CR0
-	ASM("movl %%cr0, %%eax; orl $0x80000001, %%eax; movl %%eax, %%cr0"::: "eax");
+	ASM("movl %cr0, %eax; orl $0x80000001, %eax; movl %eax, %cr0");
 
 	return true;	
 }

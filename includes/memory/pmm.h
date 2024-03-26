@@ -7,7 +7,7 @@
 #define MAX_MEMORY_SIZE 0xFFFFFFFF
 
 #define FRAME_SIZE						4096 
-#define FRAMES_PER_BYTE					8
+#define FRAMES_PER_BYTE					8 //! CHECK UTILITY
 #define FRAMES_PER_CHUNK				32
 #define FRAME_CHUNK_FULL				0xFFFFFFFF
 #define FRAME_FREE						0x0
@@ -21,19 +21,29 @@
 
 
 // Memory map
-extern uint32_t *g_frames;
+extern uint32_t *g_memory_map;
 extern uint32_t g_max_frames;
 extern uint32_t g_used_frames;
 
 
-void		set_frame(uint32_t frame);
-void		free_frame(uint32_t frame);
-uint32_t	test_frame(uint32_t frame);
-uint32_t	find_first_free_frame(uint32_t num_frames);
-void		initialise_memory_manager(uint32_t start_address, uint32_t size);
-void		initialise_memory_region(uint32_t base_address, uint32_t size);
-void		deinitialise_memory_region(uint32_t base_address, uint32_t size);
-uint32_t	*allocate_frames(uint32_t num_frames);
-void		free_frames(uint32_t *address, uint32_t num_frames);
+void		pmm_init(uint32_t start_address, uint32_t size);
+void		pmm_unmap_region(uint32_t base_address, uint32_t size);
+void		pmm_map_region(uint32_t base_address, uint32_t size);
+uint32_t	*pmm_alloc_frames(uint32_t num_frames);
+void		pmm_free_frames(uint32_t *address, uint32_t num_frames);
+
+
+static inline void set_frame(uint32_t frame) {
+	g_memory_map[FRAME_CHUNK(frame)] |= BIT_MASK(FRAME_BIT(frame));
+}
+
+static inline void free_frame(uint32_t frame) {
+	g_memory_map[FRAME_CHUNK(frame)] &= BIT_UNMASK(FRAME_BIT(frame));
+}
+
+static inline uint32_t test_frame(uint32_t frame) {
+	return (g_memory_map[FRAME_CHUNK(frame)] & BIT_MASK(FRAME_BIT(frame)));
+}
+
 
 #endif

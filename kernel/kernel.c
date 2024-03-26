@@ -5,9 +5,7 @@ static void	__init_kernel(multiboot_info_t *boot_info)
 	term_init();
 	gdt_init();
 	idt_init();
-
-	// Check flags
-	memory_map_init(boot_info);
+	memory_sections_init(boot_info);
 	memory_init();
 }
 

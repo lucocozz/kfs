@@ -38,11 +38,11 @@ extern uint32_t _sbss;
 extern uint32_t _ebss;
 
 
-extern memory_map_t		g_memory_map;
+extern memory_map_t		g_memory_sections;
 extern multiboot_info_t	*g_boot_info;
 
 
-void	memory_map_init(multiboot_info_t *boot_info);
+void	memory_sections_init(multiboot_info_t *boot_info);
 void	memory_map_print(void);
 
 #endif // MEMORY_MAP_H

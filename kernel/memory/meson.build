@@ -17,7 +17,7 @@ memory_c = files([
 	'utils/show_alloc_mem_freed.c',
 	'utils/print_memory.c',
 
-	'memory_map/memory_map_init.c',
+	'memory_map/memory_sections_init.c',
 	'memory_map/memory_map_print.c',
 	'memory_init.c',
 ])

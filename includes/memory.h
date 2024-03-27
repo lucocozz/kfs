@@ -11,7 +11,7 @@
 #include "memory/kmalloc.h"
 #include "memory/memory_map.h"
 #include "memory/segments.h"
-
+#include "memory/paging.h"
 #include "memory/pmm.h"
 #include "memory/vmm.h"
 
@@ -20,8 +20,6 @@
 #else
 #define KERNEL_START 0x00000000
 #endif
-
-extern uint32_t g_placement_address;
 
 void	isr_page_fault(registers_t regs, struct stack_state stack);
 

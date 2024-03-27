@@ -11,6 +11,7 @@ memory_c = files([
 	'segmentation/segments.c',
 
 	'paging/page_fault.c',
+	'paging/paging.c',
 
 	'utils/show_page_num.c',
 	'utils/show_alloc_mem.c',

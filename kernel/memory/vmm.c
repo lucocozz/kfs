@@ -1,29 +1,29 @@
 #include "memory/vmm.h"
 #include "memory/pmm.h"
-#include "kernel.h"
 
-page_directory_t *current_directory = 0;
+page_directory_t *g_current_directory = 0;
 
 // Get entry from page table for a given virtual address
-page_table_entry *get_page_table_entry(page_table_t *table, uint32_t v_addr) {
-	if (table) {
-		return &table->entries[PAGE_TABLE_INDEX(v_addr)];
-	}
-	return 0;
+page_table_entry *get_page_table_entry(page_table_t *table, uint32_t v_addr)
+{
+	if (table != NULL)
+		return (&table->entries[PAGE_TABLE_INDEX(v_addr)]);
+	return (NULL);
 }
 
 // Get entry from page directory for a given virtual address
-page_directory_entry *get_page_directory_entry(page_directory_t *dir, uint32_t v_addr) {
-	if (dir) {
-		return &dir->entries[PAGE_DIRECTORY_INDEX(v_addr)];
-	}
-	return 0;
+page_directory_entry *get_page_directory_entry(page_directory_t *dir, uint32_t v_addr)
+{
+	if (dir != NULL)
+		return (&dir->entries[PAGE_DIRECTORY_INDEX(v_addr)]);
+	return (NULL);
 }
 
 // Return a page table entry for a given virtual address
-page_table_entry *get_page(const uint32_t v_addr) {
+page_table_entry *get_page(const uint32_t v_addr)
+{
 	// get page directory
-	page_directory_t *dir = current_directory;
+	page_directory_t *dir = g_current_directory;
 
 	// get page table in directory
 	page_directory_entry *entry = &dir->entries[PAGE_DIRECTORY_INDEX(v_addr)];
@@ -33,46 +33,37 @@ page_table_entry *get_page(const uint32_t v_addr) {
 	page_table_entry *page = &table->entries[PAGE_TABLE_INDEX(v_addr)];
 
 	// return page
-	return page;
+	return (page);
 }
 
 // Allocate a page in memory
-void *alloc_page(page_table_entry *page) {
-	void *frame = pmm_alloc_frames(1);
-	if (frame) {
+void *alloc_page(page_table_entry *page)
+{
+	uint32_t *frame = pmm_alloc_frames(1);
+
+	if (frame != NULL) {
 		SET_FRAME(page, (uint32_t)frame);
 		SET_ATTRIBUTE(page, PTE_PRESENT);
 	}
-	return frame;
+
+	return (frame);
 }
 
 // Free a page in memory
-void free_page(page_table_entry *page) {
-	void *address = (void *)PAGE_GET_PHYSICAL_ADDRESS(page);
-	if (address)
+void free_page(page_table_entry *page)
+{
+	uint32_t *address = (uint32_t*)PAGE_GET_PHYSICAL_ADDRESS(page);
+
+	if (address != NULL)
 		pmm_free_frames(address, 1);
 	CLEAR_ATTRIBUTE(page, PTE_PRESENT);
 }
 
-// Set the current page directory
-bool switch_page_directory(page_directory_t *dir) {
-	if (!dir) return false;
-
-	current_directory = dir;
-	ASM("movl %%eax, %%cr3":: "a"(current_directory));
-
-	return true;
-}
-
-// Flush a single page in TLB
-void flush_tlb_entry(uint32_t v_addr) {
-	ASM("cli; invlpg (%0); sti":: "r"(v_addr) );
-}
-
 // Map a page
-bool map_page(void *p_addr, void *v_addr) {
+bool map_page(void *p_addr, void *v_addr)
+{
 	// Get page
-	page_directory_t *dir = current_directory;
+	page_directory_t *dir = g_current_directory;
 
 	// Get page table
 	page_directory_entry *entry = &dir->entries[PAGE_DIRECTORY_INDEX((uint32_t)v_addr)];
@@ -98,7 +89,8 @@ bool map_page(void *p_addr, void *v_addr) {
 }
 
 // Unmap a page
-void unmap_page(void *v_addr) {
+void	unmap_page(void *v_addr)
+{
 	page_table_entry *page = get_page((uint32_t)v_addr);
 
 	SET_FRAME(page, 0); // Set physical address to 0
@@ -106,7 +98,8 @@ void unmap_page(void *v_addr) {
 }
 
 // Initialise the virtual memory manager
-bool vmm_init(void) {
+bool	vmm_init(void)
+{
 	page_directory_t *dir = (page_directory_t *)pmm_alloc_frames(3);
 	if (!dir) return false;
 
@@ -161,8 +154,7 @@ bool vmm_init(void) {
 	// Switch to the new page directory
 	switch_page_directory(dir);
 
-	// Enable paging: Set PG bit 31 and PE bit 0 of CR0
-	ASM("movl %cr0, %eax; orl $0x80000001, %eax; movl %eax, %cr0");
+	enable_paging();
 
 	return true;	
 }

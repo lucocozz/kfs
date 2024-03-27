@@ -3,20 +3,22 @@
 
 #include "system/utils.h"
 
-#define PAGE_PER_TABLE 1024
-#define TABLES_PER_DIR 1024
-#define PAGE_SIZE 4096
+#define PAGE_PER_TABLE	1024
+#define TABLES_PER_DIR	1024
+#define PAGE_SIZE		4096
 
-#define PAGE_DIRECTORY_INDEX(v_addr) ((v_addr) >> 22)
-#define PAGE_TABLE_INDEX(v_addr) (((v_addr) >> 12) & 0x3FF)
-#define PAGE_GET_PHYSICAL_ADDRESS(dir_entry) (*dir_entry & ~0xFFF)
-#define SET_ATTRIBUTE(entry, attribute) (*entry |= attribute)
-#define CLEAR_ATTRIBUTE(entry, attribute) (*entry &= ~attribute)
-#define TEST_ATTRIBUTE(entry, attribute) (*entry & attribute)
-#define SET_FRAME(entry, addr) (*entry = (*entry & ~0x7FFFF000) | addr) // only set the frame address not the flags
+#define PAGE_DIRECTORY_INDEX(v_addr)			((v_addr) >> 22)
+#define PAGE_TABLE_INDEX(v_addr)				(((v_addr) >> 12) & 0x3FF)
+#define PAGE_GET_PHYSICAL_ADDRESS(dir_entry)	(*dir_entry & ~0xFFF)
+#define SET_ATTRIBUTE(entry, attribute)			(*entry |= attribute)
+#define CLEAR_ATTRIBUTE(entry, attribute)		(*entry &= ~attribute)
+#define TEST_ATTRIBUTE(entry, attribute)		(*entry & attribute)
+#define SET_FRAME(entry, addr)					(*entry = (*entry & ~0x7FFFF000) | addr) // only set the frame address not the flags
+
 
 typedef uint32_t page_table_entry;
 typedef uint32_t page_directory_entry;
+
 
 typedef enum {
 	PTE_PRESENT 		= 0x01,
@@ -25,7 +27,7 @@ typedef enum {
 	PTE_WRITETHROUGH 	= 0x08,
 	PTE_NOT_CACHEABLE 	= 0x10,
 	PTE_ACCESSED 		= 0x20,
-	PTE_DIRTY 			= 0x40, // 
+	PTE_DIRTY 			= 0x40,
 	PTE_PAT 			= 0x80,
 	PTE_CPU_GLOBAL 		= 0x100,
 	PTE_FRAME 			= 0x7FFFF000,
@@ -56,7 +58,10 @@ typedef struct {
 	page_directory_entry entries[TABLES_PER_DIR];
 } page_directory_t;
 
-extern page_directory_t *current_directory;
+
+extern page_directory_t	*g_current_directory;
+extern uint32_t			g_placement_address;
+
 
 // Get entry from page table for a given virtual address
 page_table_entry *get_page_table_entry(page_table_t *table, uint32_t v_addr);

@@ -17,8 +17,6 @@
 
 typedef uint32_t page_table_entry;
 typedef uint32_t page_directory_entry;
-typedef uint32_t phys_addr_t;
-typedef uint32_t virt_addr_t;
 
 typedef enum {
 	PTE_PRESENT 		= 0x01,
@@ -61,13 +59,13 @@ typedef struct {
 extern page_directory_t *current_directory;
 
 // Get entry from page table for a given virtual address
-page_table_entry *get_page_table_entry(page_table_t *table, virt_addr_t address);
+page_table_entry *get_page_table_entry(page_table_t *table, uint32_t v_addr);
 
 // Get entry from page directory for a given virtual address
-page_directory_entry *get_page_directory_entry(page_directory_t *dir, virt_addr_t address);
+page_directory_entry *get_page_directory_entry(page_directory_t *dir, uint32_t v_addr);
 
 // Return a page table entry for a given virtual address
-page_table_entry *get_page(const virt_addr_t address);
+page_table_entry *get_page(const uint32_t v_addr);
 
 // Allocate a page in memory
 void *alloc_page(page_table_entry *page);
@@ -79,7 +77,7 @@ void free_page(page_table_entry *page);
 bool switch_page_directory(page_directory_t *dir);
 
 // Flush a single page in TLB
-void flush_tlb_entry(virt_addr_t address);
+void flush_tlb_entry(uint32_t v_addr);
 
 // Map a page
 bool map_page(void *p_addr, void *v_addr);

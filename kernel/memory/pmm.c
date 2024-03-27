@@ -44,6 +44,7 @@ void pmm_init(uint32_t start_address, uint32_t size)
 	g_used_frames = g_max_frames;
 
 	memset32(g_memory_map, FRAME_CHUNK_FULL, BITMAP_SIZE(g_max_frames));
+	set_frame(0);
 }
 
 void pmm_unmap_region(uint32_t base_address, uint32_t size)
@@ -56,8 +57,6 @@ void pmm_unmap_region(uint32_t base_address, uint32_t size)
 		g_used_frames--;
 		num_frames--;
 	}
-	// Always set the first frame as used to avoid memory overwriting the kernel
-	set_frame(0);
 }
 
 void pmm_map_region(uint32_t base_address, uint32_t size)

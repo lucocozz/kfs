@@ -73,11 +73,12 @@ typedef struct heap {
 
 extern heap_t g_heap;
 
-uint32_t	kbrk(uint32_t size);
-void		kfree(void *ptr);
-void		*kmalloc(size_t size);
-void		*krealloc(void *ptr, size_t size);
-void		*kcalloc(size_t nmemb, size_t size);
+int		munmap(void *addr, size_t size);
+void	*mmap(size_t size);
+void	kfree(void *ptr);
+void	*kmalloc(size_t size);
+void	*krealloc(void *ptr, size_t size);
+void	*kcalloc(size_t nmemb, size_t size);
 
 
 void	show_alloc_mem(void);

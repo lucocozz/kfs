@@ -1,5 +1,5 @@
-#ifndef MEMORY_MAP_H
-#define MEMORY_MAP_H
+#ifndef KERNEL_MEMORY_MAP_H
+#define KERNEL_MEMORY_MAP_H
 
 #include "multiboot.h"
 

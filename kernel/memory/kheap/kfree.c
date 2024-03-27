@@ -65,8 +65,8 @@ static void	__free_page(page_header_t *page)
 	if (page->next != NULL)
 		page->next->prev = page->prev;
 
-	// if (munmap(page, page->size) == -1)
-	// 	ft_putstr("free(): munmap error\n");
+	if (munmap(page, page->size) == -1)
+		printk("free(): munmap error\n");
 }
 
 void	kfree(void *ptr)

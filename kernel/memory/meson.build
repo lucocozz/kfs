@@ -1,11 +1,12 @@
 memory_c = files([
 	'pmm.c',
 	'vmm.c',
+	'mmap.c',
+	'munmap.c',
 	'kheap/kmalloc.c',
 	'kheap/kfree.c',
 	'kheap/krealloc.c',
 	'kheap/kcalloc.c',
-	'kheap/kbrk.c',
 	
 	'segmentation/segments.c',
 

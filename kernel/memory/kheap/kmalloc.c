@@ -22,7 +22,7 @@ static page_header_t	*__alloc_page(size_t size)
 	page_header_t *page;
 
 	//TODO: check memory limit
-	page = (page_header_t*)kbrk(size);
+	page = (page_header_t*)mmap(size);
 	if (page == NULL)
 		return (NULL);
 	bzero(page, sizeof(page_header_t));

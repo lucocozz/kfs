@@ -30,7 +30,8 @@ void	memory_init(void)
 	// reserve the memory map and align it to 4K frames
 	uint32_t memory_map_length = ALIGN_WITH(BITMAP_SIZE(g_max_frames) * sizeof(uint32_t), FRAME_SIZE);
 	pmm_map_region(g_memory_sections.kernel_physical.end, memory_map_length);
-	g_placement_address = g_memory_sections.kernel_physical.end + memory_map_length;
+	// g_placement_address = g_memory_sections.kernel_physical.end + memory_map_length;
+	g_placement_address = 0xC0000000 + (0x1000 * 0x1000); // 0xC0000000 + 4MB
 
-	initialise_virtual_memory_manager();
+	vmm_init();
 }

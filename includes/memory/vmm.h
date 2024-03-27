@@ -7,8 +7,8 @@
 #define TABLES_PER_DIR 1024
 #define PAGE_SIZE 4096
 
-#define PAGE_DIRECTORY_INDEX(virt_addr) ((virt_addr) >> 22)
-#define PAGE_TABLE_INDEX(virt_addr) (((virt_addr) >> 12) & 0x3FF)
+#define PAGE_DIRECTORY_INDEX(v_addr) ((v_addr) >> 22)
+#define PAGE_TABLE_INDEX(v_addr) (((v_addr) >> 12) & 0x3FF)
 #define PAGE_GET_PHYSICAL_ADDRESS(dir_entry) (*dir_entry & ~0xFFF)
 #define SET_ATTRIBUTE(entry, attribute) (*entry |= attribute)
 #define CLEAR_ATTRIBUTE(entry, attribute) (*entry &= ~attribute)
@@ -17,8 +17,8 @@
 
 typedef uint32_t page_table_entry;
 typedef uint32_t page_directory_entry;
-typedef uint32_t phys_addr;
-typedef uint32_t virt_addr;
+typedef uint32_t phys_addr_t;
+typedef uint32_t virt_addr_t;
 
 typedef enum {
 	PTE_PRESENT 		= 0x01,
@@ -61,13 +61,13 @@ typedef struct {
 extern page_directory_t *current_directory;
 
 // Get entry from page table for a given virtual address
-page_table_entry *get_page_table_entry(page_table_t *table, virt_addr address);
+page_table_entry *get_page_table_entry(page_table_t *table, virt_addr_t address);
 
 // Get entry from page directory for a given virtual address
-page_directory_entry *get_page_directory_entry(page_directory_t *dir, virt_addr address);
+page_directory_entry *get_page_directory_entry(page_directory_t *dir, virt_addr_t address);
 
 // Return a page table entry for a given virtual address
-page_table_entry *get_page(const virt_addr address);
+page_table_entry *get_page(const virt_addr_t address);
 
 // Allocate a page in memory
 void *alloc_page(page_table_entry *page);
@@ -79,15 +79,15 @@ void free_page(page_table_entry *page);
 bool switch_page_directory(page_directory_t *dir);
 
 // Flush a single page in TLB
-void flush_tlb_entry(virt_addr address);
+void flush_tlb_entry(virt_addr_t address);
 
 // Map a page
-bool map_page(void *paddr, void *vaddr);
+bool map_page(void *p_addr, void *v_addr);
 
 // Unmap a page
-void unmap_page(void *virt_addr);
+void unmap_page(void *v_addr);
 
 // Initialise the virtual memory manager
-bool initialise_virtual_memory_manager(void);
+bool vmm_init(void);
 
 #endif

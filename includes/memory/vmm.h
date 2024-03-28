@@ -15,6 +15,8 @@
 #define TEST_ATTRIBUTE(entry, attribute)		(*entry & attribute)
 #define SET_FRAME(entry, addr)					(*entry = (*entry & ~0x7FFFF000) | addr) // only set the frame address not the flags
 
+#define ERR_OUT_OF_MEMORY	-1
+
 
 typedef uint32_t page_table_entry;
 typedef uint32_t page_directory_entry;
@@ -49,12 +51,12 @@ typedef enum {
 
 // page table: handles 4MB of memory
 
-typedef struct {
+typedef struct page_table {
 	page_table_entry entries[PAGE_PER_TABLE];
 } page_table_t;
 
 // page directory: handles 4GB of memory
-typedef struct {
+typedef struct page_directory {
 	page_directory_entry entries[TABLES_PER_DIR];
 } page_directory_t;
 
@@ -63,34 +65,13 @@ extern page_directory_t	*g_current_directory;
 extern uint32_t			g_placement_address;
 
 
-// Get entry from page table for a given virtual address
-page_table_entry *get_page_table_entry(page_table_t *table, uint32_t v_addr);
-
-// Get entry from page directory for a given virtual address
-page_directory_entry *get_page_directory_entry(page_directory_t *dir, uint32_t v_addr);
-
-// Return a page table entry for a given virtual address
-page_table_entry *get_page(const uint32_t v_addr);
-
-// Allocate a page in memory
-void *alloc_page(page_table_entry *page);
-
-// Free a page in memory
-void free_page(page_table_entry *page);
-
-// Set the current page directory
-bool switch_page_directory(page_directory_t *dir);
-
-// Flush a single page in TLB
-void flush_tlb_entry(uint32_t v_addr);
-
-// Map a page
-bool map_page(void *p_addr, void *v_addr);
-
-// Unmap a page
-void unmap_page(void *v_addr);
-
-// Initialise the virtual memory manager
-bool vmm_init(void);
+int						vmm_init(void);
+void					*alloc_page(page_table_entry *page);
+void					free_page(page_table_entry *page);
+bool					map_page(uint32_t *p_addr, uint32_t *v_addr);
+void					unmap_page(uint32_t *v_addr);
+page_table_entry		*get_page(const uint32_t v_addr);
+page_table_entry		*get_page_table_entry(page_table_t *table, uint32_t v_addr);
+page_directory_entry	*get_page_directory_entry(page_directory_t *dir, uint32_t v_addr);
 
 #endif

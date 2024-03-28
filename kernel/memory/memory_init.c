@@ -33,5 +33,6 @@ void	memory_init(void)
 	// g_placement_address = g_memory_sections.kernel_physical.end + memory_map_length;
 	g_placement_address = 0xC0000000 + (0x1000 * 0x1000); // 0xC0000000 + 4MB
 
-	vmm_init();
+	if (vmm_init() == ERR_OUT_OF_MEMORY)
+		panic("Failed to initialise the virtual memory manager");
 }

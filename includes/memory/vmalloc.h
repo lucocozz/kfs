@@ -1,11 +1,11 @@
-#ifndef KERNEL_MEMORY_KMALLOC_H
-#define KERNEL_MEMORY_KMALLOC_H
+#ifndef KERNEL_MEMORY_VMALLOC_H
+#define KERNEL_MEMORY_VMALLOC_H
 
 #include "system/utils.h"
 #include "../includes/memory.h"
 #include "string.h"
 
-#define KMALLOC_MAGIC	0xdeadbeef
+#define VMALLOC_MAGIC	0xdeadbeef
 #define ALIGNMENT		8
 #define ALIGN(size)		(((size) + (ALIGNMENT - 1)) & ~(ALIGNMENT - 1))
 
@@ -73,12 +73,11 @@ typedef struct heap {
 
 extern heap_t g_heap;
 
-int		munmap(void *addr, size_t size);
-void	*mmap(size_t size);
-void	kfree(void *ptr);
-void	*kmalloc(size_t size);
-void	*krealloc(void *ptr, size_t size);
-void	*kcalloc(size_t nmemb, size_t size);
+
+void	vfree(void *ptr);
+void	*vmalloc(size_t size);
+void	*vrealloc(void *ptr, size_t size);
+void	*vcalloc(size_t nmemb, size_t size);
 
 
 void	show_alloc_mem(void);

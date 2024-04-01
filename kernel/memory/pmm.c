@@ -5,7 +5,7 @@ static uint32_t __check_free_frame_continuity(uint32_t frame, uint32_t num_frame
 {
 	for (uint32_t i = 0; i < num_frames; ++i)
 	{
-		if (test_frame(frame + i) != FRAME_FREE)
+		if (pmm_test_frame(frame + i) != FRAME_FREE)
 			return (ERR_NO_FRAME);
 	}
 	return (frame);
@@ -52,11 +52,11 @@ void pmm_unmap_region(uint32_t base_address, uint32_t size)
 	uint32_t num_frames = size / FRAME_SIZE; // calculate the number of frames in the region and align it to 4K frames
 
 	while (num_frames > 0) {
-		free_frame(align++);
+		pmm_free_frame(align++);
 		g_used_frames--;
 		num_frames--;
 	}
-	set_frame(0);
+	pmm_set_frame(0);
 }
 
 void pmm_map_region(uint32_t base_address, uint32_t size)
@@ -65,7 +65,7 @@ void pmm_map_region(uint32_t base_address, uint32_t size)
 	uint32_t num_frames = size / FRAME_SIZE;
 
 	while (num_frames > 0) {
-		set_frame(align++);
+		pmm_set_frame(align++);
 		g_used_frames++;
 		num_frames--;
 	}
@@ -83,7 +83,7 @@ uint32_t *pmm_alloc_frames(uint32_t num_frames)
 		return (NULL); // no free region of memory large enough found
 
 	for (uint32_t i = 0; i < num_frames; ++i) {
-		set_frame(start_frame + i);
+		pmm_set_frame(start_frame + i);
 		g_used_frames++;
 	}
 
@@ -98,7 +98,7 @@ void pmm_free_frames(uint32_t *address, uint32_t num_frames)
 	uint32_t start_frame = (uint32_t)address / FRAME_SIZE;
 
 	for (uint32_t i = 0; i < num_frames; ++i) {
-		free_frame(start_frame + i);
+		pmm_free_frame(start_frame + i);
 		g_used_frames--;
 	}
 }

@@ -1,4 +1,4 @@
-#include "memory/kmalloc.h"
+#include "memory/vmalloc.h"
 
 static int	__block_defragmentation(block_header_t *block, size_t size)
 {
@@ -47,7 +47,7 @@ static int __block_fragmentation(block_header_t *block, size_t size)
 			fragment->size = block->size - size;
 			fragment->next = block->next;
 			fragment->prev = block;
-			fragment->magic = KMALLOC_MAGIC;
+			fragment->magic = VMALLOC_MAGIC;
 			block->next = fragment;
 			page->block_count++;
 			page->freed_count++;
@@ -71,19 +71,19 @@ static int	__check_defragmentation(block_header_t *block, size_t size)
 		return (__block_fragmentation(block, size));
 }
 
-void	*krealloc(void *ptr, size_t size)
+void	*vrealloc(void *ptr, size_t size)
 {
 	if (size == 0) {
 		if (ptr != NULL)
-			kfree(ptr);
+			vfree(ptr);
 		return (NULL);
 	}
 	
 	if (ptr == NULL)
-		return (kmalloc(size));
+		return (vmalloc(size));
 
 	block_header_t	*block = BLOCK_HEADER_SHIFT_BACK(ptr);
-	if (block->magic != KMALLOC_MAGIC)
+	if (block->magic != VMALLOC_MAGIC)
 		return (NULL);
 
 	// pthread_mutex_lock(&g_heap_mutex);
@@ -93,7 +93,7 @@ void	*krealloc(void *ptr, size_t size)
 	if (is_fragmented == true)
 		return (ptr);
 
-	void *new = kmalloc(size);
+	void *new = vmalloc(size);
 	if (new == NULL)
 		return (NULL);
 
@@ -102,6 +102,6 @@ void	*krealloc(void *ptr, size_t size)
 	memcpy(new, ptr, block->size);
 	// pthread_mutex_unlock(&g_heap_mutex);
 
-	kfree(ptr);
+	vfree(ptr);
 	return (new);
 }

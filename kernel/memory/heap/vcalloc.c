@@ -1,9 +1,9 @@
-#include "memory/kmalloc.h"
+#include "memory/vmalloc.h"
 
-void	*kcalloc(size_t nmemb, size_t size)
+void	*vcalloc(size_t nmemb, size_t size)
 {
 	size_t	mem_size = nmemb * size;
-	void	*ptr = kmalloc(mem_size);
+	void	*ptr = vmalloc(mem_size);
 
 	if (ptr == NULL)
 		return (NULL);

@@ -3,10 +3,10 @@ memory_c = files([
 	'vmm.c',
 	'mmap.c',
 	'munmap.c',
-	'kheap/kmalloc.c',
-	'kheap/kfree.c',
-	'kheap/krealloc.c',
-	'kheap/kcalloc.c',
+	'heap/vmalloc.c',
+	'heap/vfree.c',
+	'heap/vrealloc.c',
+	'heap/vcalloc.c',
 	
 	'segmentation/segments.c',
 
@@ -18,6 +18,7 @@ memory_c = files([
 	'utils/show_alloc_mem_hex.c',
 	'utils/show_alloc_mem_freed.c',
 	'utils/print_memory.c',
+	'utils/print_free_list.c',
 
 	'memory_map/memory_sections_init.c',
 	'memory_map/memory_map_print.c',

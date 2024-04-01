@@ -14,6 +14,12 @@ void	kernel_main(uint32_t magic, multiboot_info_t *boot_info, uint32_t *stack_to
 	UNUSED(stack_top);
 	assert(magic == MULTIBOOT_BOOTLOADER_MAGIC);
 	__init_kernel(boot_info);
+	mmap(1024);
+	mmap(1024 * 2);
+	// void *toto = mmap(1024);
+	mmap(1024 * 2);
+	// munmap(toto, 1024);
+	print_free_list();
 	shell();
 }
 EXPORT_SYMBOL(kernel_main);

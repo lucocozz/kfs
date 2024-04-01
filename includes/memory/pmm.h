@@ -33,15 +33,15 @@ uint32_t	*pmm_alloc_frames(uint32_t num_frames);
 void		pmm_free_frames(uint32_t *address, uint32_t num_frames);
 
 
-static inline void set_frame(uint32_t frame) {
+static inline void pmm_set_frame(uint32_t frame) {
 	g_memory_map[FRAME_CHUNK(frame)] |= BIT_MASK(FRAME_BIT(frame));
 }
 
-static inline void free_frame(uint32_t frame) {
+static inline void pmm_free_frame(uint32_t frame) {
 	g_memory_map[FRAME_CHUNK(frame)] &= BIT_UNMASK(FRAME_BIT(frame));
 }
 
-static inline uint32_t test_frame(uint32_t frame) {
+static inline uint32_t pmm_test_frame(uint32_t frame) {
 	return (g_memory_map[FRAME_CHUNK(frame)] & BIT_MASK(FRAME_BIT(frame)));
 }
 

@@ -61,17 +61,29 @@ typedef struct page_directory {
 } page_directory_t;
 
 
+typedef struct page_free {
+	size_t				count;
+	struct page_free	*next;
+} page_free_t;
+
+
 extern page_directory_t	*g_current_directory;
 extern uint32_t			g_placement_address;
 
+extern page_free_t		*g_free_list;
+
 
 int						vmm_init(void);
-void					*alloc_page(page_table_entry *page);
-void					free_page(page_table_entry *page);
-bool					map_page(uint32_t *p_addr, uint32_t *v_addr);
-void					unmap_page(uint32_t *v_addr);
-page_table_entry		*get_page(const uint32_t v_addr);
-page_table_entry		*get_page_table_entry(page_table_t *table, uint32_t v_addr);
-page_directory_entry	*get_page_directory_entry(page_directory_t *dir, uint32_t v_addr);
+void					*vmm_alloc_page(page_table_entry *page);
+void					vmm_free_page(page_table_entry *page);
+bool					vmm_map_page(uint32_t *p_addr, uint32_t *v_addr);
+void					vmm_unmap_page(uint32_t *v_addr);
+page_table_entry		*vmm_get_page(const uint32_t v_addr);
+page_table_entry		*vmm_get_page_table_entry(page_table_t *table, uint32_t v_addr);
+page_directory_entry	*vmm_get_page_directory_entry(page_directory_t *dir, uint32_t v_addr);
+
+int		munmap(void *addr, size_t size);
+void	*mmap(size_t size);
+void	print_free_list(void);
 
 #endif

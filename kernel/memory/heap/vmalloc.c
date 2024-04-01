@@ -1,4 +1,4 @@
-#include "memory/kmalloc.h"
+#include "memory/vmalloc.h"
 
 
 typedef struct block_index {
@@ -123,7 +123,7 @@ static void	*__do_alloc(page_queue_t *queue, size_t block_size)
 	index = __find_first_fit(queue, block_size);
 	if (index.page == NULL)
 		return (NULL);
-	index.block->magic = KMALLOC_MAGIC;
+	index.block->magic = VMALLOC_MAGIC;
 	index.block->allocated = true;
 	index.block->size = block_size;
 	index.block->parent = index.page;
@@ -131,7 +131,7 @@ static void	*__do_alloc(page_queue_t *queue, size_t block_size)
 	return (BLOCK_HEADER_SHIFT(index.block));
 }
 
-void	*kmalloc(size_t size)
+void	*vmalloc(size_t size)
 {
 	void	*alloc;
 	size_t	block_size = BLOCK_SIZE(size);

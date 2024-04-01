@@ -5,6 +5,8 @@
 uint32_t	g_placement_address = 0;
 heap_t		g_heap = INITIALIZE_HEAP;
 
+page_free_t	*g_free_list = NULL;
+
 uint32_t	*g_memory_map = NULL;
 uint32_t	g_max_frames = 0;
 uint32_t	g_used_frames = 0;
@@ -23,13 +25,12 @@ void	memory_init(void)
 			pmm_unmap_region(entry->addr_low, entry->len_low);
 	}
 	
-	// set kernel memory as used and align it to 4K frames above the kernel
 	uint32_t kernel_memory_length = ALIGN_WITH(g_memory_sections.kernel_physical.length, FRAME_SIZE);
 	pmm_map_region(g_memory_sections.kernel_physical.start, kernel_memory_length);
 
-	// reserve the memory map and align it to 4K frames
 	uint32_t memory_map_length = ALIGN_WITH(BITMAP_SIZE(g_max_frames) * sizeof(uint32_t), FRAME_SIZE);
 	pmm_map_region(g_memory_sections.kernel_physical.end, memory_map_length);
+
 	// g_placement_address = g_memory_sections.kernel_physical.end + memory_map_length;
 	g_placement_address = 0xC0000000 + (0x1000 * 0x1000); // 0xC0000000 + 4MB
 

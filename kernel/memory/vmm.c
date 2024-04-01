@@ -5,7 +5,7 @@
 page_directory_t *g_current_directory = 0;
 
 // Get entry from page table for a given virtual address
-page_table_entry *get_page_table_entry(page_table_t *table, uint32_t v_addr)
+page_table_entry *vmm_get_page_table_entry(page_table_t *table, uint32_t v_addr)
 {
 	if (table != NULL)
 		return (&table->entries[PAGE_TABLE_INDEX(v_addr)]);
@@ -13,7 +13,7 @@ page_table_entry *get_page_table_entry(page_table_t *table, uint32_t v_addr)
 }
 
 // Get entry from page directory for a given virtual address
-page_directory_entry *get_page_directory_entry(page_directory_t *dir, uint32_t v_addr)
+page_directory_entry *vmm_get_page_directory_entry(page_directory_t *dir, uint32_t v_addr)
 {
 	if (dir != NULL)
 		return (&dir->entries[PAGE_DIRECTORY_INDEX(v_addr)]);
@@ -21,7 +21,7 @@ page_directory_entry *get_page_directory_entry(page_directory_t *dir, uint32_t v
 }
 
 // Return a page table entry for a given virtual address
-page_table_entry *get_page(const uint32_t v_addr)
+page_table_entry *vmm_get_page(const uint32_t v_addr)
 {
 	page_directory_t	 *dir	= g_current_directory;
 	page_directory_entry *entry	= &dir->entries[PAGE_DIRECTORY_INDEX(v_addr)];
@@ -31,7 +31,7 @@ page_table_entry *get_page(const uint32_t v_addr)
 	return (page);
 }
 
-void *alloc_page(page_table_entry *page)
+void *vmm_alloc_page(page_table_entry *page)
 {
 	uint32_t *frame = pmm_alloc_frames(1);
 
@@ -43,7 +43,7 @@ void *alloc_page(page_table_entry *page)
 	return (frame);
 }
 
-void free_page(page_table_entry *page)
+void vmm_free_page(page_table_entry *page)
 {
 	uint32_t *address = (uint32_t*)PAGE_GET_PHYSICAL_ADDRESS(page);
 
@@ -52,7 +52,7 @@ void free_page(page_table_entry *page)
 	CLEAR_ATTRIBUTE(page, PTE_PRESENT);
 }
 
-bool map_page(uint32_t *p_addr, uint32_t *v_addr)
+bool vmm_map_page(uint32_t *p_addr, uint32_t *v_addr)
 {
 	page_directory_t		*dir = g_current_directory;
 	page_directory_entry	*entry = &dir->entries[PAGE_DIRECTORY_INDEX((uint32_t)v_addr)];
@@ -79,9 +79,9 @@ bool map_page(uint32_t *p_addr, uint32_t *v_addr)
 }
 
 // Unmap a page
-void	unmap_page(uint32_t *v_addr)
+void	vmm_unmap_page(uint32_t *v_addr)
 {
-	page_table_entry *page = get_page((uint32_t)v_addr);
+	page_table_entry *page = vmm_get_page((uint32_t)v_addr);
 
 	SET_FRAME(page, 0); // Set physical address to 0
 	CLEAR_ATTRIBUTE(page, PTE_PRESENT); // Clear present flag

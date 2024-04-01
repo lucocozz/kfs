@@ -8,7 +8,7 @@
 #include "system/interrupts.h"
 #include "system/utils.h"
 
-#include "memory/kmalloc.h"
+#include "memory/vmalloc.h"
 #include "memory/memory_map.h"
 #include "memory/segments.h"
 #include "memory/paging.h"

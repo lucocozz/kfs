@@ -32,6 +32,23 @@ typedef u16			uint;
 #define BIT_MASK(bit)		(1UL << bit)
 #define BIT_UNMASK(bit)		~(1UL << bit)
 
+#define BYTE_TO_KB(byte)	(byte / 1024)
+#define BYTE_TO_MB(byte)	(byte / 1024 / 1024)
+#define BYTE_TO_GB(byte)	(byte / 1024 / 1024 / 1024)
+
+#define KB_TO_BYTE(kb)		(kb * 1024)
+#define KB_TO_MB(kb)		(kb / 1024)
+#define KB_TO_GB(kb)		(kb / 1024 / 1024)
+
+#define MB_TO_BYTE(mb)		(mb * 1024 * 1024)
+#define MB_TO_KB(mb)		(mb * 1024)
+#define MB_TO_GB(mb)		(mb / 1024)
+
+#define GB_TO_BYTE(gb)		(gb * 1024 * 1024 * 1024)
+#define GB_TO_KB(gb)		(gb * 1024 * 1024)
+#define GB_TO_MB(gb)		(gb * 1024)
+
+
 #define __Packed__			__attribute__((__packed__))
 #define __Aligned__(x)		__attribute__((__aligned__(x)))
 #define __Section__(name)	__attribute__((__section__(name)))

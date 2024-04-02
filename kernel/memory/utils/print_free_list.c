@@ -4,15 +4,14 @@ void	print_free_list(void)
 {
 	page_free_t	*page = g_free_list;
 
-	printk("Free list:");
-	if (page == NULL) {
-		printk(" Empty\n");
-		return ;
-	}
-	printk("\n");
-
+	printk("--------------------------\n");
+	printk("|       Free list        |\n");
+	printk("--------------------------\n");
+	printk("| Page at     | Count    |\n");
+	printk("--------------------------\n");
 	while (page != NULL) {
-		printk("Page at %p, count: %d\n", page, page->count);
+		printk("| 0x%08X  | %d        |\n", page, page->count);
 		page = page->next;
 	}
+	printk("--------------------------\n");
 }

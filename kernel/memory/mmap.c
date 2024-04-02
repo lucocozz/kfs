@@ -14,6 +14,8 @@ static void	__fragment_free_page(page_free_t *page, size_t count)
 
 static void __remove_page_from_free_list(page_free_t *page, page_free_t *prev)
 {
+	if (prev == page)
+		prev = NULL;
 	if (prev != NULL)
 		prev->next = page->next;
 	else
@@ -26,7 +28,7 @@ static uint32_t	*__find_best_free_page(size_t count)
 {
 	page_free_t	*best = NULL;
 	page_free_t	*prev = NULL;
-	
+
 	if (g_free_list == NULL)
 		return (NULL);
 
@@ -58,7 +60,11 @@ static uint32_t *__request_pages(size_t count)
 	uint32_t	*page = (uint32_t *)g_placement_address;
 
 	for (size_t i = 0; i < count; ++i) {
-		vmm_alloc_page(vmm_get_page(g_placement_address));
+		uint32_t *p_addr = vmm_alloc_page(vmm_get_page(g_placement_address));
+		if (p_addr == NULL)
+			return (NULL);
+		if (vmm_map_page(p_addr, (uint32_t*)g_placement_address) == false)
+			return (NULL);
 		g_placement_address += PAGE_SIZE;
 	}
 
@@ -74,6 +80,8 @@ void	*mmap(size_t size)
 
 	if (page == NULL)
 		page = __request_pages(pages_count);
-	
+	if (page == NULL)
+		return (NULL);
 	return (page);
 }
+EXPORT_SYMBOL(mmap);

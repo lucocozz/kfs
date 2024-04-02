@@ -12,36 +12,46 @@ static void	__defragment_free_page(page_free_t *page, page_free_t *next)
 	next->count = 0;
 }
 
+static void	__release_memory_at_heap_end(page_free_t *prev, page_free_t *page)
+{
+	if ((uint32_t)page + (page->count * PAGE_SIZE) != g_placement_address)
+		return ;
+	g_placement_address = (uint32_t)page;
+	if (prev != NULL)
+		prev->next = NULL;
+	else
+		g_free_list = NULL;
+	for (size_t i = 0; i < page->count; ++i)
+		vmm_unmap_page((uint32_t *)page + (i * PAGE_SIZE));
+}
+
 static void	__insert_page_to_free_list(uint32_t addr, size_t count)
 {
 	page_free_t	*page = (page_free_t *)addr;
 	page_free_t	*prev = NULL;
 	page_free_t	*current = g_free_list;
 
-	if (current == NULL)
-	{
-		g_free_list = page;
-		page->next = NULL;
-		page->count = count;
-		return ;
-	}
+	page->next = NULL;
+	page->count = count;
 
-	while (current != NULL && page >= current)
-	{
+	while (current != NULL && page > current) {
 		prev = current;
 		current = current->next;
 	}
-
-	page->next = current;
-	page->count = count;
 
 	if (prev != NULL)
 		prev->next = page;
 	else
 		g_free_list = page;
 
-	__defragment_free_page(prev, page);
-	__defragment_free_page(page, page->next);
+	page->next = current;
+
+	if (page->next == NULL)
+		__release_memory_at_heap_end(prev, page);
+	else {
+		__defragment_free_page(page, page->next);
+		__defragment_free_page(prev, page);
+	}
 }
 
 int	munmap(void *addr, size_t size)
@@ -50,7 +60,6 @@ int	munmap(void *addr, size_t size)
 	int	pages_count = size / PAGE_SIZE;
 
 	__insert_page_to_free_list((uint32_t)addr, pages_count);
-	// for (int i = 0; i < pages_count; ++i)
-		// vmm_free_page(vmm_get_page((uint32_t)addr + (i * PAGE_SIZE)));
 	return (0);
 }
+EXPORT_SYMBOL(munmap);

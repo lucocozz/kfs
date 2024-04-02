@@ -22,7 +22,7 @@ typedef uint32_t page_table_entry;
 typedef uint32_t page_directory_entry;
 
 
-typedef enum {
+typedef enum PTE_flags {
 	PTE_PRESENT 		= 0x01,
 	PTE_READ_WRITE 		= 0x02,
 	PTE_USER 			= 0x04,
@@ -33,9 +33,9 @@ typedef enum {
 	PTE_PAT 			= 0x80,
 	PTE_CPU_GLOBAL 		= 0x100,
 	PTE_FRAME 			= 0x7FFFF000,
-} page_table_entry_flags;
+} PTE_flags_t;
 
-typedef enum {
+typedef enum PDE_flags {
 	PDE_PRESENT 		= 0x01,
 	PDE_READ_WRITE 		= 0x02,
 	PDE_USER 			= 0x04,
@@ -47,7 +47,7 @@ typedef enum {
 	PDE_CPU_GLOBAL 		= 0x100,
 	PDE_PAT 			= 0x2000,
 	PDE_FRAME 			= 0x7FFFF000,
-} page_directory_entry_flags;
+} PDE_flags_t;
 
 // page table: handles 4MB of memory
 

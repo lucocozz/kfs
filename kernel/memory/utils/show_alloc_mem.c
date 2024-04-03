@@ -1,4 +1,4 @@
-#include "memory.h"
+#include "../includes/memory.h"
 
 static size_t	__print_blocks(page_header_t *page)
 {
@@ -47,3 +47,4 @@ void show_alloc_mem(void)
 	printk("Total : %d bytes\n", total);
 	// pthread_mutex_unlock(&g_heap_mutex);
 }
+EXPORT_SYMBOL(show_alloc_mem);

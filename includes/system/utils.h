@@ -19,10 +19,11 @@ typedef u16			uint;
 #define UNUSED(x)	(void)(x)
 #define ASM(...)	__asm__ volatile(__VA_ARGS__)
 
-#define ARRAY_SIZE(x)		(sizeof(x) / sizeof(*x))
-#define CEIL_DIV(a, b)		(((a + b) - 1) / b) // a / b rounded up
-#define ALIGN_DOWN(a, b)	(a + b) & ~b
-#define ALIGN_UP(a, b)		(((a + b) - 1) & ~(b - 1))
+#define ARRAY_SIZE(x)			(sizeof(x) / sizeof(*x))
+#define CEIL_DIV(a, b)			(((a + b) - 1) / b) // a / b rounded up
+#define ALIGN_DOWN(a, b)		(a + b) & ~b
+#define ALIGN_UP(a, b)			(((a + b) - 1) & ~(b - 1))
+#define ALIGN_WITH(size, align)	((size + align - 1) & ~(align - 1))
 
 #define LOW_B16(address)	(uint16_t)((address) & 0xFFFF)
 #define HIGH_B16(address)	(uint16_t)(((address) >> 16) & 0xFFFF)
@@ -30,6 +31,23 @@ typedef u16			uint;
 #define HIGH_B8(address)	(uint8_t)(((address) >> 8) & 0xFF)
 #define BIT_MASK(bit)		(1UL << bit)
 #define BIT_UNMASK(bit)		~(1UL << bit)
+
+#define BYTE_TO_KB(byte)	(byte / 1024)
+#define BYTE_TO_MB(byte)	(byte / 1024 / 1024)
+#define BYTE_TO_GB(byte)	(byte / 1024 / 1024 / 1024)
+
+#define KB_TO_BYTE(kb)		(kb * 1024)
+#define KB_TO_MB(kb)		(kb / 1024)
+#define KB_TO_GB(kb)		(kb / 1024 / 1024)
+
+#define MB_TO_BYTE(mb)		(mb * 1024 * 1024)
+#define MB_TO_KB(mb)		(mb * 1024)
+#define MB_TO_GB(mb)		(mb / 1024)
+
+#define GB_TO_BYTE(gb)		(gb * 1024 * 1024 * 1024)
+#define GB_TO_KB(gb)		(gb * 1024 * 1024)
+#define GB_TO_MB(gb)		(gb * 1024)
+
 
 #define __Packed__			__attribute__((__packed__))
 #define __Aligned__(x)		__attribute__((__aligned__(x)))

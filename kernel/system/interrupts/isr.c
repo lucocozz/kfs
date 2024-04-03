@@ -1,6 +1,6 @@
 #include "system/interrupts.h"
 #include "system/signals.h"
-#include "memory.h"
+#include "../includes/memory.h"
 
 typedef void (*isr_handler_t)(registers_t, stack_state_t);
 

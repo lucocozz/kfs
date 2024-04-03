@@ -6,9 +6,6 @@
 
 #define _NSIG 20 // Number of signals used
 
-#define SIG_MASK(sig)	(1UL << sig)  // Mask for a signal
-#define SIG_UNMASK(sig)	~(1UL << sig) // Unmask for a signal
-
 #define SIGHUP		 1 // Abort - Hangup of controlling terminal or process
 #define SIGINT		 2 // Abort - Interrupt from keyboard
 #define SIGQUIT		 3 // Dump - Quit from keyboard

@@ -23,11 +23,11 @@
 /// ## Note
 ///
 /// - The size of `s` must be at least `n` bytes.
-void *memset32(void *s, int c, size_t n)
+void *memset32(void *s, uint32_t c, size_t n)
 {
-	int32_t	*ptr = s;
+	uint32_t	*ptr = s;
 
 	while (n--)
-		*ptr++ = (int32_t)c;
+		*ptr++ = c;
 	return (s);
 }

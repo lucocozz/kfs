@@ -16,9 +16,12 @@ void panic(const char *format, ...)
 	stack_state_t *stack;
 
 	va_start(ap, format);
-	printk("KERNEL PANIC: ");
-	vprintk(format, ap);
-	
+	printk("KERNEL PANIC");
+	if (format != NULL) {
+		printk(": ");
+		vprintk(format, ap);
+	}
+
 	ASM("mov %%esp, %0" : "=r"(stack));	// to save a trace of the stack at panic
 	__clean_registers();				// to avoid somes exceptions
 	

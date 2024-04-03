@@ -1,4 +1,5 @@
 #include "shell/shell.h"
+#include "memory/memory_map.h"
 
 static void	__helper(void)
 {
@@ -38,7 +39,7 @@ static void	__commands(char *input)
 	else if (strcmp(input, "symtab") == 0)
 		symbol_table_print();
 	else if (strcmp(input, "mmap") == 0)
-		mmap_print();
+		memory_map_print();
 	else if (strcmp(input, "help") == 0)
 		__helper();
 	else if (strcmp(input, "clear") == 0)

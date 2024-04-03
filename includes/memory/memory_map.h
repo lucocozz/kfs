@@ -1,54 +1,24 @@
-#ifndef MEMORY_MAP_H
-#define MEMORY_MAP_H
+#ifndef KERNEL_MEMORY_MAP_H
+#define KERNEL_MEMORY_MAP_H
 
 #include "multiboot.h"
 
-typedef struct s_kernel_memory_map
+
+typedef struct kernel_section {
+	uint32_t start;
+	uint32_t end;
+	uint32_t length;
+} kernel_section_t;
+
+typedef struct s_memory_map
 {
-    /* Kernel Sections */
-    struct
-    {
-        /* Kernel Section */
-        struct
-        {
-            uint32_t start;
-            uint32_t end;
-            uint32_t length;
-        } kernel;
-
-        /* Kernel Text Section */
-        struct
-        {
-            uint32_t start;
-            uint32_t end;
-            uint32_t length;
-        } text;
-
-        /* Kernel Rodata Section */
-        struct
-        {
-            uint32_t start;
-            uint32_t end;
-            uint32_t length;
-        } rodata;
-
-        /* Kernel Data Section */
-        struct
-        {
-            uint32_t start;
-            uint32_t end;
-            uint32_t length;
-        } data;
-
-        /* Kernel BSS Section */
-        struct
-        {
-            uint32_t start;
-            uint32_t end;
-            uint32_t length;
-        } bss;
-    } sections;
-} kernel_memory_map_t;
+	kernel_section_t kernel_physical;
+	kernel_section_t kernel_virtual;
+	kernel_section_t text;
+	kernel_section_t rodata;
+	kernel_section_t data;
+	kernel_section_t bss;
+} memory_map_t;
 
 extern uint32_t _kernel_start_virtual;
 extern uint32_t _kernel_end_virtual;
@@ -68,16 +38,11 @@ extern uint32_t _sbss;
 extern uint32_t _ebss;
 
 
-extern kernel_memory_map_t kernel_memory_map;
+extern memory_map_t		g_memory_sections;
 extern multiboot_info_t	*g_boot_info;
 
-extern uint32_t *main_memory_start;
-extern uint32_t main_memory_length;
-extern uint32_t nb_frames;
 
-int check_flags(void);
-void init_sections_struct(void);
-int init_memory_map(multiboot_info_t *boot_info);
-int get_memory_map();
+void	memory_sections_init(multiboot_info_t *boot_info);
+void	memory_map_print(void);
 
 #endif // MEMORY_MAP_H

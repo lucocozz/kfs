@@ -21,9 +21,8 @@ static void	__init_kernel(multiboot_info_t *boot_info)
 	gdt_init();
 	idt_init();
 	signals_init();
-
-	// Check flags
-	init_memory_map(boot_info);
+	memory_sections_init(boot_info);
+	memory_init();
 }
 
 void	kernel_main(uint32_t magic, multiboot_info_t *boot_info, uint32_t *stack_top)

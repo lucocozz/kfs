@@ -1,4 +1,5 @@
 #include "system/utils.h"
+#include "symbol_table.h"
 
 #define HEX_SPACING		"  "
 #define LINE_SPACING	"    "
@@ -38,3 +39,4 @@ void	print_memory(void *address, uint size)
 		__print_hexa_line(mem + offset, size - offset);
 	}
 }
+EXPORT_SYMBOL(print_memory);

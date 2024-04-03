@@ -1,4 +1,4 @@
-#include "memory/kmalloc.h"
+#include "memory/vmalloc.h"
 
 static void	__merge_blocks(page_header_t *page, block_header_t *first, block_header_t *second)
 {
@@ -65,18 +65,18 @@ static void	__free_page(page_header_t *page)
 	if (page->next != NULL)
 		page->next->prev = page->prev;
 
-	// if (munmap(page, page->size) == -1)
-	// 	ft_putstr("free(): munmap error\n");
+	if (munmap(page, page->size) == -1)
+		printk("free(): munmap error\n");
 }
 
-void	kfree(void *ptr)
+void	vfree(void *ptr)
 {
 	page_header_t	*page;
 	block_header_t	*block = BLOCK_HEADER_SHIFT_BACK(ptr);
 
 	if (ptr == NULL)
 		return;
-	if (block->magic != KMALLOC_MAGIC)
+	if (block->magic != VMALLOC_MAGIC)
 		return;
 
 	// pthread_mutex_lock(&g_heap_mutex);

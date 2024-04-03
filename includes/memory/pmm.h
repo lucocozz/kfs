@@ -37,7 +37,7 @@ static inline void pmm_set_frame(uint32_t frame) {
 	g_memory_map[FRAME_CHUNK(frame)] |= BIT_MASK(FRAME_BIT(frame));
 }
 
-static inline void pmm_free_frame(uint32_t frame) {
+static inline void pmm_unset_frame(uint32_t frame) {
 	g_memory_map[FRAME_CHUNK(frame)] &= BIT_UNMASK(FRAME_BIT(frame));
 }
 

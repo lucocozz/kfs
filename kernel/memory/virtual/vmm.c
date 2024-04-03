@@ -11,6 +11,7 @@ page_table_entry *vmm_get_page_table_entry(page_table_t *table, uint32_t v_addr)
 		return (&table->entries[PAGE_TABLE_INDEX(v_addr)]);
 	return (NULL);
 }
+EXPORT_SYMBOL(vmm_get_page_table_entry);
 
 // Get entry from page directory for a given virtual address
 page_directory_entry *vmm_get_page_directory_entry(page_directory_t *dir, uint32_t v_addr)
@@ -19,6 +20,7 @@ page_directory_entry *vmm_get_page_directory_entry(page_directory_t *dir, uint32
 		return (&dir->entries[PAGE_DIRECTORY_INDEX(v_addr)]);
 	return (NULL);
 }
+EXPORT_SYMBOL(vmm_get_page_directory_entry);
 
 // Return a page table entry for a given virtual address
 page_table_entry *vmm_get_page(const uint32_t v_addr)
@@ -30,6 +32,7 @@ page_table_entry *vmm_get_page(const uint32_t v_addr)
 
 	return (page);
 }
+EXPORT_SYMBOL(vmm_get_page);
 
 void *vmm_alloc_page(page_table_entry *page)
 {
@@ -42,6 +45,7 @@ void *vmm_alloc_page(page_table_entry *page)
 
 	return (frame);
 }
+EXPORT_SYMBOL(vmm_alloc_page);
 
 void vmm_free_page(page_table_entry *page)
 {
@@ -51,6 +55,7 @@ void vmm_free_page(page_table_entry *page)
 		pmm_free_frames(address, 1);
 	CLEAR_ATTRIBUTE(page, PTE_PRESENT);
 }
+EXPORT_SYMBOL(vmm_free_page);
 
 bool vmm_map_page(uint32_t *p_addr, uint32_t *v_addr)
 {
@@ -77,6 +82,7 @@ bool vmm_map_page(uint32_t *p_addr, uint32_t *v_addr)
 
 	return (true);
 }
+EXPORT_SYMBOL(vmm_map_page);
 
 // Unmap a page
 void	vmm_unmap_page(uint32_t *v_addr)
@@ -86,6 +92,7 @@ void	vmm_unmap_page(uint32_t *v_addr)
 	SET_FRAME(page, 0); // Set physical address to 0
 	CLEAR_ATTRIBUTE(page, PTE_PRESENT); // Clear present flag
 }
+EXPORT_SYMBOL(vmm_unmap_page);
 
 // Initialise the virtual memory manager
 int	vmm_init(void)
@@ -141,3 +148,4 @@ int	vmm_init(void)
 
 	return (0);	
 }
+EXPORT_SYMBOL(vmm_init);

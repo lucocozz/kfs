@@ -2,6 +2,7 @@
 
 uint8_t	g_keyboard_states = 0;
 key_t	g_keyboard_poll = {0};
+uint8_t	g_keyboard_layout = 0;
 
 static bool __is_state_key(uint8_t code)
 {

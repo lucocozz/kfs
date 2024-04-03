@@ -8,5 +8,6 @@ void	reboot(void);
 void	halt(void);
 void	shutdown(void);
 void	dump_stack(void);
+void	layout(char *layout);
 
 #endif

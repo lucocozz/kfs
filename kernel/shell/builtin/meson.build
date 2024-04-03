@@ -3,4 +3,5 @@ builtin = files([
 	'reboot.c',
 	'halt.c',
 	'shutdown.c',
+	'layout.c',
 ])

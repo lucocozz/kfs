@@ -18,4 +18,5 @@ string = files([
 	'memcmp.c',
 	'memmove.c',
 	'bzero.c',
+	'startwith.c',
 ])

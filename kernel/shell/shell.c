@@ -12,6 +12,7 @@ static void	__helper(void)
 		" - mmap\n"
 		" - help\n"
 		" - clear\n"
+		" - layout\n"
 	);
 }
 
@@ -46,6 +47,12 @@ static void	__commands(char *input)
 		term_clear();
 	else if (strcmp(input, "art") == 0)
 		term_puts(ASCII_ART);
+	else if (startwith("layout", input) == true) {
+		if (strlen(input) > strlen("layout") + 1)
+			layout(&input[strlen("layout") + 1]);
+		else
+			printk("Valide layout:\n - US\n - FR\n");
+	}
 	else
 		printk("%s: command not found\n", input);
 }

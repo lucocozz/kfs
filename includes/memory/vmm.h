@@ -67,7 +67,7 @@ typedef struct page_free {
 } page_free_t;
 
 
-extern page_directory_t	*g_current_directory;
+extern uint32_t	*g_current_directory;
 extern uint32_t			g_placement_address;
 
 extern page_free_t		*g_free_list;

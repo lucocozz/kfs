@@ -21,7 +21,7 @@
 #define VGA_CURSOR_LOW_BYTE 0x0F
 
 #ifdef __HIGH_KERNEL__
-#define VGA_BUFFER_ADDRESS (uint16_t *)0xC00B8000
+#define VGA_BUFFER_ADDRESS (uint16_t *)0xC00B8000 // 0xC03FF000 if mapped at entry 1023 in the page directory
 #else
 #define VGA_BUFFER_ADDRESS (uint16_t *)0xB8000
 #endif

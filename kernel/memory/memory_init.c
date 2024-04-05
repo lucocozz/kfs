@@ -16,7 +16,7 @@ void	memory_init(void)
 {
 	uint32_t total_memory = MAX_MEMORY_SIZE; // 4GB address space for 32 bits = 0xFFFFFFFF
 
-	pmm_init(g_memory_sections.kernel_physical.end, total_memory);
+	pmm_init(g_memory_sections.kernel_virtual.end, total_memory);
 	
 	for (uint32_t i = 0; i < g_boot_info->mmap_length; i += sizeof(multiboot_mmap_entry_t)) {
 		multiboot_mmap_entry_t *entry = (multiboot_mmap_entry_t*)(g_boot_info->mmap_addr + i);
@@ -31,10 +31,8 @@ void	memory_init(void)
 	uint32_t memory_map_length = ALIGN_WITH(BITMAP_SIZE(g_max_frames) * sizeof(uint32_t), FRAME_SIZE);
 	pmm_map_region(g_memory_sections.kernel_physical.end, memory_map_length);
 
-	// g_placement_address = 0xC0000000 + (0x1000 * 0x1000); // 0xC0000000 + 4MB
 	g_placement_address = g_memory_sections.kernel_virtual.end + memory_map_length;
 
-	panic("panic");
 	if (vmm_init() == ERR_OUT_OF_MEMORY)
 		panic("Failed to initialise the virtual memory manager");
 }

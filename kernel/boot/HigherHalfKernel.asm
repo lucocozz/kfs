@@ -18,18 +18,11 @@ extern kernel_main                      ; main is defined elsewhere
 
 ; reserve initial kernel stack space, that's 16k.
 %define STACKSIZE 0x4000 * 8
- 
-section .data
-align 0x1000
-boot_page_directory:
-	resb 4096
-boot_page_table1:
-	resb 4096
 
 extern _kernel_start_physical
 extern _kernel_end_physical
 
-section .text
+section .multiboot.header
 align 4
 MultiBootHeader:
 	dd MAGIC
@@ -48,29 +41,31 @@ MultiBootHeader:
 	dd 32
 
 ; setting up entry point for linker
+section .multiboot.text
+align 4
 global _start
 _start:
-	mov edi, dword (boot_page_table1 - 0xC0000000)
-	mov esi, dword 0
-	mov ecx, dword 1023
+	mov edi, (boot_page_table1 - 0xC0000000)
+	mov esi, 0
+	mov ecx, 1023
 
 uno:
-	cmp esi, dword _kernel_start_physical
+	cmp esi, $0
 	jl dos
-	cmp esi, dword (_kernel_end_physical - 0xC0000000)
+	cmp esi, (_kernel_end_physical - 0xC0000000)
 	jge tres
 
 	mov edx, esi
-	or edx, dword 0x003
+	or edx, 0x003
 	mov [edi], edx
 
 dos:
-	add esi, dword 4096
-	add edi, dword 4
+	add esi, 4096
+	add edi, 4
 	loop uno
 
 tres:
-	mov dword [boot_page_table1 - 0xC0000000 + 1023 * 4], (0x000B8000 | 0x003)
+	; mov dword [boot_page_table1 - 0xC0000000 + 1023 * 4], (0x000B8000 | 0x003) ; VGA memory
 
 	mov dword [boot_page_directory - 0xC0000000 + 0], (boot_page_table1 - 0xC0000000 + 0x003)
 	mov dword [boot_page_directory - 0xC0000000 + 768 * 4], (boot_page_table1 - 0xC0000000 + 0x003)
@@ -81,28 +76,24 @@ tres:
 	mov ecx, cr0
 	or ecx, dword 0x80010000
 	mov cr0, ecx
-
 	lea ecx, [HigherHalfKernel]
 	jmp ecx
 
+section .text
+align 4
 HigherHalfKernel:
 	; Unmap the identity-mapped first 4MB of physical address space. It should not be needed
 	; anymore.
-	; mov dword [BootPageDirectory], 0
+	mov dword [boot_page_directory], 0
 	invlpg [0]                          ; Invalidate TLB for the first page.
  
-	; NOTE: From now on, paging should be enabled. The first 4MB of physical address space is
-	; mapped starting at KERNEL_VIRTUAL_ADDRESS. Everything is linked to this address, so no more
-	; position-independent code or funny business with virtual-to-physical address translation
-	; should be necessary. We now have a higher-half kernel.
-
 	mov esp, stack_top                  ; Set up initial stack pointer.
 
 	push esp                            ; pass stack pointer
 	push ebx                            ; pass Multiboot info structure
 	push eax                            ; pass Multiboot magic number 
 
-	cli 
+	cli
 	extern kernel_main
 	call kernel_main 
 	
@@ -111,6 +102,14 @@ halt:
 	hlt
 	jmp halt
  
+  
+section .data
+align 0x1000
+boot_page_directory:
+	resb 4096
+boot_page_table1:
+	resb 4096
+
 section .bss
 align 32
 stack_bottom:

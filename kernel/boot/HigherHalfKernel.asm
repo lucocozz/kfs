@@ -18,25 +18,11 @@ extern kernel_main                      ; main is defined elsewhere
 
 ; reserve initial kernel stack space, that's 16k.
 %define STACKSIZE 0x4000 * 8
- 
-section .data
-align 0x1000
-BootPageDirectory:
-	; This page directory entry identity-maps the first 4MB of the 32-bit physical address space.
-	; All bits are clear except the following:
-	; bit 7: PS The kernel page is 4MB.
-	; bit 1: RW The kernel page is read/write.
-	; bit 0: P  The kernel page is present.
-	; This entry must be here -- otherwise the kernel will crash immediately after paging is
-	; enabled because it can't fetch the next instruction! It's ok to unmap this page later.
-	dd 0x00000083                                       ; 0b10000011 (PSE=1, RW=1, P=1)
-	times (KERNEL_PAGE_NUMBER - 1) dd 0                 ; Pages before kernel space.
-	; This page directory entry defines a 4MB page containing the kernel. Since 0xC0000000 translates to the index 768, we set the 768th entry in the page directory to point to the 4MB page containing the kernel.
-	dd 0x00000083
-	times (1024 - KERNEL_PAGE_NUMBER - 1) dd 0  ; Pages after the kernel image.
- 
- 
-section .text
+
+extern _kernel_start_physical
+extern _kernel_end_physical
+
+section .multiboot.header
 align 4
 MultiBootHeader:
 	dd MAGIC
@@ -55,46 +41,59 @@ MultiBootHeader:
 	dd 32
 
 ; setting up entry point for linker
+section .multiboot.text
+align 4
 global _start
 _start:
-	; NOTE: Until paging is set up, the code must be position-independent and use physical
-	; addresses, not virtual ones!
-	mov ecx, (BootPageDirectory - KERNEL_VIRTUAL_ADDRESS)
-	mov cr3, ecx                                        ; Load Page Directory Base Register.
- 
-	mov ecx, cr4
-	or ecx, PSE_FLAG                          ; Set PSE bit in CR4 to enable 4MB pages.
-	mov cr4, ecx
- 
+	mov edi, (boot_page_table1 - 0xC0000000)
+	mov esi, 0
+	mov ecx, 1023
+
+uno:
+	cmp esi, $0
+	jl dos
+	cmp esi, (_kernel_end_physical - 0xC0000000)
+	jge tres
+
+	mov edx, esi
+	or edx, 0x003
+	mov [edi], edx
+
+dos:
+	add esi, 4096
+	add edi, 4
+	loop uno
+
+tres:
+	; mov dword [boot_page_table1 - 0xC0000000 + 1023 * 4], (0x000B8000 | 0x003) ; VGA memory
+
+	mov dword [boot_page_directory - 0xC0000000 + 0], (boot_page_table1 - 0xC0000000 + 0x003)
+	mov dword [boot_page_directory - 0xC0000000 + 768 * 4], (boot_page_table1 - 0xC0000000 + 0x003)
+
+	mov ecx, dword (boot_page_directory - 0xC0000000)
+	mov cr3, ecx
+
 	mov ecx, cr0
-	or ecx, PG_FLAG                          ; Set PG bit in CR0 to enable paging.
+	or ecx, dword 0x80010000
 	mov cr0, ecx
- 
-	; Start fetching instructions in kernel space.
-	; Since eip at this point holds the physical address of this command (approximately 0x00100000)
-	; we need to do a long jump to the correct virtual address of StartInHigherHalf which is
-	; approximately 0xC0100000.
 	lea ecx, [HigherHalfKernel]
-	jmp ecx                                                     ; NOTE: Must be absolute jump!
- 
+	jmp ecx
+
+section .text
+align 4
 HigherHalfKernel:
 	; Unmap the identity-mapped first 4MB of physical address space. It should not be needed
 	; anymore.
-	; mov dword [BootPageDirectory], 0
-	; invlpg [0]                          ; Invalidate TLB for the first page.
+	mov dword [boot_page_directory], 0
+	invlpg [0]                          ; Invalidate TLB for the first page.
  
-	; NOTE: From now on, paging should be enabled. The first 4MB of physical address space is
-	; mapped starting at KERNEL_VIRTUAL_ADDRESS. Everything is linked to this address, so no more
-	; position-independent code or funny business with virtual-to-physical address translation
-	; should be necessary. We now have a higher-half kernel.
-
 	mov esp, stack_top                  ; Set up initial stack pointer.
 
 	push esp                            ; pass stack pointer
 	push ebx                            ; pass Multiboot info structure
 	push eax                            ; pass Multiboot magic number 
 
-	cli 
+	cli
 	extern kernel_main
 	call kernel_main 
 	
@@ -103,6 +102,14 @@ halt:
 	hlt
 	jmp halt
  
+  
+section .data
+align 0x1000
+boot_page_directory:
+	resb 4096
+boot_page_table1:
+	resb 4096
+
 section .bss
 align 32
 stack_bottom:

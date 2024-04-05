@@ -17,6 +17,7 @@ cflags = [
 	'-U__linux__',
 	'-D__i386__',
 	'-D__KERNEL__',
+	'-D__HIGH_KERNEL__'
 ]
 
 nasm_flags = [
@@ -24,7 +25,8 @@ nasm_flags = [
 	'-I./includes/',
 ]
 
-linker = ['-T', '../config/linker.ld']
+# linker = ['-T', '../config/linker.ld']
+linker = ['-T', '../config/linkerHighKernel.ld']
 link_args = cflags + linker + ['-static', '-Wl,--build-id=none']
 
 cc = meson.get_compiler('c')

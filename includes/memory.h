@@ -15,7 +15,7 @@
 #include "memory/pmm.h"
 #include "memory/vmm.h"
 
-#ifdef HIGH_KERNEL
+#ifdef __HIGH_KERNEL__
 #define KERNEL_START 0xC0000000
 #else
 #define KERNEL_START 0x00000000

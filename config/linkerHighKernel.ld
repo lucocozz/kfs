@@ -1,15 +1,25 @@
 ENTRY(_start)
 OUTPUT_FORMAT(elf32-i386)
-KERNEL_VIRTUAL_ADDRESS = 0xC0100000;
 
 SECTIONS {
 	/* The kernel will live at 3GB + 1MB in the virtual
 		address space, which will be mapped to 1MB in the
 		physical address space. */
-	. = KERNEL_VIRTUAL_ADDRESS;
 
-	_kernel_start_physical = 0x100000;
+	. = 0x00100000;
+	_kernel_start_physical = .;
+
+	.multiboot.header : {
+		*(.multiboot.header)
+	}
+
+	.multiboot.text : {
+		*(.multiboot.text)
+	}
+
+	. += 0xC0000000;
 	_kernel_start_virtual = .;
+
 
 	.text BLOCK(4K) : AT(ADDR(.text) - 0xC0000000) ALIGN (4K) {
 		_stext = .;    

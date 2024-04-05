@@ -1,14 +1,13 @@
 #include "../includes/memory.h"
 
 // Set the current page directory
-bool switch_page_directory(page_directory_t *directory)
+bool switch_page_directory(uint32_t *directory)
 {
 	if (directory == NULL)
 		return (false);
-
 	g_current_directory = directory;
-	ASM("movl %%eax, %%cr3":: "a"(g_current_directory));
 
+	ASM("movl %0, %%cr3":: "r"(g_current_directory));
 	return (true);
 }
 

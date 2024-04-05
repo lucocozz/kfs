@@ -5,7 +5,7 @@
 #include "symbol_table.h"
 #include "system/utils.h"
 
-#ifdef HIGH_KERNEL
+#ifdef __HIGH_KERNEL__
 #define GDT_ADDRESS 0xC0000800
 #else
 #define GDT_ADDRESS 0x800

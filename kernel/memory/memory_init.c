@@ -31,9 +31,11 @@ void	memory_init(void)
 	uint32_t memory_map_length = ALIGN_WITH(BITMAP_SIZE(g_max_frames) * sizeof(uint32_t), FRAME_SIZE);
 	pmm_map_region(g_memory_sections.kernel_physical.end, memory_map_length);
 
-	// g_placement_address = g_memory_sections.kernel_physical.end + memory_map_length;
-	g_placement_address = 0xC0000000 + (0x1000 * 0x1000); // 0xC0000000 + 4MB
+	// g_placement_address = 0xC0000000 + (0x1000 * 0x1000); // 0xC0000000 + 4MB
+	g_placement_address = g_memory_sections.kernel_virtual.end + memory_map_length;
 
+	panic("panic");
 	if (vmm_init() == ERR_OUT_OF_MEMORY)
 		panic("Failed to initialise the virtual memory manager");
 }
+	

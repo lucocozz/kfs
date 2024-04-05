@@ -20,7 +20,7 @@
 /// VGA_CURSOR_LOW_BYTE is the address of the VGA cursor low byte register.
 #define VGA_CURSOR_LOW_BYTE 0x0F
 
-#ifdef HIGH_KERNEL
+#ifdef __HIGH_KERNEL__
 #define VGA_BUFFER_ADDRESS (uint16_t *)0xC00B8000
 #else
 #define VGA_BUFFER_ADDRESS (uint16_t *)0xB8000

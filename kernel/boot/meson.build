@@ -1,3 +1,4 @@
 boot_asm = files([
-	'boot.asm',
+	# 'boot.asm',
+	'HigherHalfKernel.asm',
 ])

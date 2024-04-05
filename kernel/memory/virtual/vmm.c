@@ -122,7 +122,7 @@ int	vmm_init(void)
 		SET_FRAME(&page, frame);
 
 		// Add page to 3GB page table
-		table3G->entries[PAGE_TABLE_INDEX(virt)] = page;
+		table->entries[PAGE_TABLE_INDEX(virt)] = page;
 	}
 
 	// Map kernel space to 3GB (Higher half kernel)
@@ -132,16 +132,18 @@ int	vmm_init(void)
 		SET_FRAME(&page, frame);
 
 		// Add page to 3GB page table
-		table->entries[PAGE_TABLE_INDEX(virt)] = page;
+		table3G->entries[PAGE_TABLE_INDEX(virt)] = page;
 	}
 
 	page_directory_entry *entry = &directory->entries[PAGE_DIRECTORY_INDEX(0xC0000000)];
 	SET_ATTRIBUTE(entry, PDE_PRESENT | PDE_READ_WRITE);
-	SET_FRAME(entry, (uint32_t)table);
+	SET_FRAME(entry, (uint32_t)table3G);
 
 	page_directory_entry *entry2 = &directory->entries[PAGE_DIRECTORY_INDEX(0x00000000)];
 	SET_ATTRIBUTE(entry2, PDE_PRESENT | PDE_READ_WRITE);
-	SET_FRAME(entry2, (uint32_t)table3G);
+	SET_FRAME(entry2, (uint32_t)table);
+
+	printk("Page directory: 0x%x\n", directory);
 
 	switch_page_directory(directory);
 	enable_paging();

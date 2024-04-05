@@ -19,6 +19,13 @@ void	isr_syscall(registers_t regs, stack_state_t stack)
 	UNUSED(regs);
 }
 
+void	isr_general_protection_fault(registers_t regs, stack_state_t stack)
+{
+	UNUSED(stack);
+	UNUSED(regs);
+	panic("General Protection Fault");
+}
+
 void isr_callbacks(registers_t regs, uint8_t interrupt, stack_state_t stack)
 {
 	static isr_handler_t handlers[IDT_SIZE] = {

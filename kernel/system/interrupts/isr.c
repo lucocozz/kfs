@@ -13,12 +13,26 @@ void isr_divide_by_zero(registers_t regs, stack_state_t stack)
 EXPORT_SYMBOL(isr_divide_by_zero);
 
 
+void	isr_syscall(registers_t regs, stack_state_t stack)
+{
+	UNUSED(stack);
+	UNUSED(regs);
+}
+
+void	isr_general_protection_fault(registers_t regs, stack_state_t stack)
+{
+	UNUSED(stack);
+	UNUSED(regs);
+	panic("General Protection Fault");
+}
+
 void isr_callbacks(registers_t regs, uint8_t interrupt, stack_state_t stack)
 {
 	static isr_handler_t handlers[IDT_SIZE] = {
 		[INTERRUPT_DIVIDE_BY_ZERO]	= isr_divide_by_zero,
 		[INTERRUPT_PAGE_FAULT]		= isr_page_fault,
 		[INTERRUPT_KEYBOARD]		= isr_keyboard,
+		[INTERRUPT_SYSCALL]			= isr_syscall,
 	};
 
 	if (handlers[interrupt] != NULL) {

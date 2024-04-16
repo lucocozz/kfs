@@ -45,5 +45,7 @@ call_isr:
 	iret
 
 no_error_code_irq 0	; create handler for interrupt 0 (divide by zero)
+no_error_code_irq 13	; create handler for interrupt 13 (general protection fault)
 no_error_code_irq 14	; create handler for interrupt 14 (page fault)
 no_error_code_irq 33	; create handler for interrupt 33 (keyboard)
+error_code_irq 128	; create handler for interrupt 128 (syscall)

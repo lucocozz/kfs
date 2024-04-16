@@ -52,7 +52,11 @@ Mkfile.old
 dkms.conf
 
 .build-x86/
+builddir/
 kfs.bin
 kfs.iso
 .vscode/
 output.txt
+.gdb_history
+peda-session*
+debug.log

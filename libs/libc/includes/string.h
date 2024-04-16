@@ -2,6 +2,8 @@
 #define LIBC_STRING_H
 
 #include <stddef.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 size_t	strlen(const char *str);
 char	*strcpy(char *dest, const char *src);
@@ -17,9 +19,12 @@ char	*strtolower(char *str);
 char	*strtoupper(char *str);
 void	*memcpy(void *dest, const void *src, size_t n);
 void	*memset(void *s, int c, size_t n);
+void	*memset16(void *s, int c, size_t n);
+void	*memset32(void *s, uint32_t c, size_t n);
 void	*memmove(void *dest, const void *src, size_t n);
 int		memcmp(const void *s1, const void *s2, size_t n);
+void	bzero(void *s, size_t n);
+bool	startwith(const char *start_with, const char *str);
 // void	*memchr(const void *s, int c, size_t n);
-// void	bzero(void *s, size_t n);
 
 #endif

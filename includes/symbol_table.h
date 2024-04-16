@@ -1,14 +1,11 @@
 #ifndef KERNEL_SYMBOL_TABLE_H
 #define KERNEL_SYMBOL_TABLE_H
 
-#include "printk.h"
 #include <stdint.h>
 #include <stddef.h>
 
-#define __section(name) __attribute__((__section__(name)))
-#define __used __attribute__((__used__))
-#define __init __attribute__((__constructor__))
-#define __exit __attribute__((__destructor__))
+#include "printk.h"
+#include "system/utils.h"
 
 #define SYMBOL_SECTION_NAME "symbol_table"
 
@@ -18,7 +15,7 @@ typedef struct SymbolTableEntry {
 } SymbolTableEntry_t;
 
 #define EXPORT_SYMBOL(func) \
-	SymbolTableEntry_t __symbol_##func __section(SYMBOL_SECTION_NAME) = { \
+	SymbolTableEntry_t __symbol_##func __Section__(SYMBOL_SECTION_NAME) = { \
 		.address = (uint32_t)&func, \
 		.name = #func \
 	}

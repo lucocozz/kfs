@@ -1,0 +1,3 @@
+utils = files([
+	'panic.c',
+])

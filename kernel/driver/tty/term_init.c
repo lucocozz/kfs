@@ -1,5 +1,9 @@
 #include "driver/tty.h"
 
+uint8_t				g_tty_index = 0;
+vga_terminal_t		g_tty[TTY_COUNT] = {0};
+uint16_t			*g_vga_buffer = VGA_BUFFER_ADDRESS;
+
 static void	__write_prompt(char *str)
 {
 	for (size_t i = 0; str[i] != '\0'; ++i) {

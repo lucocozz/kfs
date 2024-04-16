@@ -13,6 +13,10 @@ string = files([
 	'strrev.c',
 	'memcpy.c',
 	'memset.c',
+	'memset16.c',
+	'memset32.c',
 	'memcmp.c',
 	'memmove.c',
+	'bzero.c',
+	'startwith.c',
 ])

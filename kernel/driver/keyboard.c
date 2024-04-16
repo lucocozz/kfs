@@ -1,6 +1,8 @@
-#include "kernel.h"
+#include "driver/keyboard.h"
 
 uint8_t	g_keyboard_states = 0;
+key_t	g_keyboard_poll = {0};
+uint8_t	g_keyboard_layout = 0;
 
 static bool __is_state_key(uint8_t code)
 {
@@ -40,8 +42,9 @@ static void __handle_states_keys(uint8_t code)
 		g_keyboard_states ^= KEY_CAPSLOCK_MASK;
 }
 
-void	keyboard_handler(void)
+void	isr_keyboard(registers_t regs, struct stack_state stack)
 {
+	UNUSED(regs); UNUSED(stack);
 	uint8_t code = inb(KEYBOARD_PORT_DATA);
 
 	if (__is_state_key(code))
@@ -53,36 +56,23 @@ void	keyboard_handler(void)
 			.state = g_keyboard_states,
 			.is_pressed = SCANCODE_IS_PRESSED(code),
 		};
-		keyboard_add_keyqueue(key);
+		keyboard_set_keypoll(key);
 	}
 }
-EXPORT_SYMBOL(keyboard_handler);
+EXPORT_SYMBOL(isr_keyboard);
 
-key_t	keyboard_get_keyqueue(void)
+key_t	keyboard_get_keypoll(void)
 {
-	key_t keypress = {0};
+	key_t key = {0};
 
-	if (g_keyboard_queue.size == 0)
-		return (keypress);
-	keypress = g_keyboard_queue.data[g_keyboard_queue.readed];
-	++g_keyboard_queue.readed;
-	if (g_keyboard_queue.readed == g_keyboard_queue.size) {
-		g_keyboard_queue.readed = 0;
-		g_keyboard_queue.size = 0;
-	}
-	return (keypress);
+	key = g_keyboard_poll;
+	g_keyboard_poll = (key_t){0};
+	return (key);
 }
-EXPORT_SYMBOL(keyboard_get_keyqueue);
+EXPORT_SYMBOL(keyboard_get_keypoll);
 
-void	keyboard_add_keyqueue(key_t key)
+void	keyboard_set_keypoll(key_t key)
 {
-	if (g_keyboard_queue.size == KEYBOARD_QUEUE_CAPACITY && g_keyboard_queue.readed > 0) {
-		memmove(g_keyboard_queue.data, g_keyboard_queue.data + g_keyboard_queue.readed, g_keyboard_queue.size - g_keyboard_queue.readed);
-		g_keyboard_queue.size -= g_keyboard_queue.readed;
-		g_keyboard_queue.readed = 0;
-	}
-	else if (g_keyboard_queue.size == KEYBOARD_QUEUE_CAPACITY)
-		return ;
-	g_keyboard_queue.data[g_keyboard_queue.size++] = key;
+	g_keyboard_poll = key;
 }
-EXPORT_SYMBOL(keyboard_add_keyqueue);
+EXPORT_SYMBOL(keyboard_set_keypoll);
